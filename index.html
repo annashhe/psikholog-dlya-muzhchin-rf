@@ -2748,30 +2748,30 @@
     <!-- ===== СКРИПТЫ ===== -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // ===== ВИДЖЕТ КАЛЕНДАРЯ: загрузка при прокрутке к блоку =====
-            var bookingSection = document.getElementById('booking');
-            if (bookingSection) {
-                var widgetLoaded = false;
-                function loadCalendarWidget() {
-                    if (widgetLoaded) return;
-                    widgetLoaded = true;
-                    var ws = document.createElement('script');
-                    ws.src = 'https://anna-psy-schedule-frontend.vercel.app/widget.js';
-                    ws.defer = true;
-                    document.body.appendChild(ws);
-                }
-                if ('IntersectionObserver' in window) {
-                    var widgetObs = new IntersectionObserver(function(entries) {
-                        if (entries.some(function(e) { return e.isIntersecting; })) {
-                            loadCalendarWidget();
-                            widgetObs.disconnect();
-                        }
-                    }, { rootMargin: '300px 0px' });
-                    widgetObs.observe(bookingSection);
-                } else {
-                    loadCalendarWidget();
-                }
-            }
+            // ===== ВИДЖЕТ КАЛЕНДАРЯ =====
+            // widget.js сам вешается на DOMContentLoaded — при ленивой загрузке после него
+            // слушатель уже не сработает. Грузим сразу и монтируем вручную на onload.
+            (function loadCalendarWidget() {
+                var mount = document.querySelector('[data-anna-psy-widget]');
+                if (!mount) return;
+                if (document.querySelector('script[data-anna-psy-widget-src]')) return;
+
+                var ws = document.createElement('script');
+                ws.src = 'https://anna-psy-schedule-frontend.vercel.app/widget.js';
+                ws.async = true;
+                ws.setAttribute('data-anna-psy-widget-src', '1');
+                ws.onload = function() {
+                    if (mount.querySelector('.anna-psy-widget, .widget-root, .tbw')) return;
+                    var api = window.AnnaPsyWidget;
+                    if (api && typeof api.mountAnnaPsyWidget === 'function') {
+                        api.mountAnnaPsyWidget(mount);
+                    }
+                };
+                ws.onerror = function() {
+                    mount.innerHTML = '<p style="color:#6e6e6e;padding:1rem;">Не удалось загрузить календарь. Обновите страницу или запишитесь через Telegram / MAX.</p>';
+                };
+                document.body.appendChild(ws);
+            })();
 
             // ===== БУРГЕР-МЕНЮ =====
             var burger = document.getElementById('burgerBtn');
