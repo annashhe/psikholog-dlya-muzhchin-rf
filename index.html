@@ -2470,6 +2470,7 @@
                 <h2 id="calendar-title">Запись на онлайн-консультацию</h2>
                 <p>Выберите время в календаре. Очно в Калининграде — только через мессенджеры (блок «Где я принимаю»).</p>
             </div>
+            <script src="https://anna-psy-schedule-frontend.vercel.app/widget.js"></script>
             <div data-anna-psy-widget></div>
             <p class="calendar-note">Если календарь не отображается, попробуйте <strong>отключить VPN</strong> или открыть страницу в другом браузере</p>
         </div>
@@ -2748,31 +2749,6 @@
     <!-- ===== СКРИПТЫ ===== -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // ===== ВИДЖЕТ КАЛЕНДАРЯ =====
-            // widget.js сам вешается на DOMContentLoaded — при ленивой загрузке после него
-            // слушатель уже не сработает. Грузим сразу и монтируем вручную на onload.
-            (function loadCalendarWidget() {
-                var mount = document.querySelector('[data-anna-psy-widget]');
-                if (!mount) return;
-                if (document.querySelector('script[data-anna-psy-widget-src]')) return;
-
-                var ws = document.createElement('script');
-                ws.src = 'https://anna-psy-schedule-frontend.vercel.app/widget.js';
-                ws.async = true;
-                ws.setAttribute('data-anna-psy-widget-src', '1');
-                ws.onload = function() {
-                    if (mount.querySelector('.anna-psy-widget, .widget-root, .tbw')) return;
-                    var api = window.AnnaPsyWidget;
-                    if (api && typeof api.mountAnnaPsyWidget === 'function') {
-                        api.mountAnnaPsyWidget(mount);
-                    }
-                };
-                ws.onerror = function() {
-                    mount.innerHTML = '<p style="color:#6e6e6e;padding:1rem;">Не удалось загрузить календарь. Обновите страницу или запишитесь через Telegram / MAX.</p>';
-                };
-                document.body.appendChild(ws);
-            })();
-
             // ===== БУРГЕР-МЕНЮ =====
             var burger = document.getElementById('burgerBtn');
             var mobileNav = document.getElementById('mobileNav');
