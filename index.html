@@ -1372,13 +1372,6 @@
             border-color: var(--highlight);
             transform: translateY(-2px);
         }
-        .cert-item.cert-clickable::after {
-            content: '🔍';
-            display: block;
-            font-size: 0.75rem;
-            margin-top: 0.3rem;
-            opacity: 0.6;
-        }
         .diploma-modal {
             position: fixed;
             inset: 0;
@@ -2353,8 +2346,11 @@
                             <div class="cert-item">Групповой психолог <small>в процессе обучения</small></div>
                         </div>
                         <button class="cert-more-toggle" id="certToggle" aria-expanded="false">Показать ещё ▾</button>
-                        <div class="cert-more-items" id="certMore">
-                            <div class="cert-item">Вторая ступень гештальт-терапии <small>МГИ</small></div>
+                        <div class="about-certs cert-more-items" id="certMore">
+                            <div class="cert-item cert-clickable" role="button" tabindex="0" aria-label="Посмотреть сертификат: вторая ступень гештальт"
+                                 data-diploma="assets/images/diplomas/Сертификат психолога Анны Щеголихиной Вторая ступень 2025.webp">
+                                Вторая ступень гештальт-терапии <small>МГИ</small>
+                            </div>
                             <div class="cert-item cert-clickable" role="button" tabindex="0" aria-label="Посмотреть сертификат: первая ступень гештальт"
                                  data-diploma="assets/images/diplomas/Сертификат психолога Анны Щеголихиной Первая ступень 2023.webp">
                                 Первая ступень гештальт-терапии <small>МГИ</small>
@@ -2362,6 +2358,30 @@
                             <div class="cert-item cert-clickable" role="button" tabindex="0" aria-label="Посмотреть диплом: магистр"
                                  data-diploma="assets/images/diplomas/КемГУ_Диплом_магистра_Прикладная_Математика_и_Информатика_Щеголихина_Анна.webp">
                                 Магистр прикладной математики и информатики <small>НФИ КемГУ</small>
+                            </div>
+                            <div class="cert-item cert-clickable" role="button" tabindex="0" aria-label="Посмотреть сертификат: интенсив 2024 Калининград"
+                                 data-diploma="assets/images/diplomas/Сертификат психолога Анны Щеголихиной Интенсив 2024 Калининград.webp">
+                                Интенсив гештальт-терапии <small>2024, Калининград</small>
+                            </div>
+                            <div class="cert-item cert-clickable" role="button" tabindex="0" aria-label="Посмотреть сертификат: интенсив 2024 коса"
+                                 data-diploma="assets/images/diplomas/Сертификат психолога Анны Щеголихиной Интенсив 2024 коса.webp">
+                                Интенсив гештальт-терапии <small>2024, Куршская коса</small>
+                            </div>
+                            <div class="cert-item cert-clickable" role="button" tabindex="0" aria-label="Посмотреть сертификат: интенсив 2025 ББИ"
+                                 data-diploma="assets/images/diplomas/Сертификат психолога Анны Щеголихиной Интенсив 2025 ББИ.webp">
+                                Интенсив гештальт-терапии <small>2025, ББИ</small>
+                            </div>
+                            <div class="cert-item cert-clickable" role="button" tabindex="0" aria-label="Посмотреть сертификат: конференция 2024"
+                                 data-diploma="assets/images/diplomas/Сертификат психолога Анны Щеголихиной Конференция 2024.webp">
+                                Конференция гештальт-терапевтов <small>2024</small>
+                            </div>
+                            <div class="cert-item cert-clickable" role="button" tabindex="0" aria-label="Посмотреть сертификат: конференция 2025 Калининград"
+                                 data-diploma="assets/images/diplomas/Сертификат психолога Анны Щеголихиной Конференция 2025 Клнд.webp">
+                                Конференция гештальт-терапевтов <small>2025, Калининград</small>
+                            </div>
+                            <div class="cert-item cert-clickable" role="button" tabindex="0" aria-label="Посмотреть сертификат: конференция 2025 онлайн"
+                                 data-diploma="assets/images/diplomas/Сертификат психолога Анны Щеголихиной Конференция 2025 Онлайн.webp">
+                                Конференция гештальт-терапевтов <small>2025, онлайн</small>
                             </div>
                         </div>
                     </div>
