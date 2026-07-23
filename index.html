@@ -4,17 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- SEO: основной домен психолог-для-мужчин.рф -->
-    <title>Психолог для мужчин онлайн | Анна Щеголихина | Видеоконсультации</title>
-    <meta name="description" content="Онлайн-психолог для мужчин — видеосессии из любого города. Мужской психолог онлайн: кризис отношений, выгорание, тревога. Также очно в Калининграде." />
-    <meta name="keywords" content="психолог для мужчин онлайн, мужской психолог онлайн, онлайн-психолог для мужчин, психолог для мужчин Калининград, видеоконсультация" />
+    <title>Психолог для мужчин онлайн | Анна Щеголихина</title>
+    <meta name="description" content="Онлайн-психолог для мужчин: видеосессии из любого города. Кризис отношений, выгорание, тревога. Также очно в Калининграде. Запись на консультацию." />
+    <meta name="keywords" content="психолог для мужчин онлайн, мужской психолог онлайн, онлайн-психолог для мужчин, психолог для мужчин Калининград" />
     <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://психолог-для-мужчин.рф/" />
+    <link rel="canonical" href="https://психолог-для-мужчин.рф" />
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+    <!-- Фавикон: SVG для современных браузеров; TODO: добавить favicon.ico и apple-touch-icon.png (180×180) -->
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="favicon.svg" sizes="any" />
+    <link rel="apple-touch-icon" href="favicon.svg" />
 
     <meta property="og:title" content="Психолог для мужчин — Анна Щеголихина" />
     <meta property="og:description" content="Онлайн-психолог для мужчин. Видеосессии из любого города. Клинический и семейный психолог. Также очно в Калининграде." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://психолог-для-мужчин.рф/" />
+    <meta property="og:url" content="https://психолог-для-мужчин.рф" />
     <meta property="og:image" content="https://static.tildacdn.com/tild6361-3465-4932-a539-643662633539/1211_26775___3.webp" />
 
     <!-- Preconnect и preload для шрифтов -->
@@ -59,9 +63,9 @@
             --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             --gold: #f5b342;
             --highlight: #802d4b;
-            /* UX: CTA на базе #b4436c, чуть контрастнее для читаемости */
-            --btn-bg: #b4436c;
-            --btn-hover: #9a3a5d;
+            /* UX: основной акцент и CTA — #802D4B */
+            --btn-bg: #802d4b;
+            --btn-hover: #6a2540;
         }
 
         html {
@@ -119,7 +123,8 @@
             font-size: 1rem;
             font-weight: 600;
         }
-        .highlight {
+        .highlight,
+        .accent-dark {
             color: var(--highlight);
         }
 
@@ -157,13 +162,13 @@
         .btn-primary {
             background: var(--btn-bg);
             color: #fff;
-            box-shadow: 0 4px 14px rgba(180, 67, 108, 0.35);
+            box-shadow: 0 4px 14px rgba(128, 45, 75, 0.35);
         }
         .btn-primary:hover {
             background: var(--btn-hover);
             color: #fff;
             transform: translateY(-3px);
-            box-shadow: 0 8px 26px rgba(180, 67, 108, 0.45);
+            box-shadow: 0 8px 26px rgba(128, 45, 75, 0.45);
         }
         .btn-outline {
             background: transparent;
@@ -891,7 +896,7 @@
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            background: var(--accent);
+            background: var(--btn-bg);
             color: #fff;
             font-weight: 700;
             font-size: 1.1rem;
@@ -1298,6 +1303,121 @@
             color: var(--accent);
         }
 
+        /* UX: плавное появление секций при скролле */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* UX: кнопка «Наверх» */
+        .scroll-top {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--btn-bg);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-md);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(12px);
+            transition: opacity 0.3s, visibility 0.3s, transform 0.3s, background 0.2s;
+            z-index: 200;
+            touch-action: manipulation;
+        }
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .scroll-top:hover {
+            background: var(--btn-hover);
+        }
+        .scroll-top svg {
+            width: 22px;
+            height: 22px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2.5;
+        }
+
+        /* Дипломы: кликабельные карточки и модальное окно */
+        .cert-item.cert-clickable {
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+        .cert-item.cert-clickable:hover {
+            border-color: var(--highlight);
+            transform: translateY(-2px);
+        }
+        .cert-item.cert-clickable::after {
+            content: '🔍';
+            display: block;
+            font-size: 0.75rem;
+            margin-top: 0.3rem;
+            opacity: 0.6;
+        }
+        .diploma-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 300;
+            padding: 24px;
+        }
+        .diploma-modal.open {
+            display: flex;
+        }
+        .diploma-modal-inner {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 16px;
+            box-shadow: var(--shadow-lg);
+        }
+        .diploma-modal img {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            margin: 0 auto;
+        }
+        .diploma-modal-close {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--btn-bg);
+            color: #fff;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+        .diploma-placeholder {
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
         /* ===== RESPONSIVE ===== */
         @media (max-width: 992px) {
             .hero-grid {
@@ -1637,8 +1757,53 @@
       ]
     }
     </script>
+    <!-- SEO: дополнительная разметка ProfessionalService (по ТЗ аудита) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "Анна Щеголихина",
+      "description": "Клинический и семейный психолог. Помощь мужчинам в кризисах отношений и жизни.",
+      "url": "https://психолог-для-мужчин.рф",
+      "telephone": "+7 913 755 62 84",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Калининград",
+        "streetAddress": "ул. Кирова, 1"
+      },
+      "priceRange": "₽₽",
+      "image": "https://static.tildacdn.com/tild6361-3465-4932-a539-643662633539/1211_26775___3.webp",
+      "sameAs": [
+        "https://t.me/annashhe",
+        "https://www.b17.ru/anna_shhegolihina/"
+      ]
+    }
+    </script>
 </head>
 <body>
+
+    <!-- Yandex.Metrika counter (ID: 110969154) -->
+    <script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=110969154', 'ym');
+
+        ym(110969154, 'init', {
+            ssr:true,
+            webvisor:true,
+            clickmap:true,
+            ecommerce:"dataLayer",
+            referrer: document.referrer,
+            url: location.href,
+            accurateTrackBounce:true,
+            trackLinks:true
+        });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/110969154" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
 
     <!-- ===== HEADER ===== -->
     <header class="header" role="banner">
@@ -1677,7 +1842,7 @@
             <div class="hero-image">
                 <img
                 src="https://static.tildacdn.com/tild6361-3465-4932-a539-643662633539/1211_26775___3.webp?quality=80&format=webp"
-                alt="Анна Щеголихина — психолог для мужчин"
+                alt="Анна Щеголихина — онлайн-психолог для мужчин, Калининград"
                 loading="eager"
                 width="460"
                 height="529"
@@ -1687,7 +1852,7 @@
             </div>
             <div class="hero-content">
                 <span class="badge">Психолог для мужчин</span>
-                <h1>Помогаю <span class="highlight">мужчинам</span> в отношениях и жизни</h1>
+                <h1>Помогаю <span class="highlight accent-dark">мужчинам</span> онлайн — в отношениях и жизни</h1>
                 <p class="subhead">Анна Щеголихина — клинический и семейный психолог</p>
                 <p class="subhead2">Более 75% моих клиентов — мужчины. Я понимаю ваши задачи и помогу найти выход.</p>
 
@@ -2164,15 +2329,27 @@
                     <div style="margin-bottom:1.2rem;">
                         <h3 style="font-size:1rem;margin-bottom:0.8rem;">Образование и дипломы</h3>
                         <div class="about-certs">
-                            <div class="cert-item">Клинический психолог <small>НИИДПО</small></div>
-                            <div class="cert-item">Семейный психолог <small>НИИДПО</small></div>
+                            <div class="cert-item cert-clickable" role="button" tabindex="0" aria-label="Посмотреть диплом: клинический психолог"
+                                 data-diploma="assets/images/diplomas/НИИДПО_Диплом_ПП_с_квалификацией_Клинический_психолог_Щеголихина_Анна.webp">
+                                Клинический психолог <small>НИИДПО</small>
+                            </div>
+                            <div class="cert-item cert-clickable" role="button" tabindex="0" aria-label="Посмотреть диплом: семейный психолог"
+                                 data-diploma="assets/images/diplomas/НИИДПО_Диплом_ПП_с_квалификацией_Семейный_психолог_Щеголихина_Анна.webp">
+                                Семейный психолог <small>НИИДПО</small>
+                            </div>
                             <div class="cert-item">Групповой психолог <small>в процессе обучения</small></div>
                         </div>
                         <button class="cert-more-toggle" id="certToggle" aria-expanded="false">Показать ещё ▾</button>
                         <div class="cert-more-items" id="certMore">
                             <div class="cert-item">Вторая ступень гештальт-терапии <small>МГИ</small></div>
-                            <div class="cert-item">Первая ступень гештальт-терапии <small>МГИ</small></div>
-                            <div class="cert-item">Магистр прикладной математики и информатики <small>НФИ КемГУ</small></div>
+                            <div class="cert-item cert-clickable" role="button" tabindex="0" aria-label="Посмотреть сертификат: первая ступень гештальт"
+                                 data-diploma="assets/images/diplomas/Сертификат психолога Анны Щеголихиной Первая ступень 2023.webp">
+                                Первая ступень гештальт-терапии <small>МГИ</small>
+                            </div>
+                            <div class="cert-item cert-clickable" role="button" tabindex="0" aria-label="Посмотреть диплом: магистр"
+                                 data-diploma="assets/images/diplomas/КемГУ_Диплом_магистра_Прикладная_Математика_и_Информатика_Щеголихина_Анна.webp">
+                                Магистр прикладной математики и информатики <small>НФИ КемГУ</small>
+                            </div>
                         </div>
                     </div>
                     <div style="background:var(--bg-white);padding:1.2rem 1.4rem;border-radius:var(--radius);border:1px solid var(--border-light);">
@@ -2398,7 +2575,7 @@
                                    title="Введите номер в формате +7 (900) 123-45-67" />
                             <div class="checkbox-group">
                                 <input type="checkbox" id="formConsent" name="consent" required />
-                                <label for="formConsent">Я согласен на обработку персональных данных и принимаю <a href="privacy-policy.html" target="_blank" rel="noopener">политику конфиденциальности</a>.</label>
+                                <label for="formConsent">Я согласен на <a href="consent.html" target="_blank" rel="noopener">обработку персональных данных</a> и принимаю <a href="privacy-policy.html" target="_blank" rel="noopener">политику конфиденциальности</a>.</label>
                             </div>
                             <!-- TODO: подключить reCAPTCHA v3 — site key + google.com/recaptcha/api.js -->
                             <button type="submit" class="btn btn-primary">Отправить заявку</button>
@@ -2516,16 +2693,44 @@
                 <a href="#booking">Записаться онлайн</a>
             </nav>
             <div class="footer-copy">
-                © 2026 Анна Щеголихина — клинический, семейный и групповой психолог, специалист по работе с мужчинами
+                © 2026 Анна Щеголихина — клинический, семейный и групповой психолог
                 <br>
-                <a href="https://психолог-для-мужчин.рф/">Психолог для мужчин онлайн</a>
+                <strong>Исполнитель:</strong> Щеголихина Анна · <!-- TODO: добавить ИНН при наличии -->тел. <a href="tel:+79137556284">+7 913 755 62 84</a> · Калининград, ул. Кирова, 1
+                <br>
+                <a href="https://психолог-для-мужчин.рф">Психолог для мужчин онлайн</a>
                 <span style="margin:0 8px;">·</span>
                 <a href="#about">Об Анне</a>
                 <span style="margin:0 8px;">·</span>
+                <a href="blog/index.html">Блог</a>
+                <span style="margin:0 8px;">·</span>
                 <a href="privacy-policy.html" target="_blank" rel="noopener">Политика конфиденциальности</a>
+                <span style="margin:0 8px;">·</span>
+                <a href="consent.html" target="_blank" rel="noopener">Согласие на обработку данных</a>
+                <br>
+                <span style="font-size:0.8rem;color:var(--text-muted);margin-top:0.4rem;display:inline-block;">
+                    Сайт носит информационный характер и не заменяет очную консультацию специалиста. Материалы не являются медицинской услугой.
+                    · Сайт предназначен для лиц старше 18 лет.
+                </span>
             </div>
         </div>
     </footer>
+
+    <!-- Модальное окно для просмотра дипломов -->
+    <div class="diploma-modal" id="diplomaModal" role="dialog" aria-modal="true" aria-label="Просмотр диплома">
+        <div class="diploma-modal-inner">
+            <button class="diploma-modal-close" id="diplomaModalClose" aria-label="Закрыть">&times;</button>
+            <img id="diplomaModalImg" src="" alt="Диплом или сертификат" loading="lazy" />
+            <p class="diploma-placeholder" id="diplomaPlaceholder" style="display:none;">
+                <!-- TODO: загрузите скан в assets/images/diplomas/ с указанным именем файла -->
+                Изображение диплома пока не загружено. Добавьте файл в папку assets/images/diplomas/
+            </p>
+        </div>
+    </div>
+
+    <!-- UX: кнопка «Наверх» -->
+    <button class="scroll-top" id="scrollTopBtn" aria-label="Наверх">
+        <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+    </button>
 
     <!-- ===== СКРИПТЫ ===== -->
     <script>
@@ -2736,12 +2941,90 @@
                     form.reset();
                 });
             }
+
+            // ===== ДИПЛОМЫ: модальное окно =====
+            document.querySelectorAll('.cert-clickable').forEach(function(item) {
+                function open() {
+                    if (item.dataset.diploma) openDiploma(item.dataset.diploma);
+                }
+                item.addEventListener('click', open);
+                item.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+                });
+            });
+            var diplomaModal = document.getElementById('diplomaModal');
+            var diplomaClose = document.getElementById('diplomaModalClose');
+            if (diplomaClose) {
+                diplomaClose.addEventListener('click', closeDiploma);
+            }
+            if (diplomaModal) {
+                diplomaModal.addEventListener('click', function(e) {
+                    if (e.target === diplomaModal) closeDiploma();
+                });
+            }
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeDiploma();
+            });
+
+            // ===== КНОПКА «НАВЕРХ» =====
+            var scrollTopBtn = document.getElementById('scrollTopBtn');
+            if (scrollTopBtn) {
+                window.addEventListener('scroll', function() {
+                    scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
+                });
+                scrollTopBtn.addEventListener('click', function() {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+
+            // ===== ПОЯВЛЕНИЕ СЕКЦИЙ ПРИ СКРОЛЛЕ =====
+            document.querySelectorAll('.section').forEach(function(sec) {
+                sec.classList.add('fade-in');
+            });
+            if ('IntersectionObserver' in window) {
+                var fadeObserver = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            fadeObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+                document.querySelectorAll('.fade-in').forEach(function(el) {
+                    fadeObserver.observe(el);
+                });
+            } else {
+                document.querySelectorAll('.fade-in').forEach(function(el) {
+                    el.classList.add('visible');
+                });
+            }
         });
+
+        // Глобальная функция открытия диплома (вызывается из карточек образования)
+        function openDiploma(src) {
+            var modal = document.getElementById('diplomaModal');
+            var img = document.getElementById('diplomaModalImg');
+            var placeholder = document.getElementById('diplomaPlaceholder');
+            if (!modal || !img) return;
+            img.style.display = 'block';
+            placeholder.style.display = 'none';
+            img.src = src;
+            img.onerror = function() {
+                img.style.display = 'none';
+                placeholder.style.display = 'block';
+            };
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeDiploma() {
+            var modal = document.getElementById('diplomaModal');
+            if (!modal) return;
+            modal.classList.remove('open');
+            document.body.style.overflow = '';
+        }
     </script>
 
-    <!-- ===== АСИНХРОННАЯ МЕТРИКА ===== -->
-    <script async src="https://mc.yandex.ru/metrika/tag.js"></script>
-    <noscript><div><img src="https://mc.yandex.ru/watch/99617923" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- Google Analytics (gtag). TODO: Google Tag Manager — добавить GTM-XXXXXX при получении ID контейнера -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N6SVKB9EX1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
