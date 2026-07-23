@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Психолог для мужчин | Анна Щеголихина | Помощь в кризисе</title>
-    <meta name="description" content="Мужской психолог онлайн и в Калининграде. Помогаю мужчинам в кризисе отношений, выгорании, тревоге. Индивидуальный подход. Запишитесь на консультацию." />
-    <meta name="keywords" content="психолог для мужчин, мужской психолог, кризис отношений, выгорание, тревога, Калининград" />
+    <!-- SEO: основной домен психолог-для-мужчин.рф -->
+    <title>Психолог для мужчин онлайн | Анна Щеголихина | Видеоконсультации</title>
+    <meta name="description" content="Онлайн-психолог для мужчин — видеосессии из любого города. Мужской психолог онлайн: кризис отношений, выгорание, тревога. Также очно в Калининграде." />
+    <meta name="keywords" content="психолог для мужчин онлайн, мужской психолог онлайн, онлайн-психолог для мужчин, психолог для мужчин Калининград, видеоконсультация" />
     <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://anna-psy.online/psycholog-dlya-muzhchin" />
+    <link rel="canonical" href="https://психолог-для-мужчин.рф/" />
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
 
     <meta property="og:title" content="Психолог для мужчин — Анна Щеголихина" />
-    <meta property="og:description" content="Клинический и семейный психолог. Помогаю мужчинам в кризисе отношений и жизни. Онлайн и очно в Калининграде." />
+    <meta property="og:description" content="Онлайн-психолог для мужчин. Видеосессии из любого города. Клинический и семейный психолог. Также очно в Калининграде." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://anna-psy.online/psycholog-dlya-muzhchin" />
+    <meta property="og:url" content="https://психолог-для-мужчин.рф/" />
     <meta property="og:image" content="https://static.tildacdn.com/tild6361-3465-4932-a539-643662633539/1211_26775___3.webp" />
 
     <!-- Preconnect и preload для шрифтов -->
@@ -58,8 +59,9 @@
             --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             --gold: #f5b342;
             --highlight: #802d4b;
-            --btn-bg: #9e3a5e;
-            --btn-hover: #7a2c48;
+            /* UX: CTA на базе #b4436c, чуть контрастнее для читаемости */
+            --btn-bg: #b4436c;
+            --btn-hover: #9a3a5d;
         }
 
         html {
@@ -150,17 +152,18 @@
             transition: all 0.3s ease;
             text-align: center;
             white-space: nowrap;
+            touch-action: manipulation; /* UX: быстрее реакция на тач-устройствах */
         }
         .btn-primary {
             background: var(--btn-bg);
             color: #fff;
-            box-shadow: 0 4px 14px rgba(158, 58, 94, 0.3);
+            box-shadow: 0 4px 14px rgba(180, 67, 108, 0.35);
         }
         .btn-primary:hover {
             background: var(--btn-hover);
             color: #fff;
             transform: translateY(-3px);
-            box-shadow: 0 8px 26px rgba(158, 58, 94, 0.4);
+            box-shadow: 0 8px 26px rgba(180, 67, 108, 0.45);
         }
         .btn-outline {
             background: transparent;
@@ -260,6 +263,32 @@
         .header-phone:hover {
             color: var(--accent);
         }
+
+        /* UX: очный приём — второстепенный блок */
+        .location-offline {
+            margin-top: 1.5rem;
+            padding-top: 1.2rem;
+            border-top: 1px dashed var(--border-light);
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+        .location-offline h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.4rem;
+        }
+
+        /* Форма: honeypot — скрытое поле от ботов */
+        .hp-field {
+            position: absolute;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
         /* Бургер-меню */
         .burger-btn {
             display: none;
@@ -269,6 +298,7 @@
             border: none;
             cursor: pointer;
             padding: 4px;
+            touch-action: manipulation;
         }
         .burger-btn span {
             display: block;
@@ -292,14 +322,15 @@
             display: none;
             flex-direction: column;
             width: 100%;
-            padding: 16px 0;
-            gap: 12px;
+            padding: 24px 0; /* UX: увеличенные отступы мобильного меню */
+            gap: 18px;
             border-top: 1px solid var(--border-light);
         }
         .mobile-nav a {
             font-size: 1rem;
             font-weight: 500;
             color: var(--text-secondary);
+            padding: 8px 0;
         }
         .mobile-nav a:hover {
             color: var(--accent);
@@ -693,6 +724,7 @@
             cursor: pointer;
             transition: all 0.2s;
             color: var(--text-secondary);
+            touch-action: manipulation;
         }
         .slider-btn:hover {
             border-color: var(--accent);
@@ -1196,6 +1228,7 @@
             background: transparent;
             transition: background 0.2s;
             user-select: none;
+            touch-action: manipulation;
         }
         .faq-item .faq-question:hover {
             background: var(--accent-soft);
@@ -1438,67 +1471,104 @@
             .online-benefits {
                 grid-template-columns: 1fr;
             }
+            /* UX: кнопки мессенджеров 85% ширины на малых экранах */
+            .contact-messengers {
+                flex-direction: column;
+                align-items: center;
+            }
+            .contact-messengers .btn {
+                width: 85%;
+                min-width: 0;
+            }
         }
     </style>
 
-    <!-- ===== MICRODATA SCHEMA.ORG ===== -->
+    <!-- ===== MICRODATA SCHEMA.ORG: Person, LocalBusiness, Service, BreadcrumbList ===== -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "ProfessionalService",
-      "name": "Анна Щеголихина – психолог для мужчин",
-      "image": "https://static.tildacdn.com/tild6361-3465-4932-a539-643662633539/1211_26775___3.webp",
-      "description": "Мужской психолог онлайн и в Калининграде. Помогаю мужчинам в кризисе отношений, выгорании, тревоге.",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "ул. Кирова, 1",
-        "addressLocality": "Калининград",
-        "postalCode": "236000",
-        "addressCountry": "RU"
-      },
-      "telephone": "+7 913 755 62 84",
-      "openingHours": "Mo-Fr 09:00-21:00",
-      "priceRange": "₽₽",
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "5.0",
-        "reviewCount": "8"
-      },
-      "review": [
+      "@graph": [
         {
-          "@type": "Review",
-          "author": { "@type": "Person", "name": "М." },
-          "reviewBody": "Проходил через развод и обратился к Анне, чтобы не утонуть в эмоциях. Работа помогла мне держать голову холодной, не влетать в конфликты и постепенно собрать себя заново. Чувствую, что вышел из ситуации гораздо сильнее, чем мог бы сам. Спасибо!",
-          "reviewRating": { "@type": "Rating", "ratingValue": "5" }
+          "@type": "Person",
+          "@id": "https://психолог-для-мужчин.рф/#person",
+          "name": "Анна Щеголихина",
+          "jobTitle": "Клинический и семейный психолог",
+          "description": "Психолог для мужчин онлайн. Специализируюсь на работе с мужчинами: кризис отношений, выгорание, тревога.",
+          "image": "https://static.tildacdn.com/tild6361-3465-4932-a539-643662633539/1211_26775___3.webp",
+          "telephone": "+79137556284",
+          "url": "https://психолог-для-мужчин.рф/",
+          "worksFor": { "@id": "https://психолог-для-мужчин.рф/#business" }
         },
         {
-          "@type": "Review",
-          "author": { "@type": "Person", "name": "С." },
-          "reviewBody": "Аня, добрый день! ... Очень благодарен за твоё внимание и поддержку! Планирую продолжать встречи, потому что понимаю, что ещё многое могу открыть для себя с твоей помощью )",
-          "reviewRating": { "@type": "Rating", "ratingValue": "5" }
-        }
-      ],
-      "offers": [
-        {
-          "@type": "Offer",
-          "name": "Индивидуальная консультация 50 мин",
-          "price": "4500",
-          "priceCurrency": "RUB",
-          "description": "Стандартное время, подходит для большинства запросов."
+          "@type": ["ProfessionalService", "LocalBusiness"],
+          "@id": "https://психолог-для-мужчин.рф/#business",
+          "name": "Анна Щеголихина – психолог для мужчин онлайн",
+          "image": "https://static.tildacdn.com/tild6361-3465-4932-a539-643662633539/1211_26775___3.webp",
+          "description": "Онлайн-психолог для мужчин. Видеосессии из любого города. Также очные консультации в Калининграде.",
+          "url": "https://психолог-для-мужчин.рф/",
+          "provider": { "@id": "https://психолог-для-мужчин.рф/#person" },
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "ул. Кирова, 1",
+            "addressLocality": "Калининград",
+            "postalCode": "236000",
+            "addressCountry": "RU"
+          },
+          "telephone": "+79137556284",
+          "openingHours": "Mo-Fr 09:00-21:00",
+          "priceRange": "₽₽",
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "5.0",
+            "reviewCount": "8"
+          },
+          "offers": [
+            {
+              "@type": "Offer",
+              "price": "4500",
+              "priceCurrency": "RUB",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Индивидуальная онлайн-консультация 50 мин",
+                "description": "Стандартное время видеосессии.",
+                "provider": { "@id": "https://психолог-для-мужчин.рф/#person" }
+              }
+            },
+            {
+              "@type": "Offer",
+              "price": "7000",
+              "priceCurrency": "RUB",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Индивидуальная онлайн-консультация 90 мин",
+                "description": "Глубокое погружение в запрос.",
+                "provider": { "@id": "https://психолог-для-мужчин.рф/#person" }
+              }
+            },
+            {
+              "@type": "Offer",
+              "price": "7000",
+              "priceCurrency": "RUB",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Семейная (парная) онлайн-консультация 90 мин",
+                "description": "Для пары или семьи.",
+                "provider": { "@id": "https://психолог-для-мужчин.рф/#person" }
+              }
+            }
+          ]
         },
         {
-          "@type": "Offer",
-          "name": "Индивидуальная консультация 90 мин",
-          "price": "7000",
-          "priceCurrency": "RUB",
-          "description": "Больше времени для себя, глубокое погружение."
-        },
-        {
-          "@type": "Offer",
-          "name": "Семейная (парная) консультация 90 мин",
-          "price": "7000",
-          "priceCurrency": "RUB",
-          "description": "Для пары или семьи, наладить диалог."
+          "@type": "BreadcrumbList",
+          "@id": "https://психолог-для-мужчин.рф/#breadcrumbs",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Главная",
+              "item": "https://психолог-для-мужчин.рф/"
+            }
+          ]
         }
       ]
     }
@@ -1521,7 +1591,7 @@
           "name": "Как часто нужно встречаться с психологом?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Оптимальная частота — 1 раз в неделю. Такой ритм создаёт устойчивый процесс: вы успеваете проживать изменения между встречами и не теряете контакт с тем, что происходит внутри. Иногда на старте или в период повышенной нагрузки мы можем встречаться 2 раза в неделю."
+            "text": "Оптимальная частота — 1 раз в неделю. Такой ритм создаёт устойчивый процесс: вы успеваете проживать изменения между встречами и не теряете контакт с тем, что происходит внутри."
           }
         },
         {
@@ -1529,7 +1599,7 @@
           "name": "Сколько времени нужно, чтобы стало легче?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "В среднем первое облегчение наступает уже в течение первых 3–6 встреч — когда становится понятнее, что с вами происходит, снижается напряжение и появляется ощущение опоры. Более глубокие и устойчивые изменения формируются в процессе нескольких месяцев (6–12 или более) регулярной работы."
+            "text": "В среднем первое облегчение наступает уже в течение первых 3–6 встреч. Более глубокие изменения формируются в процессе нескольких месяцев регулярной работы."
           }
         },
         {
@@ -1537,7 +1607,31 @@
           "name": "Что если я опоздаю или пропущу встречу?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Если потребуется перенос или отмена бронирования — пожалуйста, предупредите не позднее чем за 24 часа до встречи. В этом случае я верну вам деньги, или мы подберём другое время. При отмене встречи менее чем за 24 часа — деньги не возвращаются."
+            "text": "Предупредите не позднее чем за 24 часа до встречи — верну деньги или подберём другое время. При отмене менее чем за 24 часа — деньги не возвращаются."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Как быть, если жена хочет развода?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "На онлайн-консультации мы разберём ваши чувства, поможем принять решение и найти способ действовать спокойно и достойно, без разрушительных конфликтов."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Поможет ли психолог мужчине при кризисе среднего возраста?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Да. Кризис среднего возраста у мужчин часто проявляется как потеря смысла и сомнения в карьере и отношениях. Видеосессии помогают вернуть опору и найти новые цели."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Можно ли обратиться к психологу онлайн, если стыдно идти очно?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Да. Многие мужчины выбирают онлайн-формат из-за анонимности: вы остаётесь дома, конфиденциальность гарантирована."
           }
         }
       ]
@@ -1556,11 +1650,12 @@
                 <a href="#spec">Услуги</a>
                 <a href="#reviews">Отзывы</a>
                 <a href="#pricing">Цены</a>
+                <a href="blog/index.html">Блог</a>
                 <a href="#contact">Контакты</a>
             </nav>
             <div class="header-actions">
                 <a href="tel:+79137556284" class="header-phone">+7 913 755 62 84</a>
-                <a href="#booking" class="btn btn-primary btn-sm">Записаться</a>
+                <a href="#booking" class="btn btn-primary btn-sm">Записаться онлайн</a>
             </div>
             <button class="burger-btn" id="burgerBtn" aria-label="Открыть меню">
                 <span></span><span></span><span></span>
@@ -1570,8 +1665,9 @@
             <a href="#spec">Услуги</a>
             <a href="#reviews">Отзывы</a>
             <a href="#pricing">Цены</a>
+            <a href="blog/index.html">Блог</a>
             <a href="#contact">Контакты</a>
-            <a href="#booking">Записаться</a>
+            <a href="#booking">Записаться онлайн</a>
         </div>
     </header>
 
@@ -1698,8 +1794,8 @@
     <section class="section bg-light" aria-labelledby="results-title">
         <div class="container">
             <div class="section-title">
-                <h2 id="results-title">Что вы получите в результате</h2>
-                <p>Цели, к которым приходят мои клиенты</p>
+                <h2 id="results-title">Что вы получите после работы с мужским психологом онлайн</h2>
+                <p>Цели, к которым приходят мои клиенты на онлайн-консультациях</p>
             </div>
             <div class="results-grid">
                 <div class="result-item">
@@ -1752,10 +1848,11 @@
                 </div>
             </div>
             <div class="results-footnote">
-                Мужской психолог помогает почувствовать себя увереннее, реализоваться в профессии, построить крепкие отношения. Общественные стереотипы «мужчины не плачут» и «мужчины не жалуются» часто мешают обратиться за помощью. Я предлагаю безопасное пространство, где вы сможете справиться со сложностями без вреда для себя и окружающих.
+                <p>Мужской психолог онлайн помогает мужчинам почувствовать себя увереннее, реализоваться в профессии и построить крепкие отношения — из любого города, через видеосессию.</p>
+                <p style="margin-top:0.6rem;">Онлайн-психолог для мужчин создаёт безопасное пространство, где вы справитесь со сложностями без вреда для себя и близких. Стереотипы «мужчины не плачут» часто мешают обратиться за помощью — онлайн-формат снимает этот барьер.</p>
             </div>
             <div class="btn-center">
-                <a href="#booking" class="btn btn-primary">Записаться на первую встречу</a>
+                <a href="#booking" class="btn btn-primary">Записаться на первую онлайн-встречу</a>
             </div>
         </div>
     </section>
@@ -2015,12 +2112,19 @@
             <div class="about-grid">
                 <div class="about-text">
                     <h2 id="about-title">Анна Щеголихина</h2>
-                    <p class="lead">Клинический, семейный и групповой психолог (в процессе обучения), специалист по работе с мужчинами</p>
+                    <p class="lead">Клинический, семейный и групповой психолог. Онлайн-консультации для мужчин — основной формат работы.</p>
                     <div class="bio">
-                        <p>В психологии с 2019 года. Работаю со взрослыми и парами, помогаю разобраться в сложных чувствах, напряжении в отношениях и справиться с внутренней неуверенностью.</p>
-                        <p style="margin-top:0.4rem;">Помимо частной практики: организую психологические фестивали и летние смены «ЯРЧЕ», являюсь соучредителем сервиса по подбору и работе с психологами «ДА», провожу психологические мастер-классы.</p>
+                        <p>В психологии с 2019 года. Работаю со взрослыми и парами онлайн и очно.</p>
+                        <p style="margin-top:0.4rem;">Помогаю разобраться в сложных чувствах, напряжении в отношениях и внутренней неуверенности.</p>
+                        <p style="margin-top:0.4rem;">Помимо частной практики:</p>
+                        <ul style="margin:0.4rem 0 0 1.2rem;color:var(--text-secondary);">
+                            <li>организую психологические фестивали и летние смены «ЯРЧЕ»;</li>
+                            <li>соучредитель сервиса по подбору психологов «ДА»;</li>
+                            <li>провожу психологические мастер-классы.</li>
+                        </ul>
                         <div class="personal-story">
-                            <p><strong>Моя личная история:</strong> Я пришла в психологию через собственный опыт и вижу, как мужчинам сложно просить о помощи. Моя задача – создать пространство, где вы сможете говорить открыто, без страха быть осуждённым. Я верю, что каждый мужчина способен на глубокие перемены, если ему дать правильные инструменты и поддержку.</p>
+                            <p><strong>Моя личная история:</strong> Я пришла в психологию через собственный опыт и вижу, как мужчинам сложно просить о помощи.</p>
+                            <p style="margin-top:0.4rem;">Моя задача — создать пространство на онлайн-консультации, где вы сможете говорить открыто, без страха быть осуждённым.</p>
                         </div>
                     </div>
 
@@ -2196,22 +2300,29 @@
         <div class="container">
             <div class="section-title">
                 <h2 id="location-title">Где я принимаю</h2>
-                <p>Онлайн по всему миру и очно в Калининграде</p>
+                <p>Основной формат — онлайн-консультации из любого города. Также очно в Калининграде.</p>
             </div>
             <div class="location-grid">
                 <div class="location-info">
-                    <h3>Очный приём в центре Калининграда</h3>
-                    <p class="address">ул. Кирова, 1 (5 минут от Северного вокзала)</p>
+                    <h3>Онлайн-консультации — из любого города</h3>
                     <p style="color:var(--text-secondary);">
-                        Уютный кабинет в самом центре города. Для тех, кому важно личное присутствие и атмосфера.
+                        Провожу видеосессии для мужчин по всей России и миру. Качество терапии не зависит от географии.
                     </p>
-                    <p style="margin-top:0.6rem;">
-                        <svg class="icon" style="width:20px;height:20px;color:var(--accent);vertical-align:middle;margin-right:6px;" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                        Также провожу онлайн-консультации для клиентов из любых городов и стран. <strong>Я работаю с мужчинами в Калининграде и онлайн по всей России и миру.</strong>
+                    <ul style="margin:0.8rem 0 0 1.2rem;color:var(--text-secondary);">
+                        <li>ссылка на видеовстречу приходит за 5–10 минут до сессии;</li>
+                        <li>работаю через Telegram или MAX;</li>
+                        <li>запись через календарь на этой странице.</li>
+                    </ul>
+                    <p style="margin-top:0.8rem;">
+                        <strong>Психолог для мужчин онлайн</strong> — основной формат практики. Также работаю как <strong>психолог для мужчин в Калининграде</strong> — очно, по договорённости.
                     </p>
-                    <p style="margin-top:0.6rem;font-size:0.9rem;color:var(--text-muted);">
-                        <strong>Важно:</strong> об очной встрече мы можем <strong>договориться в мессенджерах</strong>, напишите мне. Календарь выше актуален только для онлайн-записи.
-                    </p>
+
+                    <!-- UX: очный приём — второстепенный -->
+                    <div class="location-offline">
+                        <h3>Очный приём в центре Калининграда</h3>
+                        <p class="address">ул. Кирова, 1 (5 минут от Северного вокзала)</p>
+                        <p>Уютный кабинет для тех, кому важно личное присутствие. Об очной встрече договариваемся в мессенджерах.</p>
+                    </div>
                 </div>
                 <div class="location-map">
                     <iframe 
@@ -2253,7 +2364,7 @@
                         </div>
                         <div>
                             <div class="contact-label">Формат</div>
-                            <div class="contact-value">Онлайн (весь мир) и очно (Калининград, Кирова, 1)</div>
+                            <div class="contact-value">Онлайн-консультации (основной формат) · очно в Калининграде</div>
                         </div>
                     </div>
                 </div>
@@ -2271,18 +2382,25 @@
                         </a>
                     </div>
 
-                    <!-- Форма обратной связи -->
+                    <!-- Форма обратной связи: honeypot + маска телефона + TODO reCAPTCHA v3 -->
                     <div class="contact-form" style="margin-top:1.5rem;">
-                        <h3>Оставьте заявку – я перезвоню</h3>
-                        <form id="callbackForm">
+                        <h3>Оставьте заявку на онлайн-консультацию — я перезвоню</h3>
+                        <form id="callbackForm" novalidate>
+                            <div class="hp-field" aria-hidden="true">
+                                <label for="formWebsite">Не заполняйте это поле</label>
+                                <input type="text" id="formWebsite" name="website" tabindex="-1" autocomplete="off" />
+                            </div>
                             <label for="formName">Ваше имя</label>
-                            <input type="text" id="formName" name="name" placeholder="Алексей" required />
+                            <input type="text" id="formName" name="name" placeholder="Алексей" required autocomplete="name" />
                             <label for="formPhone">Телефон</label>
-                            <input type="tel" id="formPhone" name="phone" placeholder="+7 900 123 45 67" required />
+                            <input type="tel" id="formPhone" name="phone" placeholder="+7 (900) 123-45-67" required autocomplete="tel"
+                                   pattern="^\+7\s?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$"
+                                   title="Введите номер в формате +7 (900) 123-45-67" />
                             <div class="checkbox-group">
                                 <input type="checkbox" id="formConsent" name="consent" required />
-                                <label for="formConsent">Я согласен на обработку персональных данных и принимаю <a href="/privacy-policy" target="_blank">политику конфиденциальности</a>.</label>
+                                <label for="formConsent">Я согласен на обработку персональных данных и принимаю <a href="privacy-policy.html" target="_blank" rel="noopener">политику конфиденциальности</a>.</label>
                             </div>
+                            <!-- TODO: подключить reCAPTCHA v3 — site key + google.com/recaptcha/api.js -->
                             <button type="submit" class="btn btn-primary">Отправить заявку</button>
                         </form>
                         <p style="font-size:0.8rem;color:var(--text-muted);margin-top:0.6rem;">Ваши данные не передаются третьим лицам.</p>
@@ -2349,6 +2467,39 @@
                         <p>При отмене встречи менее чем за 24 часа — деньги не возвращаются.</p>
                     </div>
                 </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        Как быть, если жена хочет развода?
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Это один из самых частых запросов мужчин. На онлайн-консультации мы разберём ваши чувства и поможем принять решение — бороться за отношения или отпустить.</p>
+                        <p>Вы научитесь действовать спокойно и достойно, без разрушительных конфликтов.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        Поможет ли психолог мужчине при кризисе среднего возраста?
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Да. Кризис среднего возраста у мужчин часто проявляется как потеря смысла, раздражительность, сомнения в карьере и отношениях.</p>
+                        <p>Онлайн-консультации помогают вернуть опору и найти новые цели — конфиденциально, из любого города.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        Можно ли обратиться онлайн, если стыдно идти очно?
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Да, и это нормально. Многие мужчины выбирают онлайн-формат из-за анонимности: вы остаётесь дома, никто не увидит вас в кабинете психолога.</p>
+                        <p>Конфиденциальность гарантирована. Видеосессия проходит так же эффективно, как очная встреча.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -2360,17 +2511,18 @@
                 <a href="#spec">Услуги</a>
                 <a href="#reviews">Отзывы</a>
                 <a href="#pricing">Цены</a>
+                <a href="blog/index.html">Блог</a>
                 <a href="#contact">Контакты</a>
-                <a href="#booking">Записаться</a>
+                <a href="#booking">Записаться онлайн</a>
             </nav>
             <div class="footer-copy">
                 © 2026 Анна Щеголихина — клинический, семейный и групповой психолог, специалист по работе с мужчинами
                 <br>
-                <a href="https://anna-psy.online/psycholog-dlya-muzhchin" target="_blank" rel="noopener">Психолог для мужчин</a>
+                <a href="https://психолог-для-мужчин.рф/">Психолог для мужчин онлайн</a>
                 <span style="margin:0 8px;">·</span>
-                <a href="https://anna-psy.online/about" target="_blank" rel="noopener">Об Анне</a>
+                <a href="#about">Об Анне</a>
                 <span style="margin:0 8px;">·</span>
-                <a href="/privacy-policy" target="_blank">Политика конфиденциальности</a>
+                <a href="privacy-policy.html" target="_blank" rel="noopener">Политика конфиденциальности</a>
             </div>
         </div>
     </footer>
@@ -2542,11 +2694,31 @@
                 });
             });
 
+            // ===== МАСКА ТЕЛЕФОНА =====
+            var phoneInput = document.getElementById('formPhone');
+            if (phoneInput) {
+                phoneInput.addEventListener('input', function() {
+                    var digits = this.value.replace(/\D/g, '');
+                    if (digits.startsWith('8')) digits = '7' + digits.slice(1);
+                    if (!digits.startsWith('7')) digits = '7' + digits;
+                    digits = digits.slice(0, 11);
+                    var formatted = '+7';
+                    if (digits.length > 1) formatted += ' (' + digits.slice(1, 4);
+                    if (digits.length >= 4) formatted += ') ' + digits.slice(4, 7);
+                    if (digits.length >= 7) formatted += '-' + digits.slice(7, 9);
+                    if (digits.length >= 9) formatted += '-' + digits.slice(9, 11);
+                    this.value = formatted;
+                });
+            }
+
             // ===== ФОРМА ОБРАТНОЙ СВЯЗИ =====
             var form = document.getElementById('callbackForm');
             if (form) {
                 form.addEventListener('submit', function(e) {
                     e.preventDefault();
+                    var honeypot = document.getElementById('formWebsite');
+                    if (honeypot && honeypot.value.trim() !== '') return;
+
                     var name = document.getElementById('formName').value.trim();
                     var phone = document.getElementById('formPhone').value.trim();
                     var consent = document.getElementById('formConsent').checked;
@@ -2554,9 +2726,13 @@
                         alert('Пожалуйста, заполните все поля и дайте согласие.');
                         return;
                     }
-                    // Здесь можно отправить данные через AJAX на ваш бэкенд или в Telegram
-                    // В примере просто показываем сообщение
-                    alert('Спасибо! Я свяжусь с вами в ближайшее время.');
+                    if (!/^\+7\s?\(\d{3}\)\s?\d{3}-\d{2}-\d{2}$/.test(phone)) {
+                        alert('Пожалуйста, введите телефон в формате +7 (900) 123-45-67');
+                        return;
+                    }
+                    // TODO: отправить через AJAX / Telegram-бот / email
+                    // TODO: добавить reCAPTCHA v3 token
+                    alert('Спасибо! Я свяжусь с вами в ближайшее время для записи на онлайн-консультацию.');
                     form.reset();
                 });
             }
