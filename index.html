@@ -15,34 +15,19 @@
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
 
-    <!-- Google Tag (GT-TNH4ZN2N) + Google Analytics (G-2VSDHB5V62) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=GT-TNH4ZN2N"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'GT-TNH4ZN2N');
-        gtag('config', 'G-2VSDHB5V62');
-    </script>
+    <!-- LCP: локальное фото героя -->
+    <link rel="preload" as="image" type="image/webp" href="assets/images/hero-460.webp" fetchpriority="high" />
+
+    <!-- Шрифты Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
 
     <meta property="og:title" content="Психолог для мужчин — Анна Щеголихина" />
     <meta property="og:description" content="Онлайн-психолог для мужчин. Видеосессии из любого города. Клинический и семейный психолог. Также очно в Калининграде." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://психолог-для-мужчин.рф" />
-    <meta property="og:image" content="https://static.tildacdn.com/tild6361-3465-4932-a539-643662633539/1211_26775___3.webp" />
-
-    <!-- Preconnect и preload для шрифтов -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" />
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-          href="https://fonts.gstatic.com/s/inter/v18/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa2JL7W0Q5n-wU.woff2" />
-    <!-- Шрифты с font-display: swap -->
-    <link rel="stylesheet" media="print" onload="this.onload=null;this.removeAttribute('media');"
-          href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" crossorigin />
-    <noscript>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" />
-    </noscript>
+    <meta property="og:image" content="https://психолог-для-мужчин.рф/assets/images/hero-920.webp" />
 
     <style>
         /* ===== ВСЕ СТИЛИ ВСТРОЕНЫ ===== */
@@ -603,9 +588,10 @@
             color: var(--accent);
             margin-bottom: 0.8rem;
         }
-        .online-benefit h4 {
+        .online-benefit h3 {
             font-size: 1rem;
             margin-bottom: 0.2rem;
+            font-weight: 600;
         }
         .online-benefit p {
             font-size: 0.85rem;
@@ -1617,7 +1603,7 @@
           "name": "Анна Щеголихина",
           "jobTitle": "Клинический и семейный психолог",
           "description": "Психолог для мужчин онлайн. Специализируюсь на работе с мужчинами: кризис отношений, выгорание, тревога.",
-          "image": "https://static.tildacdn.com/tild6361-3465-4932-a539-643662633539/1211_26775___3.webp",
+          "image": "https://психолог-для-мужчин.рф/assets/images/hero-920.webp",
           "telephone": "+79137556284",
           "url": "https://психолог-для-мужчин.рф/",
           "worksFor": { "@id": "https://психолог-для-мужчин.рф/#business" }
@@ -1626,7 +1612,7 @@
           "@type": ["ProfessionalService", "LocalBusiness"],
           "@id": "https://психолог-для-мужчин.рф/#business",
           "name": "Анна Щеголихина – психолог для мужчин онлайн",
-          "image": "https://static.tildacdn.com/tild6361-3465-4932-a539-643662633539/1211_26775___3.webp",
+          "image": "https://психолог-для-мужчин.рф/assets/images/hero-920.webp",
           "description": "Онлайн-психолог для мужчин. Видеосессии из любого города. Также очные консультации в Калининграде.",
           "url": "https://психолог-для-мужчин.рф/",
           "provider": { "@id": "https://психолог-для-мужчин.рф/#person" },
@@ -1775,7 +1761,7 @@
         "streetAddress": "ул. Кирова, 1"
       },
       "priceRange": "₽₽",
-      "image": "https://static.tildacdn.com/tild6361-3465-4932-a539-643662633539/1211_26775___3.webp",
+      "image": "https://психолог-для-мужчин.рф/assets/images/hero-920.webp",
       "sameAs": [
         "https://t.me/annashhe",
         "https://www.b17.ru/anna_shhegolihina/"
@@ -1787,29 +1773,7 @@
 
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GT-TNH4ZN2N" height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Manager"></iframe></noscript>
-
-    <!-- Yandex.Metrika counter (ID: 110969154) -->
-    <script type="text/javascript">
-        (function(m,e,t,r,i,k,a){
-            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-            m[i].l=1*new Date();
-            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=110969154', 'ym');
-
-        ym(110969154, 'init', {
-            ssr:true,
-            webvisor:true,
-            clickmap:true,
-            ecommerce:"dataLayer",
-            referrer: document.referrer,
-            url: location.href,
-            accurateTrackBounce:true,
-            trackLinks:true
-        });
-    </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/110969154" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-    <!-- /Yandex.Metrika counter -->
 
     <!-- ===== HEADER ===== -->
     <header class="header" role="banner">
@@ -1842,12 +1806,15 @@
         </div>
     </header>
 
+    <main id="main-content">
     <!-- ===== HERO ===== -->
     <section class="hero" aria-label="Главный блок">
         <div class="container hero-grid">
             <div class="hero-image">
                 <img
-                src="https://static.tildacdn.com/tild6361-3465-4932-a539-643662633539/1211_26775___3.webp?quality=80&format=webp"
+                src="assets/images/hero-460.webp"
+                srcset="assets/images/hero-460.webp 460w, assets/images/hero-920.webp 920w"
+                sizes="(max-width: 768px) 385px, 529px"
                 alt="Анна Щеголихина — онлайн-психолог для мужчин, Калининград"
                 loading="eager"
                 width="460"
@@ -2038,22 +2005,22 @@
             <div class="online-benefits">
                 <div class="online-benefit">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
-                    <h4>Анонимность и приватность</h4>
+                    <h3>Анонимность и приватность</h3>
                     <p>Вы можете чувствовать себя в безопасности, не опасаясь встреч в общественных местах.</p>
                 </div>
                 <div class="online-benefit">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                    <h4>Экономия времени</h4>
+                    <h3>Экономия времени</h3>
                     <p>Не нужно тратить часы на дорогу – сессия начинается в назначенное время, где бы вы ни находились.</p>
                 </div>
                 <div class="online-benefit">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0z"/><path d="M12 6v6l4 2"/></svg>
-                    <h4>Доступность из любого города</h4>
+                    <h3>Доступность из любого города</h3>
                     <p>Я работаю с клиентами по всей России и миру – качество терапии не зависит от географии.</p>
                 </div>
                 <div class="online-benefit">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 12a9 9 0 1 0-9 9"/><path d="M21 3v9h-9"/></svg>
-                    <h4>Гибкий график</h4>
+                    <h3>Гибкий график</h3>
                     <p>Выбирайте удобное время, включая вечерние часы, чтобы вписать терапию в свой ритм жизни.</p>
                 </div>
             </div>
@@ -2344,6 +2311,10 @@
                                 Семейный психолог <small>НИИДПО</small>
                             </div>
                             <div class="cert-item">Групповой психолог <small>в процессе обучения</small></div>
+                            <div class="cert-item cert-clickable" role="button" tabindex="0" aria-label="Посмотреть диплом: магистр"
+                                 data-diploma="assets/images/diplomas/КемГУ_Диплом_магистра_Прикладная_Математика_и_Информатика_Щеголихина_Анна.webp">
+                                Магистр прикладной математики и информатики <small>НФИ КемГУ</small>
+                            </div>
                         </div>
                         <button class="cert-more-toggle" id="certToggle" aria-expanded="false">Показать ещё ▾</button>
                         <div class="about-certs cert-more-items" id="certMore">
@@ -2354,10 +2325,6 @@
                             <div class="cert-item cert-clickable" role="button" tabindex="0" aria-label="Посмотреть сертификат: первая ступень гештальт"
                                  data-diploma="assets/images/diplomas/Сертификат психолога Анны Щеголихиной Первая ступень 2023.webp">
                                 Первая ступень гештальт-терапии <small>МГИ</small>
-                            </div>
-                            <div class="cert-item cert-clickable" role="button" tabindex="0" aria-label="Посмотреть диплом: магистр"
-                                 data-diploma="assets/images/diplomas/КемГУ_Диплом_магистра_Прикладная_Математика_и_Информатика_Щеголихина_Анна.webp">
-                                Магистр прикладной математики и информатики <small>НФИ КемГУ</small>
                             </div>
                             <div class="cert-item cert-clickable" role="button" tabindex="0" aria-label="Посмотреть сертификат: интенсив 2024 Калининград"
                                  data-diploma="assets/images/diplomas/Сертификат психолога Анны Щеголихиной Интенсив 2024 Калининград.webp">
@@ -2499,7 +2466,6 @@
             <div class="section-title">
                 <h2 id="calendar-title">Выберите удобное время в графике, чтобы записаться на консультацию ОНЛАЙН</h2>
             </div>
-            <script src="https://anna-psy-schedule-frontend.vercel.app/widget.js" defer></script>
             <div data-anna-psy-widget></div>
             <p class="calendar-note">Если календарь не отображается, попробуйте <strong>отключить VPN</strong> или открыть страницу в другом браузере</p>
         </div>
@@ -2714,6 +2680,8 @@
         </div>
     </section>
 
+    </main>
+
     <!-- ===== FOOTER ===== -->
     <footer class="footer" role="contentinfo">
         <div class="container footer-inner">
@@ -2766,7 +2734,74 @@
 
     <!-- ===== СКРИПТЫ ===== -->
     <script>
+        // Аналитика: загрузка после отрисовки страницы (GTM включает GA4)
+        function loadAnalytics() {
+            if (window.__analyticsLoaded) return;
+            window.__analyticsLoaded = true;
+
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            window.gtag = gtag;
+
+            var gtmScript = document.createElement('script');
+            gtmScript.async = true;
+            gtmScript.src = 'https://www.googletagmanager.com/gtag/js?id=GT-TNH4ZN2N';
+            gtmScript.onload = function() {
+                gtag('js', new Date());
+                gtag('config', 'GT-TNH4ZN2N');
+            };
+            document.head.appendChild(gtmScript);
+
+            (function(m,e,t,r,i,k,a){
+                m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+                m[i].l=1*new Date();
+                for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+                k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a);
+            })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js?id=110969154', 'ym');
+
+            ym(110969154, 'init', {
+                clickmap:true,
+                trackLinks:true,
+                accurateTrackBounce:true,
+                webvisor:true,
+                ecommerce:'dataLayer'
+            });
+        }
+
+        window.addEventListener('load', function() {
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(loadAnalytics, { timeout: 3500 });
+            } else {
+                setTimeout(loadAnalytics, 2000);
+            }
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
+            // ===== ВИДЖЕТ КАЛЕНДАРЯ: загрузка при прокрутке к блоку =====
+            var bookingSection = document.getElementById('booking');
+            if (bookingSection) {
+                var widgetLoaded = false;
+                function loadCalendarWidget() {
+                    if (widgetLoaded) return;
+                    widgetLoaded = true;
+                    var ws = document.createElement('script');
+                    ws.src = 'https://anna-psy-schedule-frontend.vercel.app/widget.js';
+                    ws.defer = true;
+                    document.body.appendChild(ws);
+                }
+                if ('IntersectionObserver' in window) {
+                    var widgetObs = new IntersectionObserver(function(entries) {
+                        if (entries.some(function(e) { return e.isIntersecting; })) {
+                            loadCalendarWidget();
+                            widgetObs.disconnect();
+                        }
+                    }, { rootMargin: '300px 0px' });
+                    widgetObs.observe(bookingSection);
+                } else {
+                    loadCalendarWidget();
+                }
+            }
+
             // ===== БУРГЕР-МЕНЮ =====
             var burger = document.getElementById('burgerBtn');
             var mobileNav = document.getElementById('mobileNav');
