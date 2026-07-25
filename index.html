@@ -238,6 +238,10 @@
             font-size: 1.2rem;
             color: var(--text-primary);
             letter-spacing: -0.02em;
+            text-decoration: none;
+        }
+        .header-brand:hover {
+            color: var(--text-primary);
         }
         .header-brand span {
             color: var(--accent);
@@ -272,19 +276,33 @@
             color: var(--accent);
         }
 
-        /* UX: очный приём — второстепенный блок */
+        /* UX: очный приём — наравне с онлайн-блоком */
         .location-offline {
-            margin-top: 1.5rem;
-            padding-top: 1.2rem;
-            border-top: 1px dashed var(--border-light);
-            font-size: 0.88rem;
-            color: var(--text-muted);
+            margin-top: 2rem;
+            padding-top: 0;
+            border-top: none;
+            font-size: 1rem;
+            color: inherit;
         }
+        .location-info h3,
         .location-offline h3 {
-            font-size: 0.95rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.6rem;
+        }
+        .hero-stats .stat-label .accent-inline {
+            color: var(--highlight);
             font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 0.4rem;
+        }
+        #consentModal.consent-modal-layer {
+            z-index: 10000000;
+        }
+        .contact-phone-note {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.35rem;
+            line-height: 1.45;
         }
 
         /* Форма: honeypot — скрытое поле от ботов */
@@ -1878,9 +1896,7 @@
     <!-- ===== HEADER ===== -->
     <header class="header" role="banner">
         <div class="container header-inner">
-            <div class="header-brand">
-                Анна Щеголихина <span>·</span> Психолог
-            </div>
+            <a href="https://психолог-для-мужчин.рф/" class="header-brand">Анна Щеголихина <span>·</span> Психолог</a>
             <nav class="header-nav" aria-label="Основная навигация">
                 <a href="#spec">Услуги</a>
                 <a href="#reviews">Отзывы</a>
@@ -1925,9 +1941,9 @@
             </div>
             <div class="hero-content">
                 <span class="badge">Психолог для мужчин</span>
-                <h1>Помогаю <span class="highlight accent-dark">мужчинам</span> онлайн — в отношениях и жизни</h1>
-                <p class="subhead">Анна Щеголихина — клинический и семейный психолог</p>
-                <p class="subhead2">Более 75% клиентов в индивидуальной работе — мужчины. Разберём ситуацию спокойно и по делу: что происходит и какие есть варианты дальше.</p>
+                <h1>Помогаю <span class="highlight accent-dark">мужчинам</span> — в отношениях и жизни</h1>
+                <p class="subhead">Анна Щеголихина — клинический и семейный психолог. Онлайн по всей России и очно в Калининграде.</p>
+                <p class="subhead2">Более 75% моих клиентов в индивидуальной работе — мужчины. Разбираем ситуацию спокойно и по делу: что происходит и какие есть варианты дальше.</p>
 
                 <div class="quote-block">
                     «Не обязательно справляться со всем в одиночку. На консультации — без готовых советов и давления: помогаю вам самим увидеть, что важно.»
@@ -1950,7 +1966,7 @@
                     </div>
                     <div class="stat-item">
                         <div class="stat-number">онлайн</div>
-                        <div class="stat-label">и очно в Калининграде</div>
+                        <div class="stat-label">и <span class="accent-inline">очно</span> в Калининграде</div>
                     </div>
                 </div>
             </div>
@@ -2032,7 +2048,7 @@
         <div class="container">
             <div class="section-title">
                 <h2 id="results-title">К каким изменениям обычно идут мужчины</h2>
-                <p>Не гарантия результата — ориентиры, с которыми чаще всего работают на консультациях</p>
+                <p>Не гарантия результата — ориентиры, с которыми чаще всего мы работаем на консультациях</p>
             </div>
             <div class="results-grid">
                 <div class="result-item">
@@ -2085,7 +2101,7 @@
                 </div>
             </div>
             <div class="results-footnote">
-                <p>Результат зависит от запроса, регулярности встреч и вашей готовности пробовать новое между сессиями. Я не обещаю «сохранить брак» или «убрать тревогу за N встреч» — помогаю разобраться и найти рабочие для вас шаги.</p>
+                <p>Результат зависит от запроса, регулярности встреч и вашей готовности пробовать новое между сессиями. Я не обещаю «сохранить брак» или «убрать тревогу за N встреч», а помогаю разобраться и найти рабочие для вас шаги.</p>
             </div>
             <div class="btn-center">
                 <a href="#booking" class="btn btn-primary">Записаться на первую онлайн-встречу</a>
@@ -2251,14 +2267,14 @@
                         <button class="review-toggle" aria-expanded="false">Читать полностью</button>
                     </div>
 
-                    <!-- Отзыв 6 – М. 29 лет (парная терапия, отзыв партнёрши) -->
+                    <!-- Отзыв 6 – А и М., парная терапия -->
                     <div class="review-card">
                         <div class="review-header">
-                            <span class="review-name">М.</span>
+                            <span class="review-name">А и М.</span>
                             <span class="review-source">Яндекс Услуги</span>
                         </div>
                         <div class="review-meta">
-                            <span>29 лет · парная терапия</span>
+                            <span>36 и 29 лет · парная терапия</span>
                             <div class="stars">
                                 <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9"/></svg>
                                 <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9"/></svg>
@@ -2306,7 +2322,7 @@
                     <h2 id="about-title">Анна Щеголихина</h2>
                     <p class="lead">Клинический и семейный психолог. Групповой психолог — в процессе обучения. Основной формат — онлайн-консультации; чаще всего работаю с мужчинами.</p>
                     <div class="bio">
-                        <p>Работаю со взрослыми и парами онлайн и очно в Калининграде. В индивидуальной практике более 75% клиентов — мужчины: кризис отношений, тревога, выгорание, развод.</p>
+                        <p>Работаю со взрослыми и парами онлайн и очно в Калининграде. В индивидуальной практике более 75% моих клиентов — мужчины: кризис отношений, тревога, выгорание, развод.</p>
                         <p style="margin-top:0.4rem;">Не даю готовых советов и не подталкиваю к решению «бороться или отпустить». Помогаю разобраться в ситуации и найти ответы, которые подходят именно вам.</p>
                         <p style="margin-top:0.4rem;">Помимо частной практики:</p>
                         <ul style="margin:0.4rem 0 0 1.2rem;color:var(--text-secondary);">
@@ -2315,8 +2331,9 @@
                             <li>провожу психологические мастер-классы.</li>
                         </ul>
                         <div class="personal-story">
-                            <p><strong>Почему я понимаю таких клиентов:</strong> сама пришла в психологию через гиперответственность, стремление «всё делать самой», гнаться за успехом и перфекционизм — это привело к тревоге и проблемам со сном.</p>
-                            <p style="margin-top:0.4rem;">С опорой на личную терапию и супервизии мне стало легче и спокойнее. Теперь я помогаю другим — в том числе мужчинам, которым сложно просить о помощи.</p>
+                            <p><strong>Почему я понимаю мужчин:</strong> сама пришла в психологию через гиперответственность, стремление «всё делать самой», гнаться за успехом и перфекционизм — это привело к тревоге и проблемам со сном. С опорой на личную терапию и супервизии мне стало легче и спокойнее.</p>
+                            <p style="margin-top:0.4rem;">С детства у меня были увлечения, которые часто называют «мужскими»: ремонт электроники, пайка, строительство дачи и бани, вождение мотоцикла, игры в NFS (прошла большинство частей). Математика и физика были любимыми предметами, программирование — тоже. Это не делает меня «мужчиной», но помогает говорить с мужчинами на понятном языке — без морализаторства и ярлыков.</p>
+                            <p style="margin-top:0.4rem;">Как психолог для мужчин я помогаю тем, кому сложно просить о помощи, — разобраться в ситуации и найти опору.</p>
                         </div>
                     </div>
 
@@ -2407,9 +2424,6 @@
                         </div>
                     </div>
                     <div style="background:var(--bg-white);padding:1.2rem 1.4rem;border-radius:var(--radius);border:1px solid var(--border-light);margin-bottom:1rem;">
-                        <p style="font-size:0.85rem;color:var(--text-secondary);margin:0 0 0.6rem;">
-                            <strong>Почему «психолог для мужчин»:</strong> отдельного курса «мужская психология» у меня нет — это специализация по опыту практики. Большинство клиентов в индивидуальной работе — мужчины; с женщинами тоже работаю (часто по рекомендации).
-                        </p>
                         <p style="font-size:0.85rem;color:var(--text-secondary);margin:0;">
                             <strong>Не работаю с:</strong> зависимостями (алкогольной, наркотической, игровой и др.); детьми и подростками (только взрослые от 18 лет); судебной экспертизой.
                         </p>
@@ -2456,7 +2470,7 @@
 
             <div class="steps-meta">
                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-                Онлайн или очно · 50 или 90 минут · Цена одинаковая в обоих форматах
+                Онлайн или очно · 50 или 90 минут
                 <br><span style="font-size:0.8rem;color:var(--text-muted);">Онлайн: ссылка за 5–10 минут до встречи (Telegram, MAX, Google Meet, Яндекс Телемост, Салют Джаз) — обычно ничего скачивать не нужно</span>
             </div>
         </div>
@@ -2467,7 +2481,7 @@
         <div class="container">
             <div class="section-title">
                 <h2 id="pricing-title">Стоимость консультаций</h2>
-                <p>Онлайн и очно — одна цена. При каждой оплате высылаю чек (самозанятая)</p>
+                <p>Онлайн и очно — одна цена. При каждой оплате высылаю чек (самозанятая). Отмена или перенос — не позднее чем за 24 часа. При отмене менее чем за 24 часа или неявке встреча считается состоявшейся и оплачивается.</p>
             </div>
             <div class="pricing-grid">
                 <div class="pricing-card featured">
@@ -2514,10 +2528,7 @@
                     <div>· 5 сессий по 90 минут — <strong>28 000 ₽</strong> (<span class="strike">35 000 ₽</span>, экономия 7 000 ₽)</div>
                 </div>
                 <p style="margin:1rem 0 0;font-size:0.85rem;color:var(--text-secondary);line-height:1.5;">
-                    <strong>Условия пакета:</strong> срок использования не ограничен. Отмена или перенос — не позднее чем за 24 часа (как у разовых встреч). При отмене менее чем за 24 часа или неявке встреча считается состоявшейся и списывается из пакета. Возврат неиспользованных сессий — по стоимости без учёта скидки пакета.
-                </p>
-                <p style="margin:0.6rem 0 0;font-size:0.85rem;color:var(--text-secondary);line-height:1.5;">
-                    <strong>Парная терапия:</strong> беру, только если оба согласны участвовать. Если один не готов — начинаем с индивидуальной работы.
+                    <strong>Условия пакета:</strong> использовать в течение года с момента покупки.
                 </p>
             </div>
         </div>
@@ -2527,8 +2538,8 @@
     <section class="section bg-light" aria-labelledby="calendar-title" id="booking">
         <div class="container calendar-section">
             <div class="section-title">
-                <h2 id="calendar-title">Запись на онлайн-консультацию</h2>
-                <p>Выберите время в календаре. Очно в Калининграде — только через мессенджеры (блок «Где я принимаю»).</p>
+                <h2 id="calendar-title">Выберите время онлайн-консультации в календаре</h2>
+                <p>Для записи <strong>очно</strong> в Калининграде напишите мне в мессенджеры или оставьте заявку в разделе <a href="#contact">«Свяжитесь со мной»</a>.</p>
             </div>
             <script>
                 window.PSI_LEADS_API = 'https://psi-leads.anna-shhe-adwords.workers.dev';
@@ -2603,18 +2614,17 @@
                 <div class="location-info">
                     <h3>Онлайн — из любого города</h3>
                     <p style="color:var(--text-secondary);">
-                        Видеосессии для клиентов по России и за рубежом. Запись — через календарь на этой странице.
+                        Видеосессии для клиентов из России и по всему миру. Запись — через <a href="#booking">календарь на этой странице</a>.
                     </p>
                     <ul style="margin:0.8rem 0 0 1.2rem;color:var(--text-secondary);">
-                        <li>ссылка на встречу приходит за 5–10 минут до сессии;</li>
-                        <li>площадки: Telegram, MAX, Google Meet, Яндекс Телемост, Салют Джаз;</li>
-                        <li>обычно достаточно браузера или мессенджера — ничего заранее ставить не нужно.</li>
+                        <li>ссылку на встречу присылаю за 5–10 минут до сессии;</li>
+                        <li>ничего скачивать не нужно — ссылка на видеовстречу откроется в вашем браузере (Telegram, MAX, Google Meet, Яндекс Телемост, Салют Джаз).</li>
                     </ul>
 
                     <div class="location-offline">
                         <h3>Очно в центре Калининграда</h3>
-                        <p class="address">ул. Кирова, 1 (около 5 минут от Северного вокзала)</p>
-                        <p>Кабинет по почасовой аренде — встречаем по предварительной записи. <strong>Очно нельзя записаться через календарь выше:</strong> напишите в Telegram или MAX, согласуем дату и время.</p>
+                        <p class="address">ул. Кирова, 1 (пешком 4 минуты от Северного вокзала)</p>
+                        <p>Психологическая консультация в Калининграде — по предварительной записи через мессенджеры. Очно нельзя записаться через календарь выше: напишите мне в Telegram или MAX, согласуем дату и время.</p>
                         <div style="margin-top:1rem;display:flex;flex-wrap:wrap;gap:0.6rem;">
                             <a href="https://t.me/annashhe" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Написать в Telegram</a>
                             <a href="https://max.ru/u/f9LHodD0cOKrHIa3XdZycCKQSXXx0dFf9Ck7hXPtx3Ti-6RSxFnoPC7d1Ag" target="_blank" rel="noopener" class="btn btn-outline btn-sm">Написать в MAX</a>
@@ -2641,7 +2651,7 @@
         <div class="container">
             <div class="section-title">
                 <h2 id="contact-title">Свяжитесь со мной</h2>
-                <p>Напишите в мессенджер — обычно отвечаю в течение дня. Во время сессий и супервизий могу ответить позже</p>
+                <p>Напишите в мессенджер — я отвечу в течение дня.</p>
             </div>
             <div class="contact-grid">
                 <div class="contact-info">
@@ -2652,6 +2662,7 @@
                         <div>
                             <div class="contact-label">Телефон</div>
                             <div class="contact-value"><a href="tel:+79137556284">+7 913 755 62 84</a></div>
+                            <p class="contact-phone-note">Во время сессий, супервизий и групповой работы я могу ответить не сразу, но обязательно свяжусь с вами позже.</p>
                         </div>
                     </div>
 
@@ -2680,8 +2691,8 @@
                     </div>
 
                     <div class="contact-form" style="margin-top:1.5rem;">
-                        <h3>Или оставьте телефон — перезвоню</h3>
-                        <p style="font-size:0.85rem;color:var(--text-muted);margin:0 0 0.8rem;">После отправки я получу заявку и перезвоню вам для записи на онлайн-консультацию.</p>
+                        <h3>Или оставьте телефон</h3>
+                        <p style="font-size:0.85rem;color:var(--text-muted);margin:0 0 0.8rem;">Свяжусь с вами в течение дня, отвечу на вопросы и мы согласуем запись на консультацию.</p>
                         <form id="callbackForm" novalidate>
                             <div class="hp-field" aria-hidden="true">
                                 <label for="formWebsite">Не заполняйте это поле</label>
@@ -2867,7 +2878,7 @@
     </div>
 
     <!-- Попап: согласие на обработку персональных данных -->
-    <div class="diploma-modal" id="consentModal" role="dialog" aria-modal="true" aria-labelledby="consentModalTitle">
+    <div class="diploma-modal consent-modal-layer" id="consentModal" role="dialog" aria-modal="true" aria-labelledby="consentModalTitle">
         <div class="diploma-modal-inner legal-modal-inner">
             <button type="button" class="diploma-modal-close" id="consentModalClose" aria-label="Закрыть">&times;</button>
             <h2 id="consentModalTitle">Согласие на обработку персональных данных</h2>

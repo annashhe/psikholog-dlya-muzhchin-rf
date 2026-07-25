@@ -5,6 +5,9 @@
   function openConsentModal() {
     var modal = document.getElementById('consentModal');
     if (!modal) return;
+    if (modal.parentNode !== document.body) {
+      document.body.appendChild(modal);
+    }
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
