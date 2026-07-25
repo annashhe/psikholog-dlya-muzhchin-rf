@@ -1,0 +1,6 @@
+name = "psi-leads"
+main = "psi-leads-worker.js"
+compatibility_date = "2024-01-01"
+
+# BOT_TOKEN и CHAT_ID задайте в Cloudflare Dashboard → Worker → Settings → Variables
+# (или: wrangler secret put BOT_TOKEN)

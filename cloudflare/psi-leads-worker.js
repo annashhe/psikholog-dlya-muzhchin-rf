@@ -2,6 +2,8 @@
  * Cloudflare Worker: заявки с сайта → Telegram.
  * Settings → Variables: BOT_TOKEN (encrypt), CHAT_ID = 382337050
  */
+const PSY_TZ = 'Europe/Kaliningrad';
+
 function corsOriginForRequest(origin) {
   const allowed = new Set([
     'https://психолог-для-мужчин.рф',
@@ -13,26 +15,91 @@ function corsOriginForRequest(origin) {
   return null;
 }
 
-function formatWhen(startIso, endIso, tz) {
+const THERAPY = {
+  individual: { title: 'Индивидуальная', label: 'Индивидуальная' },
+  family: { title: 'Семейная (парная)', label: 'Семейная' },
+};
+
+function dash(val) {
+  const s = String(val ?? '').trim();
+  return s || '—';
+}
+
+function formatSessionDate(startIso, tz) {
+  try {
+    return new Date(startIso).toLocaleDateString('ru-RU', {
+      timeZone: tz || 'Europe/Moscow',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+  } catch {
+    return dash(startIso);
+  }
+}
+
+function formatSlotRange(startIso, endIso, tz) {
   if (!startIso) return '—';
   try {
     const zone = tz || 'Europe/Moscow';
     const start = new Date(startIso);
     const end = endIso ? new Date(endIso) : null;
-    const datePart = start.toLocaleDateString('ru-RU', { timeZone: zone, day: 'numeric', month: 'long', year: 'numeric' });
     const t0 = start.toLocaleTimeString('ru-RU', { timeZone: zone, hour: '2-digit', minute: '2-digit' });
-    if (!end) return `${datePart}, ${t0}`;
+    if (!end) return `${t0} ${zone}`;
     const t1 = end.toLocaleTimeString('ru-RU', { timeZone: zone, hour: '2-digit', minute: '2-digit' });
-    return `${datePart}, ${t0} – ${t1}`;
+    return `${t0}-${t1} ${zone}`;
   } catch {
-    return startIso;
+    return '—';
   }
 }
 
-const THERAPY = {
-  individual: { title: 'Индивидуальная', duration: '50 мин', price: '4 500 ₽' },
-  family: { title: 'Семейная (парная)', duration: '90 мин', price: '7 000 ₽' },
-};
+function metaBlock(meta) {
+  return [
+    '',
+    'Дополнительная информация:',
+    `Страница заявки: ${dash(meta.pageUrl)}`,
+    `UTM source: ${dash(meta.utmSource)}`,
+    `UTM medium: ${dash(meta.utmMedium)}`,
+    `UTM campaign: ${dash(meta.utmCampaign)}`,
+    `UTM content: ${dash(meta.utmContent)}`,
+    `UTM term: ${dash(meta.utmTerm)}`,
+  ].join('\n');
+}
+
+function buildCallbackMessage(data) {
+  const methods = Array.isArray(data.contactMethods)
+    ? data.contactMethods.map((m) => String(m).slice(0, 40)).filter(Boolean)
+    : [];
+  return [
+    'Заявка с формы (обратный звонок)',
+    '',
+    `Имя: ${dash(data.name)}`,
+    `Телефон: ${dash(data.phone)}`,
+    `Способ связи: ${methods.length ? methods.join(', ') : '—'}`,
+    metaBlock(data),
+  ].join('\n');
+}
+
+function buildBookingMessage(data) {
+  const t = THERAPY[data.therapyType] || THERAPY.individual;
+  const clientTz = data.clientTimezone || 'Europe/Moscow';
+  const note = data.comment ? String(data.comment).trim().slice(0, 500) : '';
+  const lines = [
+    'Запись через календарь',
+    '',
+    `Имя: ${dash(data.name)}`,
+    `Телефон: ${dash(data.phone)}`,
+    `Формат: ${t.label}`,
+    `Дата сессии: ${formatSessionDate(data.startIso, clientTz)}`,
+    `Часовой пояс психолога: ${formatSlotRange(data.startIso, data.endIso, PSY_TZ)}`,
+    `Часовой пояс клиента: ${formatSlotRange(data.startIso, data.endIso, clientTz)}`,
+  ];
+  if (note) {
+    lines.push('', `Комментарий клиента: ${note}`);
+  }
+  lines.push(metaBlock(data));
+  return lines.join('\n');
+}
 
 export default {
   async fetch(request, env) {
@@ -61,46 +128,32 @@ export default {
 
     try {
       const body = await request.json();
-      const {
-        name,
-        phone,
-        website,
-        source,
-        contactMethods,
-        therapyType,
-        startIso,
-        endIso,
-        clientTimezone,
-        comment,
-      } = body;
 
-      if (website) {
+      if (body.website) {
         return Response.json({ ok: true }, { headers: corsHeaders });
       }
 
-      const safeName = String(name || '').slice(0, 120);
-      const safePhone = String(phone || '').slice(0, 40);
-      const now = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' });
+      const meta = {
+        pageUrl: body.pageUrl,
+        utmSource: body.utmSource,
+        utmMedium: body.utmMedium,
+        utmCampaign: body.utmCampaign,
+        utmContent: body.utmContent,
+        utmTerm: body.utmTerm,
+      };
 
       let text;
 
-      if (source === 'booking') {
-        if (!safeName || !safePhone || !startIso) {
+      if (body.source === 'booking') {
+        if (!body.name || !body.phone || !body.startIso) {
           return Response.json({ error: 'Missing fields' }, { status: 400, headers: corsHeaders });
         }
-        const t = THERAPY[therapyType] || THERAPY.individual;
-        const when = formatWhen(startIso, endIso, clientTimezone);
-        const safeComment = comment ? String(comment).slice(0, 500) : '';
-        text = `📅 Запись через календарь\n\n👤 ${safeName}\n📞 ${safePhone}\n📋 ${t.title}, ${t.duration}, ${t.price}\n🕐 ${when}\n${safeComment ? '💬 ' + safeComment + '\n' : ''}⏱ ${now}`;
+        text = buildBookingMessage({ ...body, ...meta });
       } else {
-        if (!safeName || !safePhone) {
+        if (!body.name || !body.phone) {
           return Response.json({ error: 'Missing fields' }, { status: 400, headers: corsHeaders });
         }
-        const methods = Array.isArray(contactMethods)
-          ? contactMethods.map((m) => String(m).slice(0, 40)).filter(Boolean)
-          : [];
-        const contactLine = methods.length ? methods.join(', ') : 'не указано';
-        text = `📩 Заявка с формы сайта\n\n👤 ${safeName}\n📞 ${safePhone}\n📲 Связаться: ${contactLine}\n🕐 ${now}`;
+        text = buildCallbackMessage({ ...body, ...meta });
       }
 
       const tgRes = await fetch(`https://api.telegram.org/bot${env.BOT_TOKEN}/sendMessage`, {

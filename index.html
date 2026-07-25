@@ -7,12 +7,13 @@
     <title>Психолог для мужчин онлайн | Анна Щеголихина</title>
     <meta name="description" content="Онлайн-психолог для мужчин: кризис отношений, тревога, выгорание. Видеосессии из любого города, очно в Калининграде. Запись на консультацию." />
     <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://психолог-для-мужчин.рф" />
+    <link rel="canonical" href="https://психолог-для-мужчин.рф/" />
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
     <!-- Фавикон -->
     <link rel="icon" href="favicon.ico" sizes="any" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <script src="assets/lead-tracking.js"></script>
 
     <!-- LCP: локальное фото героя -->
     <link rel="preload" as="image" type="image/webp"
@@ -1195,15 +1196,22 @@
             margin-bottom: 0.5rem;
             padding: 0;
         }
-        .contact-form .contact-methods label {
+        .contact-form .contact-methods .contact-methods-row {
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
-            gap: 8px;
+            gap: 8px 20px;
+        }
+        .contact-form .contact-methods label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             font-size: 0.9rem;
             font-weight: 400;
             color: var(--text-primary);
-            margin-bottom: 0.35rem;
+            margin-bottom: 0;
             cursor: pointer;
+            white-space: nowrap;
         }
         .contact-form .contact-methods input {
             width: auto;
@@ -2516,10 +2524,11 @@
                                     d.setMinutes(d.getMinutes() + mins);
                                     endIso = d.toISOString();
                                 }
+                                var tracking = typeof getLeadTrackingPayload === 'function' ? getLeadTrackingPayload() : {};
                                 origFetch(api, {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({
+                                    body: JSON.stringify(Object.assign({
                                         source: 'booking',
                                         name: payload.name,
                                         phone: payload.phone,
@@ -2529,7 +2538,7 @@
                                         clientTimezone: payload.clientTimezone,
                                         comment: payload.comment || '',
                                         website: ''
-                                    })
+                                    }, tracking))
                                 }).catch(function() {});
                                 sessionStorage.setItem('bookingThankYou', JSON.stringify({
                                     name: payload.name,
@@ -2658,10 +2667,12 @@
                                    title="Введите номер в формате +7 (900) 123-45-67" />
                             <fieldset class="contact-methods">
                                 <legend>Как с вами связаться?</legend>
-                                <label><input type="checkbox" name="contactMethod" value="Telegram" /> Telegram</label>
-                                <label><input type="checkbox" name="contactMethod" value="WhatsApp" /> WhatsApp</label>
-                                <label><input type="checkbox" name="contactMethod" value="MAX" /> MAX</label>
-                                <label><input type="checkbox" name="contactMethod" value="SMS" /> SMS</label>
+                                <div class="contact-methods-row">
+                                    <label><input type="checkbox" name="contactMethod" value="Telegram" /> Telegram</label>
+                                    <label><input type="checkbox" name="contactMethod" value="WhatsApp" /> WhatsApp</label>
+                                    <label><input type="checkbox" name="contactMethod" value="MAX" /> MAX</label>
+                                    <label><input type="checkbox" name="contactMethod" value="SMS" /> SMS</label>
+                                </div>
                             </fieldset>
                             <div class="checkbox-group">
                                 <input type="checkbox" id="formConsent" name="consent" required />
@@ -3059,16 +3070,18 @@
                         submitBtn.textContent = 'Отправка…';
                     }
 
+                    var tracking = typeof getLeadTrackingPayload === 'function' ? getLeadTrackingPayload() : {};
+
                     fetch(LEAD_API_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
+                        body: JSON.stringify(Object.assign({
                             source: 'callback',
                             name: name,
                             phone: phone,
                             contactMethods: contactMethods,
                             website: honeypot ? honeypot.value : ''
-                        })
+                        }, tracking))
                     })
                     .then(function(res) {
                         if (!res.ok) throw new Error('bad status');

@@ -8,12 +8,13 @@
     <link rel="icon" href="favicon.ico" sizes="any" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="assets/thank-you-page.css" />
+    <script src="assets/lead-tracking.js"></script>
 </head>
 <body>
     <header class="header">
         <div class="container header-inner">
-            <a href="index.html">Анна Щеголихина <span>·</span> Психолог</a>
-            <a href="index.html" class="header-back">← На главную</a>
+            <a href="https://психолог-для-мужчин.рф/">Анна Щеголихина <span>·</span> Психолог</a>
+            <a href="https://психолог-для-мужчин.рф/" class="header-back">← На главную</a>
         </div>
     </header>
     <main>
@@ -29,6 +30,7 @@
     </footer>
     <script>
         (function() {
+            var home = window.PSI_SITE_HOME || 'https://психолог-для-мужчин.рф/';
             var THERAPY = {
                 individual: { title: 'Индивидуальная консультация', duration: '50 минут', price: '4 500 ₽' },
                 family: { title: 'Семейная (парная) консультация', duration: '90 минут', price: '7 000 ₽' }
@@ -58,7 +60,7 @@
             var raw = null;
             try { raw = sessionStorage.getItem('bookingThankYou'); sessionStorage.removeItem('bookingThankYou'); } catch (e) {}
             if (!raw) {
-                root.innerHTML = '<h1>Спасибо!</h1><p class="lead">Если вы только что записались через календарь, заявка принята. Я свяжусь с вами в течение дня.</p><a class="btn" href="index.html">На главную</a>';
+                root.innerHTML = '<h1>Спасибо!</h1><p class="lead">Если вы только что записались через календарь, заявка принята. Я свяжусь с вами в течение дня.</p><a class="btn" href="' + home + '">На главную</a>';
                 return;
             }
             var data;
@@ -77,7 +79,7 @@
                 '<dt>Выбранное время</dt><dd>' + escapeHtml(when) + '</dd>' +
                 '</dl>' +
                 '<p class="note">За 5–10 минут до сессии пришлю ссылку на видеовстречу в Telegram или MAX. Если нужно перенести время — напишите заранее.</p>' +
-                '<a class="btn" href="index.html">Вернуться на сайт</a>';
+                '<a class="btn" href="' + home + '">Вернуться на сайт</a>';
         })();
     </script>
 </body>
