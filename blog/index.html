@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Блог: заглушка до публикации статей -->
     <title>Блог | Психолог для мужчин онлайн — Анна Щеголихина</title>
-    <meta name="description" content="Статьи о психологии для мужчин: отношения, кризис, онлайн-консультации." />
+    <meta name="description" content="Статьи о психологии для мужчин: отношения, кризис, тревога, развод, онлайн-консультации." />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://психолог-для-мужчин.рф/blog/" />
     <link rel="icon" href="../favicon.ico" sizes="any" />
     <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" />
     <style>
-        :root { --accent: #b4436c; --btn-bg: #b4436c; --muted: #6e6e6e; --border: #eae7ea; --bg: #f6f4f6; }
+        :root { --accent: #802d4b; --btn-bg: #802d4b; --muted: #6e6e6e; --border: #eae7ea; --bg: #f6f4f6; }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #1a1a1a; }
+        body { font-family: 'Manrope', sans-serif; line-height: 1.6; color: #1a1a1a; }
         .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
         .header { padding: 14px 0; border-bottom: 1px solid var(--border); background: #fff; position: sticky; top: 0; z-index: 10; }
         .header-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
@@ -26,10 +26,13 @@
         main { padding: 56px 0 72px; }
         h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); margin-bottom: .5rem; }
         .lead { color: var(--muted); font-size: 1.05rem; margin-bottom: 2.5rem; }
-        .placeholder { text-align: center; padding: 48px 24px; background: var(--bg); border-radius: 16px; border: 1px dashed var(--border); }
-        .placeholder p { color: var(--muted); font-size: 1.1rem; margin-bottom: 1.5rem; }
-        .btn { display: inline-flex; padding: .8rem 2rem; background: var(--btn-bg); color: #fff; border-radius: 60px; text-decoration: none; font-weight: 600; touch-action: manipulation; }
-        .btn:hover { background: #9a3a5d; color: #fff; }
+        .articles-list { display: grid; gap: 20px; }
+        .articles-list article { padding: 24px; border: 1px solid var(--border); border-radius: 16px; background: #fff; }
+        .articles-list h2 { font-size: 1.15rem; margin-bottom: 0.5rem; line-height: 1.35; }
+        .articles-list h2 a { color: var(--accent); text-decoration: none; }
+        .articles-list h2 a:hover { text-decoration: underline; }
+        .articles-list p { color: var(--muted); font-size: 0.95rem; margin-bottom: 0.6rem; }
+        time { font-size: 0.85rem; color: var(--muted); }
         .footer { padding: 32px 0; background: var(--bg); border-top: 1px solid var(--border); text-align: center; font-size: .85rem; color: var(--muted); }
         .footer a { color: var(--muted); text-decoration: none; }
         .footer a:hover { color: var(--accent); }
@@ -50,7 +53,8 @@
         <div class="container header-inner">
             <a href="https://психолог-для-мужчин.рф/" class="header-brand">Анна Щеголихина <span>·</span> Психолог</a>
             <nav class="header-nav" aria-label="Навигация">
-                <a href="/#spec">Услуги</a>
+                <a href="/#spec">Запросы</a>
+                <a href="/#pricing">Услуги и цены</a>
                 <a href="/#booking">Записаться онлайн</a>
                 <a href="/#contact">Контакты</a>
             </nav>
@@ -60,13 +64,53 @@
     <main>
         <div class="container">
             <h1>Блог</h1>
-            <p class="lead">Статьи о психологии для мужчин: отношения, кризис, онлайн-консультации</p>
+            <p class="lead">Статьи о психологии для мужчин: отношения, кризис, тревога, развод — без готовых скриптов и гарантий результата</p>
 
-            <div class="articles-list" style="display:grid;gap:20px;">
-                <article style="padding:24px;border:1px solid #eae7ea;border-radius:16px;background:#fff;">
-                    <h2 style="font-size:1.2rem;margin-bottom:0.5rem;"><a href="/blog/zhena-hochet-razvoda/" style="color:#802d4b;text-decoration:none;">Жена хочет развода: что делать мужчине?</a></h2>
-                    <p style="color:#6e6e6e;font-size:0.95rem;margin-bottom:0.6rem;">Типичные реакции и ошибки в кризисе, когда партнёрша говорит о разводе — без готовых скриптов и гарантий.</p>
-                    <time datetime="2026-07-23" style="font-size:0.85rem;color:#6e6e6e;">23 июля 2026</time>
+            <div class="articles-list">
+                <article>
+                    <h2><a href="/blog/zhena-hochet-razvoda/">Жена хочет развода: типичные реакции и ошибки</a></h2>
+                    <p>Типичные ловушки в кризисе, когда партнёрша говорит о разводе.</p>
+                    <time datetime="2026-07-23">23 июля 2026</time>
+                </article>
+                <article>
+                    <h2><a href="/blog/zhena-ne-hochet-imet-detey/">Жена не хочет детей: что важно понять мужчине</a></h2>
+                    <p>Страхи, ценности и шаги диалога — без давления «убедить любой ценой».</p>
+                    <time datetime="2026-07-12">12 июля 2026</time>
+                </article>
+                <article>
+                    <h2><a href="/blog/govorit-li-zhene-ob-izmene/">Говорить ли жене об измене: взгляд психолога</a></h2>
+                    <p>Мотивы признания и молчания — без универсального «надо сказать / надо молчать».</p>
+                    <time datetime="2026-06-23">23 июня 2026</time>
+                </article>
+                <article>
+                    <h2><a href="/blog/hochu-razvestis-s-zhenoy/">Хочу развестись с женой: как принять решение</a></h2>
+                    <p>Причины, сигналы для проверки и страхи на пороге развода.</p>
+                    <time datetime="2026-06-01">1 июня 2026</time>
+                </article>
+                <article>
+                    <h2><a href="/blog/psiholog-dlya-muzhchin-v-krizise/">Психолог для мужчин в кризисе: как устроена помощь</a></h2>
+                    <p>Почему мужчины приходят поздно и как выглядит работа без ярлыков.</p>
+                    <time datetime="2026-05-15">15 мая 2026</time>
+                </article>
+                <article>
+                    <h2><a href="/blog/hochu-izbavitsya-ot-revnosti/">Хочу избавиться от ревности: как перестать накручивать себя</a></h2>
+                    <p>Ревность как сигнал и шаги, которые снижают ритуал проверки.</p>
+                    <time datetime="2026-05-10">10 мая 2026</time>
+                </article>
+                <article>
+                    <h2><a href="/blog/v-chem-smysl-zhizni/">В чём смысл жизни: взгляд психолога</a></h2>
+                    <p>Почему вопрос смысла встаёт в 35–50 и как искать опору без готовой формулы.</p>
+                    <time datetime="2026-05-06">6 мая 2026</time>
+                </article>
+                <article>
+                    <h2><a href="/blog/trevoga-chto-eto-otkuda/">Тревога: что это, откуда берётся и что можно сделать</a></h2>
+                    <p>Ситуативная и хроническая тревога — признаки и бережные шаги.</p>
+                    <time datetime="2026-04-29">29 апреля 2026</time>
+                </article>
+                <article>
+                    <h2><a href="/blog/kak-zabyt-cheloveka/">Как забыть человека: почему «просто выкинуть из головы» не работает</a></h2>
+                    <p>Три слоя тоски и медленное принятие после расставания.</p>
+                    <time datetime="2026-04-27">27 апреля 2026</time>
                 </article>
             </div>
         </div>
@@ -74,7 +118,9 @@
 
     <footer class="footer">
         <div class="container">
-            © 2026 Анна Щеголихина · <a href="https://психолог-для-мужчин.рф/">На главную</a> · <a href="/privacy-policy/" target="_blank" rel="noopener">Политика конфиденциальности</a>
+            © 2026 Анна Щеголихина · <a href="https://психолог-для-мужчин.рф/">На главную</a>
+            · <a href="/oferta/" target="_blank" rel="noopener">Оферта</a>
+            · <a href="/privacy-policy/" target="_blank" rel="noopener">Политика</a>
         </div>
     </footer>
 </body>
