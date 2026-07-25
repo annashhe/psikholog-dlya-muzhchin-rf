@@ -2542,6 +2542,7 @@
                                 }).catch(function() {});
                                 sessionStorage.setItem('bookingThankYou', JSON.stringify({
                                     name: payload.name,
+                                    phone: payload.phone,
                                     therapyType: payload.therapyType,
                                     startIso: startIso,
                                     endIso: endIso,
@@ -3087,6 +3088,7 @@
                         if (!res.ok) throw new Error('bad status');
                         sessionStorage.setItem('callbackThankYou', JSON.stringify({
                             name: name,
+                            phone: phone,
                             contactMethods: contactMethods
                         }));
                         window.location.href = 'thank-you-callback.html';

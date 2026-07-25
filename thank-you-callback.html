@@ -9,6 +9,7 @@
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="assets/thank-you-page.css" />
     <script src="assets/lead-tracking.js"></script>
+    <script src="assets/thank-you-shared.js"></script>
 </head>
 <body>
     <header class="header">
@@ -23,6 +24,7 @@
                 <h1>Спасибо!</h1>
                 <p class="lead">Заявка принята. Загрузка…</p>
             </div>
+            <div id="thankYouArticles"></div>
         </div>
     </main>
     <footer class="footer">
@@ -31,26 +33,42 @@
     <script>
         (function() {
             var home = window.PSI_SITE_HOME || 'https://психолог-для-мужчин.рф/';
+            var messengers = window.thankYouMessengerLinks || '';
             var root = document.getElementById('thankYouContent');
+            var articlesEl = document.getElementById('thankYouArticles');
+
+            function escapeHtml(s) {
+                return String(s).replace(/[<>&]/g, '');
+            }
+
+            function phonePhrase(phone) {
+                var p = String(phone || '').trim();
+                if (p) return 'по указанному телефону <strong>' + escapeHtml(p) + '</strong>';
+                return 'по указанному телефону';
+            }
+
             var raw = null;
             try { raw = sessionStorage.getItem('callbackThankYou'); sessionStorage.removeItem('callbackThankYou'); } catch (e) {}
             if (!raw) {
                 root.innerHTML = '<h1>Спасибо!</h1><p class="lead">Если вы только что отправили заявку, я скоро свяжусь с вами.</p><a class="btn" href="' + home + '">На главную</a>';
+                if (articlesEl && typeof renderThankYouArticles === 'function') {
+                    articlesEl.innerHTML = renderThankYouArticles();
+                }
                 return;
             }
             var data;
             try { data = JSON.parse(raw); } catch (e) { data = {}; }
-            var name = String(data.name || 'коллега').replace(/[<>&]/g, '');
-            var contacts = Array.isArray(data.contactMethods) ? data.contactMethods : [];
-            var contactText = contacts.length
-                ? contacts.join(', ')
-                : 'по указанному телефону';
+            var name = escapeHtml(data.name || 'коллега');
+
             root.innerHTML =
                 '<h1>Спасибо, ' + name + '!</h1>' +
-                '<p class="lead">Ваша заявка на обратный звонок получена.</p>' +
-                '<p>Я свяжусь с вами <strong>' + contactText + '</strong> в течение дня (обычно быстрее), чтобы договориться об онлайн-консультации.</p>' +
-                '<p class="note">Если вопрос срочный, можете написать напрямую в <a href="https://t.me/annashhe" target="_blank" rel="noopener">Telegram</a> или <a href="https://max.ru/u/f9LHodD0cOKrHIa3XdZycCKQSXXx0dFf9Ck7hXPtx3Ti-6RSxFnoPC7d1Ag" target="_blank" rel="noopener">MAX</a>.</p>' +
+                '<p class="lead">Я получила вашу заявку, и свяжусь с вами через Telegram или MAX ' + phonePhrase(data.phone) + ' в течение дня, чтобы обсудить ваш вопрос.</p>' +
+                '<p class="note">Если вопрос срочный, можете написать мне напрямую в ' + messengers + '.</p>' +
                 '<a class="btn" href="' + home + '">Вернуться на сайт</a>';
+
+            if (articlesEl && typeof renderThankYouArticles === 'function') {
+                articlesEl.innerHTML = renderThankYouArticles();
+            }
         })();
     </script>
 </body>
