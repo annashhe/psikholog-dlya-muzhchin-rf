@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Заявка отправлена | Анна Щеголихина</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="favicon.ico" sizes="any" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="assets/thank-you-page.css" />
+</head>
+<body>
+    <header class="header">
+        <div class="container header-inner">
+            <a href="index.html">Анна Щеголихина <span>·</span> Психолог</a>
+            <a href="index.html" class="header-back">← На главную</a>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <div class="card" id="thankYouContent">
+                <h1>Спасибо!</h1>
+                <p class="lead">Заявка принята. Загрузка…</p>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">© 2026 Анна Щеголихина</div>
+    </footer>
+    <script>
+        (function() {
+            var root = document.getElementById('thankYouContent');
+            var raw = null;
+            try { raw = sessionStorage.getItem('callbackThankYou'); sessionStorage.removeItem('callbackThankYou'); } catch (e) {}
+            if (!raw) {
+                root.innerHTML = '<h1>Спасибо!</h1><p class="lead">Если вы только что отправили заявку, я скоро свяжусь с вами.</p><a class="btn" href="index.html">На главную</a>';
+                return;
+            }
+            var data;
+            try { data = JSON.parse(raw); } catch (e) { data = {}; }
+            var name = String(data.name || 'коллега').replace(/[<>&]/g, '');
+            var contacts = Array.isArray(data.contactMethods) ? data.contactMethods : [];
+            var contactText = contacts.length
+                ? contacts.join(', ')
+                : 'по указанному телефону';
+            root.innerHTML =
+                '<h1>Спасибо, ' + name + '!</h1>' +
+                '<p class="lead">Ваша заявка на обратный звонок получена.</p>' +
+                '<p>Я свяжусь с вами <strong>' + contactText + '</strong> в течение дня (обычно быстрее), чтобы договориться об онлайн-консультации.</p>' +
+                '<p class="note">Если вопрос срочный, можете написать напрямую в <a href="https://t.me/annashhe" target="_blank" rel="noopener">Telegram</a> или <a href="https://max.ru/u/f9LHodD0cOKrHIa3XdZycCKQSXXx0dFf9Ck7hXPtx3Ti-6RSxFnoPC7d1Ag" target="_blank" rel="noopener">MAX</a>.</p>' +
+                '<a class="btn" href="index.html">Вернуться на сайт</a>';
+        })();
+    </script>
+</body>
+</html>

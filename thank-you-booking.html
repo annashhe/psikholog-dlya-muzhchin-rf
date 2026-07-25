@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Запись подтверждена | Анна Щеголихина</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="favicon.ico" sizes="any" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="assets/thank-you-page.css" />
+</head>
+<body>
+    <header class="header">
+        <div class="container header-inner">
+            <a href="index.html">Анна Щеголихина <span>·</span> Психолог</a>
+            <a href="index.html" class="header-back">← На главную</a>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <div class="card" id="thankYouContent">
+                <h1>Спасибо!</h1>
+                <p class="lead">Запись принята. Загрузка…</p>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">© 2026 Анна Щеголихина</div>
+    </footer>
+    <script>
+        (function() {
+            var THERAPY = {
+                individual: { title: 'Индивидуальная консультация', duration: '50 минут', price: '4 500 ₽' },
+                family: { title: 'Семейная (парная) консультация', duration: '90 минут', price: '7 000 ₽' }
+            };
+
+            function escapeHtml(s) {
+                return String(s).replace(/[<>&]/g, '');
+            }
+
+            function formatWhen(startIso, endIso, tz) {
+                if (!startIso) return '—';
+                try {
+                    var start = new Date(startIso);
+                    var end = endIso ? new Date(endIso) : null;
+                    var zone = tz || 'Europe/Moscow';
+                    var datePart = start.toLocaleDateString('ru-RU', { timeZone: zone, day: 'numeric', month: 'long', year: 'numeric' });
+                    var t0 = start.toLocaleTimeString('ru-RU', { timeZone: zone, hour: '2-digit', minute: '2-digit' });
+                    if (!end) return datePart + ', ' + t0;
+                    var t1 = end.toLocaleTimeString('ru-RU', { timeZone: zone, hour: '2-digit', minute: '2-digit' });
+                    return datePart + ', ' + t0 + ' – ' + t1;
+                } catch (e) {
+                    return startIso;
+                }
+            }
+
+            var root = document.getElementById('thankYouContent');
+            var raw = null;
+            try { raw = sessionStorage.getItem('bookingThankYou'); sessionStorage.removeItem('bookingThankYou'); } catch (e) {}
+            if (!raw) {
+                root.innerHTML = '<h1>Спасибо!</h1><p class="lead">Если вы только что записались через календарь, заявка принята. Я свяжусь с вами в течение дня.</p><a class="btn" href="index.html">На главную</a>';
+                return;
+            }
+            var data;
+            try { data = JSON.parse(raw); } catch (e) { data = {}; }
+            var name = escapeHtml(data.name || 'коллега');
+            var therapy = THERAPY[data.therapyType] || THERAPY.individual;
+            var when = formatWhen(data.startIso, data.endIso, data.clientTimezone);
+
+            root.innerHTML =
+                '<h1>Спасибо, ' + name + '!</h1>' +
+                '<p class="lead">Вы оставили заявку на онлайн-консультацию. Я получила её и свяжусь с вами по указанному телефону в течение дня, чтобы подтвердить запись.</p>' +
+                '<dl class="details">' +
+                '<dt>Формат</dt><dd>' + therapy.title + '</dd>' +
+                '<dt>Длительность</dt><dd>' + therapy.duration + '</dd>' +
+                '<dt>Стоимость</dt><dd>' + therapy.price + '</dd>' +
+                '<dt>Выбранное время</dt><dd>' + escapeHtml(when) + '</dd>' +
+                '</dl>' +
+                '<p class="note">За 5–10 минут до сессии пришлю ссылку на видеовстречу в Telegram или MAX. Если нужно перенести время — напишите заранее.</p>' +
+                '<a class="btn" href="index.html">Вернуться на сайт</a>';
+        })();
+    </script>
+</body>
+</html>

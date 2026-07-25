@@ -13,6 +13,27 @@ function corsOriginForRequest(origin) {
   return null;
 }
 
+function formatWhen(startIso, endIso, tz) {
+  if (!startIso) return '—';
+  try {
+    const zone = tz || 'Europe/Moscow';
+    const start = new Date(startIso);
+    const end = endIso ? new Date(endIso) : null;
+    const datePart = start.toLocaleDateString('ru-RU', { timeZone: zone, day: 'numeric', month: 'long', year: 'numeric' });
+    const t0 = start.toLocaleTimeString('ru-RU', { timeZone: zone, hour: '2-digit', minute: '2-digit' });
+    if (!end) return `${datePart}, ${t0}`;
+    const t1 = end.toLocaleTimeString('ru-RU', { timeZone: zone, hour: '2-digit', minute: '2-digit' });
+    return `${datePart}, ${t0} – ${t1}`;
+  } catch {
+    return startIso;
+  }
+}
+
+const THERAPY = {
+  individual: { title: 'Индивидуальная', duration: '50 мин', price: '4 500 ₽' },
+  family: { title: 'Семейная (парная)', duration: '90 мин', price: '7 000 ₽' },
+};
+
 export default {
   async fetch(request, env) {
     const origin = request.headers.get('Origin') || '';
@@ -39,20 +60,48 @@ export default {
     }
 
     try {
-      const { name, phone, website } = await request.json();
+      const body = await request.json();
+      const {
+        name,
+        phone,
+        website,
+        source,
+        contactMethods,
+        therapyType,
+        startIso,
+        endIso,
+        clientTimezone,
+        comment,
+      } = body;
 
       if (website) {
         return Response.json({ ok: true }, { headers: corsHeaders });
       }
 
-      if (!name || !phone) {
-        return Response.json({ error: 'Missing fields' }, { status: 400, headers: corsHeaders });
+      const safeName = String(name || '').slice(0, 120);
+      const safePhone = String(phone || '').slice(0, 40);
+      const now = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' });
+
+      let text;
+
+      if (source === 'booking') {
+        if (!safeName || !safePhone || !startIso) {
+          return Response.json({ error: 'Missing fields' }, { status: 400, headers: corsHeaders });
+        }
+        const t = THERAPY[therapyType] || THERAPY.individual;
+        const when = formatWhen(startIso, endIso, clientTimezone);
+        const safeComment = comment ? String(comment).slice(0, 500) : '';
+        text = `📅 Запись через календарь\n\n👤 ${safeName}\n📞 ${safePhone}\n📋 ${t.title}, ${t.duration}, ${t.price}\n🕐 ${when}\n${safeComment ? '💬 ' + safeComment + '\n' : ''}⏱ ${now}`;
+      } else {
+        if (!safeName || !safePhone) {
+          return Response.json({ error: 'Missing fields' }, { status: 400, headers: corsHeaders });
+        }
+        const methods = Array.isArray(contactMethods)
+          ? contactMethods.map((m) => String(m).slice(0, 40)).filter(Boolean)
+          : [];
+        const contactLine = methods.length ? methods.join(', ') : 'не указано';
+        text = `📩 Заявка с формы сайта\n\n👤 ${safeName}\n📞 ${safePhone}\n📲 Связаться: ${contactLine}\n🕐 ${now}`;
       }
-
-      const safeName = String(name).slice(0, 120);
-      const safePhone = String(phone).slice(0, 40);
-
-      const text = `📩 Новая заявка с сайта\n\n👤 ${safeName}\n📞 ${safePhone}\n🕐 ${new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' })}`;
 
       const tgRes = await fetch(`https://api.telegram.org/bot${env.BOT_TOKEN}/sendMessage`, {
         method: 'POST',

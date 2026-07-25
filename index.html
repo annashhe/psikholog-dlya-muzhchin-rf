@@ -1183,6 +1183,32 @@
             gap: 10px;
             margin: 0.8rem 0 1.2rem;
         }
+        .contact-form .contact-methods {
+            border: none;
+            margin: 0 0 1rem;
+            padding: 0;
+        }
+        .contact-form .contact-methods legend {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            padding: 0;
+        }
+        .contact-form .contact-methods label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--text-primary);
+            margin-bottom: 0.35rem;
+            cursor: pointer;
+        }
+        .contact-form .contact-methods input {
+            width: auto;
+            margin: 0;
+        }
         .contact-form .checkbox-group input[type="checkbox"] {
             width: 18px;
             height: 18px;
@@ -2470,6 +2496,59 @@
                 <h2 id="calendar-title">Запись на онлайн-консультацию</h2>
                 <p>Выберите время в календаре. Очно в Калининграде — только через мессенджеры (блок «Где я принимаю»).</p>
             </div>
+            <script>
+                window.PSI_LEADS_API = 'https://psi-leads.anna-shhe-adwords.workers.dev';
+                (function() {
+                    var api = window.PSI_LEADS_API;
+                    var origFetch = window.fetch;
+                    window.fetch = function(input, init) {
+                        var url = typeof input === 'string' ? input : (input && input.url) || '';
+                        var isBooking = url.indexOf('/public/bookings') !== -1 && init && String(init.method || '').toUpperCase() === 'POST';
+                        return origFetch.apply(this, arguments).then(function(res) {
+                            if (!isBooking || !res.ok) return res;
+                            try {
+                                var payload = init.body ? JSON.parse(init.body) : {};
+                                var startIso = payload.startIso;
+                                var endIso = payload.endIso;
+                                if (startIso && !endIso) {
+                                    var d = new Date(startIso);
+                                    var mins = payload.therapyType === 'family' ? 90 : 50;
+                                    d.setMinutes(d.getMinutes() + mins);
+                                    endIso = d.toISOString();
+                                }
+                                origFetch(api, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({
+                                        source: 'booking',
+                                        name: payload.name,
+                                        phone: payload.phone,
+                                        therapyType: payload.therapyType,
+                                        startIso: startIso,
+                                        endIso: endIso,
+                                        clientTimezone: payload.clientTimezone,
+                                        comment: payload.comment || '',
+                                        website: ''
+                                    })
+                                }).catch(function() {});
+                                sessionStorage.setItem('bookingThankYou', JSON.stringify({
+                                    name: payload.name,
+                                    therapyType: payload.therapyType,
+                                    startIso: startIso,
+                                    endIso: endIso,
+                                    clientTimezone: payload.clientTimezone
+                                }));
+                                setTimeout(function() {
+                                    window.location.href = 'thank-you-booking.html';
+                                }, 150);
+                            } catch (err) {
+                                console.error('[booking thank-you]', err);
+                            }
+                            return res;
+                        });
+                    };
+                })();
+            </script>
             <script src="https://anna-psy-schedule-frontend.vercel.app/widget.js"></script>
             <div data-anna-psy-widget></div>
             <p class="calendar-note">Если календарь не отображается, попробуйте <strong>отключить VPN</strong> или открыть страницу в другом браузере</p>
@@ -2577,6 +2656,13 @@
                             <input type="tel" id="formPhone" name="phone" placeholder="+7 (900) 123-45-67" required autocomplete="tel"
                                    pattern="^\+7\s?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$"
                                    title="Введите номер в формате +7 (900) 123-45-67" />
+                            <fieldset class="contact-methods">
+                                <legend>Как с вами связаться?</legend>
+                                <label><input type="checkbox" name="contactMethod" value="Telegram" /> Telegram</label>
+                                <label><input type="checkbox" name="contactMethod" value="WhatsApp" /> WhatsApp</label>
+                                <label><input type="checkbox" name="contactMethod" value="MAX" /> MAX</label>
+                                <label><input type="checkbox" name="contactMethod" value="SMS" /> SMS</label>
+                            </fieldset>
                             <div class="checkbox-group">
                                 <input type="checkbox" id="formConsent" name="consent" required />
                                 <label for="formConsent">Я согласен на <a href="consent.html" target="_blank" rel="noopener">обработку персональных данных</a> и принимаю <a href="privacy-policy.html" target="_blank" rel="noopener">политику конфиденциальности</a>.</label>
@@ -2931,8 +3017,7 @@
             }
 
             // ===== ФОРМА ОБРАТНОЙ СВЯЗИ → Cloudflare Worker → Telegram =====
-            // После деплоя Worker вставьте URL ниже (см. cloudflare/psi-leads-worker.js)
-            var LEAD_API_URL = 'https://psi-leads.anna-shhe-adwords.workers.dev';
+            var LEAD_API_URL = window.PSI_LEADS_API || 'https://psi-leads.anna-shhe-adwords.workers.dev';
 
             var form = document.getElementById('callbackForm');
             if (form) {
@@ -2944,7 +3029,10 @@
                     var name = document.getElementById('formName').value.trim();
                     var phone = document.getElementById('formPhone').value.trim();
                     var consent = document.getElementById('formConsent').checked;
-                    var success = document.getElementById('formSuccess');
+                    var contactMethods = [];
+                    form.querySelectorAll('input[name="contactMethod"]:checked').forEach(function(el) {
+                        contactMethods.push(el.value);
+                    });
                     var submitBtn = form.querySelector('button[type="submit"]');
                     var defaultBtnText = submitBtn ? submitBtn.textContent : '';
 
@@ -2956,13 +3044,13 @@
                         alert('Пожалуйста, введите телефон в формате +7 (900) 123-45-67');
                         return;
                     }
+                    if (contactMethods.length === 0) {
+                        alert('Выберите хотя бы один способ связи.');
+                        return;
+                    }
 
                     if (!LEAD_API_URL) {
-                        if (success) {
-                            success.style.display = 'block';
-                            success.innerHTML = 'Спасибо, ' + name.replace(/[<>&]/g, '') + '! Чтобы заявка точно дошла, напишите также в <a href="https://t.me/annashhe" target="_blank" rel="noopener">Telegram</a> или <a href="https://max.ru/u/f9LHodD0cOKrHIa3XdZycCKQSXXx0dFf9Ck7hXPtx3Ti-6RSxFnoPC7d1Ag" target="_blank" rel="noopener">MAX</a> — так быстрее.';
-                        }
-                        form.reset();
+                        alert('Форма временно недоступна. Напишите в Telegram или позвоните.');
                         return;
                     }
 
@@ -2970,30 +3058,28 @@
                         submitBtn.disabled = true;
                         submitBtn.textContent = 'Отправка…';
                     }
-                    if (success) success.style.display = 'none';
 
                     fetch(LEAD_API_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
+                            source: 'callback',
                             name: name,
                             phone: phone,
+                            contactMethods: contactMethods,
                             website: honeypot ? honeypot.value : ''
                         })
                     })
                     .then(function(res) {
                         if (!res.ok) throw new Error('bad status');
-                        if (success) {
-                            success.style.display = 'block';
-                            success.innerHTML = 'Спасибо, ' + name.replace(/[<>&]/g, '') + '! Я свяжусь с вами в ближайшее время для записи на онлайн-консультацию.';
-                        }
-                        form.reset();
+                        sessionStorage.setItem('callbackThankYou', JSON.stringify({
+                            name: name,
+                            contactMethods: contactMethods
+                        }));
+                        window.location.href = 'thank-you-callback.html';
                     })
                     .catch(function() {
-                        if (success) {
-                            success.style.display = 'block';
-                            success.innerHTML = 'Не удалось отправить заявку автоматически. Напишите мне в <a href="https://t.me/annashhe" target="_blank" rel="noopener">Telegram</a> или позвоните <a href="tel:+79137556284">+7 913 755 62 84</a>.';
-                        }
+                        alert('Не удалось отправить заявку. Напишите в Telegram @annashhe или позвоните +7 913 755 62 84.');
                     })
                     .finally(function() {
                         if (submitBtn) {
