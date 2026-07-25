@@ -1,31 +1,41 @@
 /**
  * Cloudflare Worker: заявки с сайта → Telegram.
- * Workers & Pages → Create Worker → вставить этот код → Deploy.
  * Settings → Variables: BOT_TOKEN (encrypt), CHAT_ID = 382337050
  */
+function corsOriginForRequest(origin) {
+  const allowed = new Set([
+    'https://психолог-для-мужчин.рф',
+    'https://xn-----glcflhfsdlncbk4a6bya1c4j.xn--p1ai',
+    'https://annashhe.github.io',
+  ]);
+  if (origin && allowed.has(origin)) return origin;
+  if (origin && origin.startsWith('https://annashhe.github.io')) return origin;
+  return null;
+}
+
 export default {
   async fetch(request, env) {
-    const allowedOrigins = [
-      'https://психолог-для-мужчин.рф',
-      'https://xn----7sbbap1bbh3anq.xn--p1ai',
-      'https://annashhe.github.io',
-    ];
-
     const origin = request.headers.get('Origin') || '';
-    const corsOrigin = allowedOrigins.includes(origin) ? origin : allowedOrigins[0];
+    const corsOrigin = corsOriginForRequest(origin);
 
     const corsHeaders = {
-      'Access-Control-Allow-Origin': corsOrigin,
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     };
+    if (corsOrigin) {
+      corsHeaders['Access-Control-Allow-Origin'] = corsOrigin;
+    }
 
     if (request.method === 'OPTIONS') {
-      return new Response(null, { headers: corsHeaders });
+      return new Response(null, { status: 204, headers: corsHeaders });
     }
 
     if (request.method !== 'POST') {
       return new Response('Method not allowed', { status: 405, headers: corsHeaders });
+    }
+
+    if (!corsOrigin) {
+      return Response.json({ error: 'Forbidden origin' }, { status: 403 });
     }
 
     try {
