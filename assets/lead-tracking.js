@@ -17,6 +17,11 @@ window.PSI_SITE_HOME = 'https://психолог-для-мужчин.рф/';
       });
       if (has) {
         sessionStorage.setItem('psiUtms', JSON.stringify(utm));
+        try {
+          if (!localStorage.getItem('psiUtmsFirst')) {
+            localStorage.setItem('psiUtmsFirst', JSON.stringify(utm));
+          }
+        } catch (e1) {}
       }
       if (window.location.search) {
         sessionStorage.setItem('psiLandingQuery', window.location.search);
@@ -58,7 +63,11 @@ function getLeadTrackingPayload() {
 
   var utm = {};
   try {
-    utm = JSON.parse(sessionStorage.getItem('psiUtms') || '{}');
+    utm = JSON.parse(
+      sessionStorage.getItem('psiUtms') ||
+      localStorage.getItem('psiUtmsFirst') ||
+      '{}'
+    );
   } catch (e2) {}
 
   return {

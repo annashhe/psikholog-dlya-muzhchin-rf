@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- SEO: основной домен психолог-для-мужчин.рф -->
-    <title>Психолог для мужчин онлайн | Анна Щеголихина</title>
-    <meta name="description" content="Онлайн-психолог для мужчин: кризис отношений, тревога, выгорание. Видеосессии из любого города, очно в Калининграде. Запись на консультацию." />
+    <title>Психолог для мужчин онлайн и очно | Анна Щеголихина</title>
+    <meta name="description" content="Психолог для мужчин: в основном онлайн, также очно в Калининграде. Кризис отношений, тревога, выгорание. Связь и сессии Пн–Вс 9–21 по калининградскому времени." />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://психолог-для-мужчин.рф/" />
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
@@ -34,7 +34,7 @@
     <meta property="og:title" content="Психолог для мужчин — Анна Щеголихина" />
     <meta property="og:description" content="Онлайн-психолог для мужчин. Видеосессии из любого города. Также очно в Калининграде по записи." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://психолог-для-мужчин.рф" />
+    <meta property="og:url" content="https://психолог-для-мужчин.рф/" />
     <meta property="og:image" content="https://психолог-для-мужчин.рф/assets/images/hero-920.webp" />
 
     <style>
@@ -271,9 +271,12 @@
             font-size: 0.95rem;
             color: var(--text-primary);
             white-space: nowrap;
+            text-decoration: none;
+            cursor: pointer;
         }
         .header-phone:hover {
             color: var(--accent);
+            text-decoration: underline;
         }
 
         /* UX: очный приём — наравне с онлайн-блоком */
@@ -1153,10 +1156,12 @@
             font-size: 1rem;
         }
         .contact-info .contact-item .contact-value a {
-            color: var(--text-primary);
+            color: var(--accent);
+            text-decoration: underline;
+            cursor: pointer;
         }
         .contact-info .contact-item .contact-value a:hover {
-            color: var(--accent);
+            color: var(--btn-hover);
         }
         .contact-messengers {
             display: flex;
@@ -1722,7 +1727,7 @@
           "@id": "https://психолог-для-мужчин.рф/#person",
           "name": "Анна Щеголихина",
           "jobTitle": "Клинический и семейный психолог",
-          "description": "Психолог для мужчин онлайн. Работа с кризисом отношений, выгоранием, тревогой.",
+          "description": "Психолог для мужчин: в основном онлайн, также очно в Калининграде. Кризис отношений, выгорание, тревога.",
           "image": "https://психолог-для-мужчин.рф/assets/images/hero-920.webp",
           "telephone": "+79137556284",
           "taxID": "422811411707",
@@ -1738,9 +1743,9 @@
         {
           "@type": ["ProfessionalService", "LocalBusiness"],
           "@id": "https://психолог-для-мужчин.рф/#business",
-          "name": "Анна Щеголихина – психолог для мужчин онлайн",
+          "name": "Анна Щеголихина — психолог для мужчин",
           "image": "https://психолог-для-мужчин.рф/assets/images/hero-920.webp",
-          "description": "Онлайн-психолог для мужчин. Видеосессии из любого города. Очные консультации в Калининграде по предварительной записи.",
+          "description": "Психологическая помощь для мужчин: в основном онлайн (видеосессии), очные консультации в Калининграде по записи. Связь и сессии ежедневно 09:00–21:00 по калининградскому времени.",
           "url": "https://психолог-для-мужчин.рф/",
           "provider": { "@id": "https://психолог-для-мужчин.рф/#person" },
           "taxID": "422811411707",
@@ -1752,13 +1757,19 @@
             "addressCountry": "RU"
           },
           "telephone": "+79137556284",
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 54.724268,
+            "longitude": 20.497139
+          },
           "openingHoursSpecification": {
             "@type": "OpeningHoursSpecification",
             "dayOfWeek": [
               "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
             ],
             "opens": "09:00",
-            "closes": "21:00"
+            "closes": "21:00",
+            "description": "По калининградскому времени (Europe/Kaliningrad, UTC+2)"
           },
           "priceRange": "₽₽",
           "offers": [
@@ -1768,7 +1779,7 @@
               "priceCurrency": "RUB",
               "itemOffered": {
                 "@type": "Service",
-                "name": "Индивидуальная онлайн-консультация 50 мин",
+                "name": "Индивидуальная консультация 50 мин (онлайн)",
                 "description": "Стандартная видеосессия.",
                 "provider": { "@id": "https://психолог-для-мужчин.рф/#person" }
               }
@@ -1779,7 +1790,7 @@
               "priceCurrency": "RUB",
               "itemOffered": {
                 "@type": "Service",
-                "name": "Индивидуальная онлайн-консультация 90 мин",
+                "name": "Индивидуальная консультация 90 мин (онлайн)",
                 "description": "Расширенная индивидуальная сессия.",
                 "provider": { "@id": "https://психолог-для-мужчин.рф/#person" }
               }
@@ -1790,7 +1801,7 @@
               "priceCurrency": "RUB",
               "itemOffered": {
                 "@type": "Service",
-                "name": "Семейная (парная) онлайн-консультация 90 мин",
+                "name": "Семейная (парная) консультация 90 мин (онлайн)",
                 "description": "Для пары, если оба партнёра готовы участвовать.",
                 "provider": { "@id": "https://психолог-для-мужчин.рф/#person" }
               }
@@ -1822,7 +1833,7 @@
           "name": "Как проходит онлайн-консультация?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "По смыслу — как очная встреча, только без дороги. За 5–10 минут до начала присылается ссылка на видеовстречу (Telegram, MAX, Google Meet, Яндекс Телемост или Салют Джаз). Длительность — 50 или 90 минут."
+            "text": "По смыслу — как очная встреча, только без дороги. За 5–10 минут до начала отправлю ссылку на видеосозвон — ничего скачивать не нужно, ссылка откроется в браузере. Длительность — 50 или 90 минут. Важно заранее выбрать тихое место, где вас не будут перебивать."
           }
         },
         {
@@ -1907,6 +1918,7 @@
             ecommerce:'dataLayer'
         });
     </script>
+    <script src="assets/analytics-events.js"></script>
     <noscript><div><img src="https://mc.yandex.ru/watch/110969154" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
     <!-- /Yandex.Metrika counter -->
 
@@ -2163,7 +2175,7 @@
         <div class="container">
             <div class="section-title">
                 <h2 id="reviews-title">Отзывы клиентов</h2>
-                <p>Отзывы из открытых источников и личных сообщений. Инициалы и возраст указаны для удобства чтения. Звёздный рейтинг на карточках не использую — смотрите исходники по ссылкам ниже.</p>
+                <p>Отзывы из открытых источников и личных сообщений. Инициалы и возраст указаны для удобства чтения.</p>
             </div>
 
             <div class="reviews-slider-wrap">
@@ -2405,9 +2417,15 @@
                         </div>
                     </div>
                     <div style="background:var(--bg-white);padding:1.2rem 1.4rem;border-radius:var(--radius);border:1px solid var(--border-light);margin-bottom:1rem;">
-                        <p style="font-size:0.85rem;color:var(--text-secondary);margin:0;">
-                            <strong>Не работаю с:</strong> острыми суицидальными состояниями и психозом (нужна психиатрическая / кризисная помощь); зависимостями (алкогольной, наркотической, игровой и др.); детьми и подростками (только взрослые от 18 лет); судебной экспертизой.
-                        </p>
+                        <div style="font-size:0.85rem;color:var(--text-secondary);">
+                            <strong>Не работаю с:</strong>
+                            <ul style="margin:0.5rem 0 0 1.1rem;padding:0;">
+                                <li>острыми суицидальными состояниями и психозом (нужна психиатрическая / кризисная помощь);</li>
+                                <li>зависимостями (алкогольной, наркотической, игровой и др.);</li>
+                                <li>детьми и подростками (только взрослые от 18 лет);</li>
+                                <li>судебной экспертизой.</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2452,7 +2470,7 @@
             <div class="steps-meta">
                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
                 Онлайн или очно · 50 или 90 минут
-                <br><span style="font-size:0.8rem;color:var(--text-muted);">Онлайн: ссылка за 5–10 минут до встречи (Telegram, MAX, Google Meet, Яндекс Телемост, Салют Джаз) — обычно ничего скачивать не нужно</span>
+                <br><span style="font-size:0.8rem;color:var(--text-muted);">Онлайн: отправляю ссылку на видеосозвон за 5–10 минут до встречи — ничего скачивать не нужно, ссылка откроется в браузере</span>
             </div>
         </div>
     </section>
@@ -2527,6 +2545,25 @@
                 (function() {
                     var api = window.PSI_LEADS_API;
                     var origFetch = window.fetch;
+
+                    function postBookingLead(body, attempt) {
+                        attempt = attempt || 0;
+                        return origFetch(api, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: body
+                        }).catch(function(err) {
+                            if (attempt < 2) {
+                                return new Promise(function(resolve) {
+                                    setTimeout(resolve, 700 * (attempt + 1));
+                                }).then(function() {
+                                    return postBookingLead(body, attempt + 1);
+                                });
+                            }
+                            console.error('[booking lead]', err);
+                        });
+                    }
+
                     window.fetch = function(input, init) {
                         var url = typeof input === 'string' ? input : (input && input.url) || '';
                         var isBooking = url.indexOf('/public/bookings') !== -1 && init && String(init.method || '').toUpperCase() === 'POST';
@@ -2543,21 +2580,17 @@
                                     endIso = d.toISOString();
                                 }
                                 var tracking = typeof getLeadTrackingPayload === 'function' ? getLeadTrackingPayload() : {};
-                                origFetch(api, {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify(Object.assign({
-                                        source: 'booking',
-                                        name: payload.name,
-                                        phone: payload.phone,
-                                        therapyType: payload.therapyType,
-                                        startIso: startIso,
-                                        endIso: endIso,
-                                        clientTimezone: payload.clientTimezone,
-                                        comment: payload.comment || '',
-                                        website: ''
-                                    }, tracking))
-                                }).catch(function() {});
+                                postBookingLead(JSON.stringify(Object.assign({
+                                    source: 'booking',
+                                    name: payload.name,
+                                    phone: payload.phone,
+                                    therapyType: payload.therapyType,
+                                    startIso: startIso,
+                                    endIso: endIso,
+                                    clientTimezone: payload.clientTimezone,
+                                    comment: payload.comment || '',
+                                    website: ''
+                                }, tracking)));
                                 sessionStorage.setItem('bookingThankYou', JSON.stringify({
                                     name: payload.name,
                                     phone: payload.phone,
@@ -2566,6 +2599,9 @@
                                     endIso: endIso,
                                     clientTimezone: payload.clientTimezone
                                 }));
+                                if (typeof window.psiMetrikaGoal === 'function') {
+                                    window.psiMetrikaGoal('lead_booking');
+                                }
                                 setTimeout(function() {
                                     window.location.href = '/thank-you-booking/';
                                 }, 150);
@@ -2598,8 +2634,8 @@
                         Видеосессии для клиентов из России и по всему миру. Время встречи согласуем с учётом вашего пояса (ориентир — Калининград). Запись — через <a href="#booking">календарь на этой странице</a>.
                     </p>
                     <ul style="margin:0.8rem 0 0 1.2rem;color:var(--text-secondary);">
-                        <li>ссылку на встречу присылаю за 5–10 минут до сессии;</li>
-                        <li>ничего скачивать не нужно — ссылка на видеовстречу откроется в вашем браузере (Telegram, MAX, Google Meet, Яндекс Телемост, Салют Джаз).</li>
+                        <li>ссылку на видеосозвон присылаю за 5–10 минут до сессии;</li>
+                        <li>ничего скачивать не нужно — ссылка откроется в браузере.</li>
                     </ul>
 
                     <div class="location-offline">
@@ -2644,6 +2680,16 @@
                             <div class="contact-label">Телефон</div>
                             <div class="contact-value"><a href="tel:+79137556284">+7 913 755 62 84</a></div>
                             <p class="contact-phone-note">Во время сессий, супервизий и групповой работы я могу ответить не сразу, но обязательно свяжусь с вами позже.</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="icon-wrap">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                        </div>
+                        <div>
+                            <div class="contact-label">Часы работы</div>
+                            <div class="contact-value">Пн–Вс, 9:00–21:00 (калининградское время)</div>
                         </div>
                     </div>
 
@@ -2727,7 +2773,7 @@
                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 9l6 6 6-6"/></svg>
                     </button>
                     <div class="faq-answer">
-                        <p>По смыслу — как очная встреча, только без дороги. За 5–10 минут до начала пришлю ссылку на видеовстречу: Telegram, MAX, Google Meet, Яндекс Телемост или Салют Джаз — обычно ничего заранее скачивать не нужно.</p>
+                        <p>По смыслу — как очная встреча, только без дороги. За 5–10 минут до начала отправлю ссылку на видеосозвон — ничего скачивать не нужно, ссылка откроется в браузере.</p>
                         <p>Длительность — 50 или 90 минут. Важно заранее выбрать тихое место, где вас не будут перебивать.</p>
                     </div>
                 </div>
@@ -2884,7 +2930,7 @@
             <p>При использовании сервисов видеосвязи и мессенджеров возможна передача данных на серверы за пределами РФ (Google Meet, WhatsApp, Telegram и др.) — в объёме, необходимом для связи и консультации. Подробности — в Политике.</p>
             <h3>6. Подтверждение</h3>
             <p>Отмечая чекбокс на сайте, вы подтверждаете согласие на обработку данных и ознакомление с <a href="/privacy-policy/" target="_blank" rel="noopener">политикой конфиденциальности</a> и <a href="/oferta/" target="_blank" rel="noopener">публичной офертой</a>.</p>
-            <p style="margin-top:1rem;font-size:.85rem;color:var(--text-secondary);">Оператор: Щеголихина Анна Михайловна, самозанятая, ИНН 422811411707. Контакт: +7 913 755 62 84 · anna-psy-online@yandex.ru</p>
+            <p style="margin-top:1rem;font-size:.85rem;color:var(--text-secondary);">Оператор: Щеголихина Анна Михайловна, самозанятая, ИНН 422811411707. Контакт: <a href="tel:+79137556284">+7 913 755 62 84</a> · <a href="mailto:anna-psy-online@yandex.ru">anna-psy-online@yandex.ru</a></p>
         </div>
     </div>
 
@@ -3155,6 +3201,9 @@
                     })
                     .then(function(res) {
                         if (!res.ok) throw new Error('bad status');
+                        if (typeof window.psiMetrikaGoal === 'function') {
+                            window.psiMetrikaGoal('lead_callback');
+                        }
                         sessionStorage.setItem('callbackThankYou', JSON.stringify({
                             name: name,
                             phone: phone,
@@ -3210,6 +3259,15 @@
             }
 
             // ===== ПОЯВЛЕНИЕ СЕКЦИЙ ПРИ СКРОЛЛЕ =====
+            document.body.addEventListener('click', function(e) {
+                var link = e.target.closest('a[href]');
+                if (!link || typeof window.psiMetrikaGoal !== 'function') return;
+                var href = link.getAttribute('href') || '';
+                if (href.indexOf('tel:') === 0) window.psiMetrikaGoal('click_phone');
+                else if (/t\.me\/|telegram\.me\//i.test(href)) window.psiMetrikaGoal('click_telegram');
+                else if (href.indexOf('max.ru/') !== -1) window.psiMetrikaGoal('click_max');
+            });
+
             document.querySelectorAll('.section').forEach(function(sec) {
                 sec.classList.add('fade-in');
             });
