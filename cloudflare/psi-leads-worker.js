@@ -3,6 +3,7 @@
  * Settings → Variables: BOT_TOKEN (encrypt), CHAT_ID = 382337050
  */
 const PSY_TZ = 'Europe/Kaliningrad';
+const SITE_HOME = 'https://психолог-для-мужчин.рф';
 
 function corsOriginForRequest(origin) {
   const allowed = new Set([
@@ -23,6 +24,35 @@ const THERAPY = {
 function dash(val) {
   const s = String(val ?? '').trim();
   return s || '—';
+}
+
+/** +7XXXXXXXXXX без пробелов и скобок */
+function normalizePhone(phone) {
+  const raw = String(phone ?? '').trim();
+  if (!raw) return '—';
+  const digits = raw.replace(/\D/g, '');
+  if (!digits) return dash(raw);
+  return `+${digits}`;
+}
+
+/** В сообщении — только origin, без ?utm_… (UTM отдельными строками) */
+function displayPageUrl(url) {
+  const s = String(url ?? '').trim();
+  if (!s) return SITE_HOME;
+  try {
+    const u = new URL(s);
+    const host = u.hostname.toLowerCase();
+    if (
+      host === 'xn-----glcflhfsdlncbk4a6bya1c4j.xn--p1ai' ||
+      host === 'психолог-для-мужчин.рф' ||
+      host.endsWith('annashhe.github.io')
+    ) {
+      return SITE_HOME;
+    }
+    return u.origin;
+  } catch {
+    return SITE_HOME;
+  }
 }
 
 function formatSessionDate(startIso, tz) {
@@ -57,7 +87,7 @@ function metaBlock(meta) {
   return [
     '',
     'Дополнительная информация:',
-    `Страница заявки: ${dash(meta.pageUrl)}`,
+    `Страница заявки: ${displayPageUrl(meta.pageUrl)}`,
     `UTM source: ${dash(meta.utmSource)}`,
     `UTM medium: ${dash(meta.utmMedium)}`,
     `UTM campaign: ${dash(meta.utmCampaign)}`,
@@ -74,7 +104,7 @@ function buildCallbackMessage(data) {
     'Заявка с формы (обратный звонок)',
     '',
     `Имя: ${dash(data.name)}`,
-    `Телефон: ${dash(data.phone)}`,
+    `Телефон: ${normalizePhone(data.phone)}`,
     `Способ связи: ${methods.length ? methods.join(', ') : '—'}`,
     metaBlock(data),
   ].join('\n');
@@ -85,10 +115,10 @@ function buildBookingMessage(data) {
   const clientTz = data.clientTimezone || 'Europe/Moscow';
   const note = data.comment ? String(data.comment).trim().slice(0, 500) : '';
   const lines = [
-    'Запись через календарь',
+    'Запись Онлайн через календарь',
     '',
     `Имя: ${dash(data.name)}`,
-    `Телефон: ${dash(data.phone)}`,
+    `Телефон: ${normalizePhone(data.phone)}`,
     `Формат: ${t.label}`,
     `Дата сессии: ${formatSessionDate(data.startIso, clientTz)}`,
     `Часовой пояс психолога: ${formatSlotRange(data.startIso, data.endIso, PSY_TZ)}`,
@@ -159,7 +189,11 @@ export default {
       const tgRes = await fetch(`https://api.telegram.org/bot${env.BOT_TOKEN}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: env.CHAT_ID, text }),
+        body: JSON.stringify({
+          chat_id: env.CHAT_ID,
+          text,
+          disable_web_page_preview: true,
+        }),
       });
 
       if (!tgRes.ok) {

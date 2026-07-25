@@ -41,14 +41,7 @@ window.PSI_SITE_HOME = 'https://психолог-для-мужчин.рф/';
 })();
 
 function getLeadTrackingPayload() {
-  var pageUrl = window.PSI_SITE_HOME;
-  try {
-    var q = sessionStorage.getItem('psiLandingQuery') || window.location.search || '';
-    if (q && q.charAt(0) !== '?') q = '?' + q;
-    if (q.length > 1) {
-      pageUrl = window.PSI_SITE_HOME.replace(/\/$/, '') + q;
-    }
-  } catch (e) {}
+  var pageUrl = window.PSI_SITE_HOME.replace(/\/$/, '');
 
   var utm = {};
   try {
