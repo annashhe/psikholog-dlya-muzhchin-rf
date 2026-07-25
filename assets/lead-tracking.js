@@ -25,16 +25,29 @@ window.PSI_SITE_HOME = 'https://психолог-для-мужчин.рф/';
   }
 
   var path = window.location.pathname || '';
-  if (/\/index\.html$/i.test(path)) {
-    var dest =
-      window.PSI_SITE_HOME.replace(/\/$/, '') +
-      (window.location.search || '') +
-      (window.location.hash || '');
+  var qs = window.location.search || '';
+  var hash = window.location.hash || '';
+
+  if (path === '/index.html') {
+    var home =
+      window.PSI_SITE_HOME.replace(/\/$/, '') + qs + hash;
     if (window.location.protocol.indexOf('http') === 0) {
-      window.location.replace(dest);
+      window.location.replace(home);
       return;
     }
-    history.replaceState(null, '', path.replace(/\/index\.html$/i, '/') || '/');
+    history.replaceState(null, '', '/' + qs + hash);
+  } else if (/\/index\.html$/i.test(path)) {
+    if (window.location.protocol.indexOf('http') === 0) {
+      window.location.replace(path.replace(/\/index\.html$/i, '/') + qs + hash);
+      return;
+    }
+    history.replaceState(null, '', path.replace(/\/index\.html$/i, '/') + qs + hash);
+  } else if (/\.html$/i.test(path)) {
+    var clean = path.replace(/\.html$/i, '/');
+    if (window.location.protocol.indexOf('http') === 0) {
+      window.location.replace(clean + qs + hash);
+      return;
+    }
   }
 
   captureUtms();

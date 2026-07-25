@@ -26,6 +26,13 @@ function dash(val) {
   return s || '—';
 }
 
+function escHtml(val) {
+  return String(val ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
 /** +7XXXXXXXXXX без пробелов и скобок */
 function normalizePhone(phone) {
   const raw = String(phone ?? '').trim();
@@ -33,6 +40,12 @@ function normalizePhone(phone) {
   const digits = raw.replace(/\D/g, '');
   if (!digits) return dash(raw);
   return `+${digits}`;
+}
+
+function phoneLineHtml(phone) {
+  const p = normalizePhone(phone);
+  if (p === '—') return 'Телефон: —';
+  return `Телефон: <a href="tel:${escHtml(p)}">${escHtml(p)}</a>`;
 }
 
 /** В сообщении — только origin, без ?utm_… (UTM отдельными строками) */
@@ -87,12 +100,12 @@ function metaBlock(meta) {
   return [
     '',
     'Дополнительная информация:',
-    `Страница заявки: ${displayPageUrl(meta.pageUrl)}`,
-    `UTM source: ${dash(meta.utmSource)}`,
-    `UTM medium: ${dash(meta.utmMedium)}`,
-    `UTM campaign: ${dash(meta.utmCampaign)}`,
-    `UTM content: ${dash(meta.utmContent)}`,
-    `UTM term: ${dash(meta.utmTerm)}`,
+    `Страница заявки: ${escHtml(displayPageUrl(meta.pageUrl))}`,
+    `UTM source: ${escHtml(dash(meta.utmSource))}`,
+    `UTM medium: ${escHtml(dash(meta.utmMedium))}`,
+    `UTM campaign: ${escHtml(dash(meta.utmCampaign))}`,
+    `UTM content: ${escHtml(dash(meta.utmContent))}`,
+    `UTM term: ${escHtml(dash(meta.utmTerm))}`,
   ].join('\n');
 }
 
@@ -103,9 +116,9 @@ function buildCallbackMessage(data) {
   return [
     'Заявка с формы (обратный звонок)',
     '',
-    `Имя: ${dash(data.name)}`,
-    `Телефон: ${normalizePhone(data.phone)}`,
-    `Способ связи: ${methods.length ? methods.join(', ') : '—'}`,
+    `Имя: ${escHtml(dash(data.name))}`,
+    phoneLineHtml(data.phone),
+    `Способ связи: ${escHtml(methods.length ? methods.join(', ') : '—')}`,
     metaBlock(data),
   ].join('\n');
 }
@@ -117,15 +130,15 @@ function buildBookingMessage(data) {
   const lines = [
     'Запись Онлайн через календарь',
     '',
-    `Имя: ${dash(data.name)}`,
-    `Телефон: ${normalizePhone(data.phone)}`,
-    `Формат: ${t.label}`,
-    `Дата сессии: ${formatSessionDate(data.startIso, clientTz)}`,
-    `Часовой пояс психолога: ${formatSlotRange(data.startIso, data.endIso, PSY_TZ)}`,
-    `Часовой пояс клиента: ${formatSlotRange(data.startIso, data.endIso, clientTz)}`,
+    `Имя: ${escHtml(dash(data.name))}`,
+    phoneLineHtml(data.phone),
+    `Формат: ${escHtml(t.label)}`,
+    `Дата сессии: ${escHtml(formatSessionDate(data.startIso, clientTz))}`,
+    `Часовой пояс психолога: ${escHtml(formatSlotRange(data.startIso, data.endIso, PSY_TZ))}`,
+    `Часовой пояс клиента: ${escHtml(formatSlotRange(data.startIso, data.endIso, clientTz))}`,
   ];
   if (note) {
-    lines.push('', `Комментарий клиента: ${note}`);
+    lines.push('', `Комментарий клиента: ${escHtml(note)}`);
   }
   lines.push(metaBlock(data));
   return lines.join('\n');
@@ -192,6 +205,7 @@ export default {
         body: JSON.stringify({
           chat_id: env.CHAT_ID,
           text,
+          parse_mode: 'HTML',
           disable_web_page_preview: true,
         }),
       });

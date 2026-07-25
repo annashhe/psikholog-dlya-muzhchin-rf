@@ -1444,6 +1444,32 @@
             cursor: pointer;
             touch-action: manipulation;
         }
+        .legal-modal-inner {
+            max-width: min(640px, 90vw);
+            max-height: 85vh;
+            overflow: auto;
+            padding: 28px 24px 24px;
+        }
+        .legal-modal-inner h2 {
+            font-size: 1.25rem;
+            color: var(--highlight);
+            margin-bottom: 1rem;
+        }
+        .legal-modal-inner h3 {
+            font-size: 1rem;
+            margin: 1.2rem 0 0.5rem;
+        }
+        .legal-modal-inner p,
+        .legal-modal-inner li {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+        }
+        .legal-modal-inner ul {
+            margin: 0.4rem 0 0.8rem 1.2rem;
+        }
+        .legal-modal-inner a {
+            color: var(--highlight);
+        }
         .diploma-placeholder {
             padding: 2rem;
             text-align: center;
@@ -1859,7 +1885,7 @@
                 <a href="#spec">Услуги</a>
                 <a href="#reviews">Отзывы</a>
                 <a href="#pricing">Цены</a>
-                <a href="blog/index.html">Блог</a>
+                <a href="/blog/">Блог</a>
                 <a href="#contact">Контакты</a>
             </nav>
             <div class="header-actions">
@@ -1874,7 +1900,7 @@
             <a href="#spec">Услуги</a>
             <a href="#reviews">Отзывы</a>
             <a href="#pricing">Цены</a>
-            <a href="blog/index.html">Блог</a>
+            <a href="/blog/">Блог</a>
             <a href="#contact">Контакты</a>
             <a href="#booking">Записаться онлайн</a>
         </div>
@@ -2549,7 +2575,7 @@
                                     clientTimezone: payload.clientTimezone
                                 }));
                                 setTimeout(function() {
-                                    window.location.href = 'thank-you-booking.html';
+                                    window.location.href = '/thank-you-booking/';
                                 }, 150);
                             } catch (err) {
                                 console.error('[booking thank-you]', err);
@@ -2560,6 +2586,7 @@
                 })();
             </script>
             <script src="https://anna-psy-schedule-frontend.vercel.app/widget.js"></script>
+            <script src="assets/legal-modal.js"></script>
             <div data-anna-psy-widget></div>
             <p class="calendar-note">Если календарь не отображается, попробуйте <strong>отключить VPN</strong> или открыть страницу в другом браузере</p>
         </div>
@@ -2677,7 +2704,7 @@
                             </fieldset>
                             <div class="checkbox-group">
                                 <input type="checkbox" id="formConsent" name="consent" required />
-                                <label for="formConsent">Я согласен на <a href="consent.html" target="_blank" rel="noopener">обработку персональных данных</a> и принимаю <a href="privacy-policy.html" target="_blank" rel="noopener">политику конфиденциальности</a>.</label>
+                                <label for="formConsent">Я согласен на <a href="#" class="js-open-consent">обработку персональных данных</a> и принимаю <a href="/privacy-policy/" target="_blank" rel="noopener">политику конфиденциальности</a>.</label>
                             </div>
                             <button type="submit" class="btn btn-primary">Отправить заявку</button>
                         </form>
@@ -2801,7 +2828,7 @@
                 <a href="#spec">Услуги</a>
                 <a href="#reviews">Отзывы</a>
                 <a href="#pricing">Цены</a>
-                <a href="blog/index.html">Блог</a>
+                <a href="/blog/">Блог</a>
                 <a href="#contact">Контакты</a>
                 <a href="#booking">Записаться онлайн</a>
             </nav>
@@ -2814,11 +2841,11 @@
                 <span style="margin:0 8px;">·</span>
                 <a href="#about">Об Анне</a>
                 <span style="margin:0 8px;">·</span>
-                <a href="blog/index.html">Блог</a>
+                <a href="/blog/">Блог</a>
                 <span style="margin:0 8px;">·</span>
-                <a href="privacy-policy.html" target="_blank" rel="noopener">Политика конфиденциальности</a>
+                <a href="/privacy-policy/" target="_blank" rel="noopener">Политика конфиденциальности</a>
                 <span style="margin:0 8px;">·</span>
-                <a href="consent.html" target="_blank" rel="noopener">Согласие на обработку данных</a>
+                <a href="/consent/" target="_blank" rel="noopener">Согласие на обработку данных</a>
                 <br>
                 <span style="font-size:0.8rem;color:var(--text-muted);margin-top:0.4rem;display:inline-block;">
                     Сайт носит информационный характер и не заменяет очную консультацию специалиста. Материалы не являются медицинской услугой и не содержат гарантий результата.
@@ -2836,6 +2863,30 @@
             <p class="diploma-placeholder" id="diplomaPlaceholder" style="display:none;">
                 Изображение диплома не найдено. Проверьте файл в папке assets/images/diplomas/
             </p>
+        </div>
+    </div>
+
+    <!-- Попап: согласие на обработку персональных данных -->
+    <div class="diploma-modal" id="consentModal" role="dialog" aria-modal="true" aria-labelledby="consentModalTitle">
+        <div class="diploma-modal-inner legal-modal-inner">
+            <button type="button" class="diploma-modal-close" id="consentModalClose" aria-label="Закрыть">&times;</button>
+            <h2 id="consentModalTitle">Согласие на обработку персональных данных</h2>
+            <p>Настоящим я даю своё согласие <strong>Анне Щеголихиной</strong> (далее — Оператор) на обработку моих персональных данных на условиях, изложенных ниже.</p>
+            <h3>1. Перечень данных</h3>
+            <p>Имя, телефон, адрес электронной почты (при указании), содержание обращений через форму сайта или мессенджеры.</p>
+            <h3>2. Цели обработки</h3>
+            <ul>
+                <li>обратная связь и запись на онлайн-консультацию;</li>
+                <li>оказание психологических услуг;</li>
+                <li>исполнение требований законодательства РФ.</li>
+            </ul>
+            <h3>3. Действия с данными</h3>
+            <p>Сбор, запись, хранение, уточнение, использование, передача (в объёме, необходимом для оказания услуг), обезличивание, блокирование, удаление.</p>
+            <h3>4. Срок действия согласия</h3>
+            <p>До достижения целей обработки или до отзыва согласия. Отзыв направляется на <a href="tel:+79137556284">+7 913 755 62 84</a> или в <a href="https://t.me/annashhe" target="_blank" rel="noopener">Telegram</a>.</p>
+            <h3>5. Подтверждение</h3>
+            <p>Отмечая чекбокс на сайте, вы подтверждаете, что ознакомились с <a href="/privacy-policy/" target="_blank" rel="noopener">политикой конфиденциальности</a> и даёте согласие на обработку данных.</p>
+            <p style="margin-top:1rem;font-size:.85rem;color:var(--text-secondary);">Оператор: Анна Щеголихина. Контакт: +7 913 755 62 84.</p>
         </div>
     </div>
 
@@ -3091,7 +3142,7 @@
                             phone: phone,
                             contactMethods: contactMethods
                         }));
-                        window.location.href = 'thank-you-callback.html';
+                        window.location.href = '/thank-you-callback/';
                     })
                     .catch(function() {
                         alert('Не удалось отправить заявку. Напишите в Telegram @annashhe или позвоните +7 913 755 62 84.');

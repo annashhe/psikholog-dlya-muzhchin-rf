@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Заявка отправлена | Анна Щеголихина</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/assets/thank-you-page.css" />
+    <script src="/assets/lead-tracking.js"></script>
+    <script src="/assets/thank-you-shared.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container header-inner">
+            <a href="https://психолог-для-мужчин.рф/">Анна Щеголихина <span>·</span> Психолог</a>
+            <a href="https://психолог-для-мужчин.рф/" class="header-back">← На главную</a>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <div class="card" id="thankYouContent">
+                <h1>Спасибо!</h1>
+                <p class="lead">Заявка принята. Загрузка…</p>
+            </div>
+            <div id="thankYouArticles"></div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">© 2026 Анна Щеголихина</div>
+    </footer>
+    <script>
+        (function() {
+            var home = window.PSI_SITE_HOME || 'https://психолог-для-мужчин.рф/';
+            var messengers = window.thankYouMessengerLinks || '';
+            var root = document.getElementById('thankYouContent');
+            var articlesEl = document.getElementById('thankYouArticles');
+
+            function escapeHtml(s) {
+                return String(s).replace(/[<>&]/g, '');
+            }
+
+            function phonePhrase(phone) {
+                var p = String(phone || '').trim();
+                if (p) return 'по указанному телефону <strong>' + escapeHtml(p) + '</strong>';
+                return 'по указанному телефону';
+            }
+
+            function formatContactMethodsList(methods) {
+                var list = Array.isArray(methods) ? methods.filter(Boolean) : [];
+                if (!list.length) return 'Telegram или MAX';
+                if (list.length === 1) return list[0];
+                if (list.length === 2) return list[0] + ' или ' + list[1];
+                return list.slice(0, -1).join(', ') + ' или ' + list[list.length - 1];
+            }
+
+            var raw = null;
+            try { raw = sessionStorage.getItem('callbackThankYou'); sessionStorage.removeItem('callbackThankYou'); } catch (e) {}
+            if (!raw) {
+                root.innerHTML = '<h1>Спасибо!</h1><p class="lead">Если вы только что отправили заявку, я скоро свяжусь с вами.</p><a class="btn" href="' + home + '">На главную</a>';
+                if (articlesEl && typeof renderThankYouArticles === 'function') {
+                    articlesEl.innerHTML = renderThankYouArticles();
+                }
+                return;
+            }
+            var data;
+            try { data = JSON.parse(raw); } catch (e) { data = {}; }
+            var name = escapeHtml(data.name || 'коллега');
+            var via = formatContactMethodsList(data.contactMethods);
+
+            root.innerHTML =
+                '<h1>Спасибо, ' + name + '!</h1>' +
+                '<p class="lead">Я получила вашу заявку, и свяжусь с вами через ' + escapeHtml(via) + ' ' + phonePhrase(data.phone) + ' в течение дня, чтобы обсудить ваш вопрос.</p>' +
+                '<p class="note">Если вопрос срочный, можете написать мне напрямую в ' + messengers + '.</p>' +
+                '<a class="btn" href="' + home + '">Вернуться на сайт</a>';
+
+            if (articlesEl && typeof renderThankYouArticles === 'function') {
+                articlesEl.innerHTML = renderThankYouArticles();
+            }
+        })();
+    </script>
+</body>
+</html>
