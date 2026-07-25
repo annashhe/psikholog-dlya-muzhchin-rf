@@ -1,17 +1,17 @@
 /** Канонический адрес главной и сбор UTM для заявок */
 window.PSI_SITE_HOME = 'https://психолог-для-мужчин.рф/';
 
-(function() {
+(function () {
   function captureUtms() {
     try {
       var params = new URLSearchParams(window.location.search);
       var keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
       var utm = {};
       var has = false;
-      keys.forEach(function(k) {
+      keys.forEach(function (k) {
         var v = params.get(k);
         if (v) {
-          utm[k] = v;
+          utm[k] = String(v).slice(0, 200);
           has = true;
         }
       });
@@ -34,8 +34,7 @@ window.PSI_SITE_HOME = 'https://психолог-для-мужчин.рф/';
   var hash = window.location.hash || '';
 
   if (path === '/index.html') {
-    var home =
-      window.PSI_SITE_HOME.replace(/\/$/, '') + qs + hash;
+    var home = window.PSI_SITE_HOME.replace(/\/$/, '') + qs + hash;
     if (window.location.protocol.indexOf('http') === 0) {
       window.location.replace(home);
       return;
@@ -59,14 +58,17 @@ window.PSI_SITE_HOME = 'https://психолог-для-мужчин.рф/';
 })();
 
 function getLeadTrackingPayload() {
-  var pageUrl = window.PSI_SITE_HOME.replace(/\/$/, '');
+  var pageUrl = '';
+  try {
+    pageUrl = window.location.origin + (window.location.pathname || '/');
+  } catch (e0) {
+    pageUrl = window.PSI_SITE_HOME.replace(/\/$/, '');
+  }
 
   var utm = {};
   try {
     utm = JSON.parse(
-      sessionStorage.getItem('psiUtms') ||
-      localStorage.getItem('psiUtmsFirst') ||
-      '{}'
+      sessionStorage.getItem('psiUtms') || localStorage.getItem('psiUtmsFirst') || '{}'
     );
   } catch (e2) {}
 

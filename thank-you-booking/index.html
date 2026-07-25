@@ -8,8 +8,10 @@
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/assets/thank-you-page.css" />
-    <script src="/assets/lead-tracking.js"></script>
-    <script src="/assets/thank-you-shared.js"></script>
+    <script src="/assets/lead-tracking.js" defer></script>
+    <script src="/assets/consent-analytics.js" defer></script>
+    <script src="/assets/analytics-events.js" defer></script>
+    <script src="/assets/thank-you-shared.js" defer></script>
 </head>
 <body>
     <header class="header">
@@ -31,16 +33,38 @@
         <div class="container">© 2026 Анна Щеголихина</div>
     </footer>
     <script>
-        (function() {
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof window.psiLoadAnalytics === 'function') window.psiLoadAnalytics();
+
             var home = window.PSI_SITE_HOME || 'https://психолог-для-мужчин.рф/';
             var messengers = window.thankYouMessengerLinks || '';
             var THERAPY = {
                 individual: { title: 'Индивидуальная консультация', duration: '50 минут', price: '4 500 ₽' },
+                individual90: { title: 'Индивидуальная консультация', duration: '90 минут', price: '7 000 ₽' },
                 family: { title: 'Семейная (парная) консультация', duration: '90 минут', price: '7 000 ₽' }
             };
 
             function escapeHtml(s) {
-                return String(s).replace(/[<>&]/g, '');
+                return String(s)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;');
+            }
+
+            function maskPhone(phone) {
+                var digits = String(phone || '').replace(/\D/g, '');
+                if (digits.length < 11) return '';
+                return '+7 ••• ••• ' + digits.slice(-4, -2) + '-' + digits.slice(-2);
+            }
+
+            function resolveTherapy(data) {
+                if (THERAPY[data.therapyType]) return THERAPY[data.therapyType];
+                if (data.startIso && data.endIso) {
+                    var mins = Math.round((new Date(data.endIso) - new Date(data.startIso)) / 60000);
+                    if (mins >= 80) return THERAPY.individual90;
+                }
+                return THERAPY.individual;
             }
 
             function formatWhen(startIso, endIso, tz) {
@@ -48,7 +72,7 @@
                 try {
                     var start = new Date(startIso);
                     var end = endIso ? new Date(endIso) : null;
-                    var zone = tz || 'Europe/Moscow';
+                    var zone = tz || 'Europe/Kaliningrad';
                     var datePart = start.toLocaleDateString('ru-RU', { timeZone: zone, day: 'numeric', month: 'long', year: 'numeric' });
                     var t0 = start.toLocaleTimeString('ru-RU', { timeZone: zone, hour: '2-digit', minute: '2-digit' });
                     var timePart;
@@ -65,8 +89,8 @@
             }
 
             function phonePhrase(phone) {
-                var p = String(phone || '').trim();
-                if (p) return 'по указанному телефону <strong>' + escapeHtml(p) + '</strong>';
+                var masked = maskPhone(phone);
+                if (masked) return 'по телефону <strong>' + escapeHtml(masked) + '</strong>';
                 return 'по указанному телефону';
             }
 
@@ -84,12 +108,12 @@
             var data;
             try { data = JSON.parse(raw); } catch (e) { data = {}; }
             var name = escapeHtml(data.name || 'коллега');
-            var therapy = THERAPY[data.therapyType] || THERAPY.individual;
+            var therapy = resolveTherapy(data);
             var when = formatWhen(data.startIso, data.endIso, data.clientTimezone);
 
             root.innerHTML =
                 '<h1>Спасибо, ' + name + '!</h1>' +
-                '<p class="lead">Я получила вашу заявку на онлайн-консультацию, и свяжусь с вами ' + phonePhrase(data.phone) + ' в течение дня, чтобы подтвердить запись.</p>' +
+                '<p class="lead">Я получила вашу заявку на онлайн-консультацию и свяжусь с вами ' + phonePhrase(data.phone) + ' в течение дня, чтобы подтвердить запись.</p>' +
                 '<dl class="details">' +
                 '<dt>Формат</dt><dd>' + therapy.title + '</dd>' +
                 '<dt>Длительность</dt><dd>' + therapy.duration + '</dd>' +
@@ -102,7 +126,7 @@
             if (articlesEl && typeof renderThankYouArticles === 'function') {
                 articlesEl.innerHTML = renderThankYouArticles();
             }
-        })();
+        });
     </script>
 </body>
 </html>

@@ -1,24 +1,28 @@
 /**
  * Cloudflare Worker: заявки с сайта → Telegram.
- * Settings → Variables: BOT_TOKEN (encrypt), CHAT_ID = 382337050
+ * Secrets/vars в Dashboard: BOT_TOKEN, CHAT_ID
  */
 const PSY_TZ = 'Europe/Kaliningrad';
 const SITE_HOME = 'https://психолог-для-мужчин.рф';
+const RATE_LIMIT_WINDOW_SEC = 60;
+const RATE_LIMIT_MAX = 8;
+const NAME_MAX = 80;
+const PHONE_DIGITS_MIN = 11;
+const PHONE_DIGITS_MAX = 15;
 
 function corsOriginForRequest(origin) {
   const allowed = new Set([
     'https://психолог-для-мужчин.рф',
     'https://xn-----glcflhfsdlncbk4a6bya1c4j.xn--p1ai',
-    'https://annashhe.github.io',
   ]);
   if (origin && allowed.has(origin)) return origin;
-  if (origin && origin.startsWith('https://annashhe.github.io')) return origin;
   return null;
 }
 
 const THERAPY = {
-  individual: { title: 'Индивидуальная', label: 'Индивидуальная' },
-  family: { title: 'Семейная (парная)', label: 'Семейная' },
+  individual: { title: 'Индивидуальная', label: 'Индивидуальная 50 мин' },
+  individual90: { title: 'Индивидуальная 90 мин', label: 'Индивидуальная 90 мин' },
+  family: { title: 'Семейная (парная)', label: 'Семейная 90 мин' },
 };
 
 function dash(val) {
@@ -33,22 +37,30 @@ function escHtml(val) {
     .replace(/>/g, '&gt;');
 }
 
-/** +7XXXXXXXXXX без пробелов и скобок */
 function normalizePhone(phone) {
   const raw = String(phone ?? '').trim();
-  if (!raw) return '—';
+  if (!raw) return '';
   const digits = raw.replace(/\D/g, '');
-  if (!digits) return dash(raw);
+  if (!digits) return '';
   return `+${digits}`;
+}
+
+function isValidPhone(phone) {
+  const digits = String(phone ?? '').replace(/\D/g, '');
+  return digits.length >= PHONE_DIGITS_MIN && digits.length <= PHONE_DIGITS_MAX;
+}
+
+function isValidName(name) {
+  const s = String(name ?? '').trim();
+  return s.length >= 2 && s.length <= NAME_MAX;
 }
 
 function phoneLineHtml(phone) {
   const p = normalizePhone(phone);
-  if (p === '—') return 'Телефон: —';
+  if (!p) return 'Телефон: —';
   return `Телефон: <a href="tel:${escHtml(p)}">${escHtml(p)}</a>`;
 }
 
-/** В сообщении — только origin, без ?utm_… (UTM отдельными строками) */
 function displayPageUrl(url) {
   const s = String(url ?? '').trim();
   if (!s) return SITE_HOME;
@@ -57,12 +69,11 @@ function displayPageUrl(url) {
     const host = u.hostname.toLowerCase();
     if (
       host === 'xn-----glcflhfsdlncbk4a6bya1c4j.xn--p1ai' ||
-      host === 'психолог-для-мужчин.рф' ||
-      host.endsWith('annashhe.github.io')
+      host === 'психолог-для-мужчин.рф'
     ) {
-      return SITE_HOME;
+      return `${SITE_HOME.replace(/\/$/, '')}${u.pathname || '/'}`;
     }
-    return u.origin;
+    return u.origin + (u.pathname || '/');
   } catch {
     return SITE_HOME;
   }
@@ -71,7 +82,7 @@ function displayPageUrl(url) {
 function formatSessionDate(startIso, tz) {
   try {
     return new Date(startIso).toLocaleDateString('ru-RU', {
-      timeZone: tz || 'Europe/Moscow',
+      timeZone: tz || PSY_TZ,
       day: 'numeric',
       month: 'long',
       year: 'numeric',
@@ -84,7 +95,7 @@ function formatSessionDate(startIso, tz) {
 function formatSlotRange(startIso, endIso, tz) {
   if (!startIso) return '—';
   try {
-    const zone = tz || 'Europe/Moscow';
+    const zone = tz || PSY_TZ;
     const start = new Date(startIso);
     const end = endIso ? new Date(endIso) : null;
     const t0 = start.toLocaleTimeString('ru-RU', { timeZone: zone, hour: '2-digit', minute: '2-digit' });
@@ -123,9 +134,18 @@ function buildCallbackMessage(data) {
   ].join('\n');
 }
 
+function resolveTherapy(data) {
+  if (THERAPY[data.therapyType]) return THERAPY[data.therapyType];
+  if (data.startIso && data.endIso) {
+    const mins = Math.round((new Date(data.endIso) - new Date(data.startIso)) / 60000);
+    if (mins >= 80) return THERAPY.individual90;
+  }
+  return THERAPY.individual;
+}
+
 function buildBookingMessage(data) {
-  const t = THERAPY[data.therapyType] || THERAPY.individual;
-  const clientTz = data.clientTimezone || 'Europe/Moscow';
+  const t = resolveTherapy(data);
+  const clientTz = data.clientTimezone || PSY_TZ;
   const note = data.comment ? String(data.comment).trim().slice(0, 500) : '';
   const lines = [
     'Запись Онлайн через календарь',
@@ -142,6 +162,28 @@ function buildBookingMessage(data) {
   }
   lines.push(metaBlock(data));
   return lines.join('\n');
+}
+
+async function checkRateLimit(request) {
+  const ip =
+    request.headers.get('CF-Connecting-IP') ||
+    request.headers.get('X-Forwarded-For')?.split(',')[0]?.trim() ||
+    'unknown';
+  const key = new Request(`https://psi-leads.rate/${encodeURIComponent(ip)}`);
+  const cache = caches.default;
+  const hit = await cache.match(key);
+  let count = 0;
+  if (hit) {
+    count = parseInt(await hit.text(), 10) || 0;
+  }
+  if (count >= RATE_LIMIT_MAX) return false;
+  await cache.put(
+    key,
+    new Response(String(count + 1), {
+      headers: { 'Cache-Control': `max-age=${RATE_LIMIT_WINDOW_SEC}` },
+    })
+  );
+  return true;
 }
 
 export default {
@@ -166,7 +208,11 @@ export default {
     }
 
     if (!corsOrigin) {
-      return Response.json({ error: 'Forbidden origin' }, { status: 403 });
+      return Response.json({ error: 'Forbidden origin' }, { status: 403, headers: corsHeaders });
+    }
+
+    if (!(await checkRateLimit(request))) {
+      return Response.json({ error: 'Too many requests' }, { status: 429, headers: corsHeaders });
     }
 
     try {
@@ -174,6 +220,10 @@ export default {
 
       if (body.website) {
         return Response.json({ ok: true }, { headers: corsHeaders });
+      }
+
+      if (!isValidName(body.name) || !isValidPhone(body.phone)) {
+        return Response.json({ error: 'Invalid fields' }, { status: 400, headers: corsHeaders });
       }
 
       const meta = {
@@ -188,14 +238,11 @@ export default {
       let text;
 
       if (body.source === 'booking') {
-        if (!body.name || !body.phone || !body.startIso) {
+        if (!body.startIso) {
           return Response.json({ error: 'Missing fields' }, { status: 400, headers: corsHeaders });
         }
         text = buildBookingMessage({ ...body, ...meta });
       } else {
-        if (!body.name || !body.phone) {
-          return Response.json({ error: 'Missing fields' }, { status: 400, headers: corsHeaders });
-        }
         text = buildCallbackMessage({ ...body, ...meta });
       }
 
@@ -211,13 +258,13 @@ export default {
       });
 
       if (!tgRes.ok) {
-        console.error(await tgRes.text());
+        console.error('Telegram status', tgRes.status);
         return Response.json({ error: 'Telegram error' }, { status: 502, headers: corsHeaders });
       }
 
       return Response.json({ ok: true }, { headers: corsHeaders });
     } catch (e) {
-      console.error(e);
+      console.error('Worker error', e && e.message ? e.message : 'unknown');
       return Response.json({ error: 'Server error' }, { status: 500, headers: corsHeaders });
     }
   },

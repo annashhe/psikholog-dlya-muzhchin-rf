@@ -1,13 +1,16 @@
 /** Общие блоки для thank-you-callback и thank-you-booking */
 (function (global) {
   var TG_URL = 'https://t.me/annashhe';
+  var WA_URL = 'https://wa.me/79137556284';
   var MAX_URL =
     'https://max.ru/u/f9LHodD0cOKrHIa3XdZycCKQSXXx0dFf9Ck7hXPtx3Ti-6RSxFnoPC7d1Ag';
 
   global.thankYouMessengerLinks =
     '<a href="' +
     TG_URL +
-    '" target="_blank" rel="noopener">Telegram</a> или <a href="' +
+    '" target="_blank" rel="noopener">Telegram</a>, <a href="' +
+    WA_URL +
+    '" target="_blank" rel="noopener">WhatsApp</a> или <a href="' +
     MAX_URL +
     '" target="_blank" rel="noopener">MAX</a>';
 

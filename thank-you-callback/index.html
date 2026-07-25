@@ -8,8 +8,10 @@
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/assets/thank-you-page.css" />
-    <script src="/assets/lead-tracking.js"></script>
-    <script src="/assets/thank-you-shared.js"></script>
+    <script src="/assets/lead-tracking.js" defer></script>
+    <script src="/assets/consent-analytics.js" defer></script>
+    <script src="/assets/analytics-events.js" defer></script>
+    <script src="/assets/thank-you-shared.js" defer></script>
 </head>
 <body>
     <header class="header">
@@ -31,25 +33,37 @@
         <div class="container">© 2026 Анна Щеголихина</div>
     </footer>
     <script>
-        (function() {
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof window.psiLoadAnalytics === 'function') window.psiLoadAnalytics();
+
             var home = window.PSI_SITE_HOME || 'https://психолог-для-мужчин.рф/';
             var messengers = window.thankYouMessengerLinks || '';
             var root = document.getElementById('thankYouContent');
             var articlesEl = document.getElementById('thankYouArticles');
 
             function escapeHtml(s) {
-                return String(s).replace(/[<>&]/g, '');
+                return String(s)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;');
+            }
+
+            function maskPhone(phone) {
+                var digits = String(phone || '').replace(/\D/g, '');
+                if (digits.length < 11) return '';
+                return '+7 ••• ••• ' + digits.slice(-4, -2) + '-' + digits.slice(-2);
             }
 
             function phonePhrase(phone) {
-                var p = String(phone || '').trim();
-                if (p) return 'по указанному телефону <strong>' + escapeHtml(p) + '</strong>';
+                var masked = maskPhone(phone);
+                if (masked) return 'по телефону <strong>' + escapeHtml(masked) + '</strong>';
                 return 'по указанному телефону';
             }
 
             function formatContactMethodsList(methods) {
                 var list = Array.isArray(methods) ? methods.filter(Boolean) : [];
-                if (!list.length) return 'Telegram или MAX';
+                if (!list.length) return 'Telegram, WhatsApp или MAX';
                 if (list.length === 1) return list[0];
                 if (list.length === 2) return list[0] + ' или ' + list[1];
                 return list.slice(0, -1).join(', ') + ' или ' + list[list.length - 1];
@@ -71,14 +85,14 @@
 
             root.innerHTML =
                 '<h1>Спасибо, ' + name + '!</h1>' +
-                '<p class="lead">Я получила вашу заявку, и свяжусь с вами через ' + escapeHtml(via) + ' ' + phonePhrase(data.phone) + ' в течение дня, чтобы обсудить ваш вопрос.</p>' +
+                '<p class="lead">Я получила вашу заявку и свяжусь с вами через ' + escapeHtml(via) + ' ' + phonePhrase(data.phone) + ' в течение дня, чтобы обсудить ваш вопрос.</p>' +
                 '<p class="note">Если вопрос срочный, можете написать мне напрямую в ' + messengers + '.</p>' +
                 '<a class="btn" href="' + home + '">Вернуться на сайт</a>';
 
             if (articlesEl && typeof renderThankYouArticles === 'function') {
                 articlesEl.innerHTML = renderThankYouArticles();
             }
-        })();
+        });
     </script>
 </body>
 </html>

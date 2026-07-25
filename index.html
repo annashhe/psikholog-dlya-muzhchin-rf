@@ -13,29 +13,27 @@
     <link rel="icon" href="favicon.ico" sizes="any" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-    <script src="assets/lead-tracking.js"></script>
+    <script src="assets/lead-tracking.js" defer></script>
+    <script src="assets/consent-analytics.js" defer></script>
+    <script src="assets/analytics-events.js" defer></script>
 
     <!-- LCP: локальное фото героя -->
     <link rel="preload" as="image" type="image/webp"
           imagesrcset="assets/images/hero-460.webp 460w, assets/images/hero-920.webp 920w"
-          imagesizes="(max-width: 768px) 385px, 529px"
+          imagesizes="(max-width: 768px) 385px, 385px"
           href="assets/images/hero-460.webp"
           fetchpriority="high" />
 
-    <!-- Google Tag (GT-TNH4ZN2N) — GA4 настраивается внутри GTM -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=GT-TNH4ZN2N"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'GT-TNH4ZN2N');
-    </script>
-
-    <meta property="og:title" content="Психолог для мужчин — Анна Щеголихина" />
-    <meta property="og:description" content="Онлайн-психолог для мужчин. Видеосессии из любого города. Также очно в Калининграде по записи." />
+    <meta property="og:title" content="Психолог для мужчин онлайн и очно | Анна Щеголихина" />
+    <meta property="og:description" content="Психолог для мужчин: в основном онлайн, также очно в Калининграде. Кризис отношений, тревога, выгорание. Связь и сессии Пн–Вс 9–21 по калининградскому времени." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://психолог-для-мужчин.рф/" />
     <meta property="og:image" content="https://психолог-для-мужчин.рф/assets/images/hero-920.webp" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Психолог для мужчин онлайн и очно | Анна Щеголихина" />
+    <meta name="twitter:description" content="Онлайн-психолог для мужчин. Также очно в Калининграде. Кризис отношений, тревога, выгорание." />
+    <meta name="twitter:image" content="https://психолог-для-мужчин.рф/assets/images/hero-920.webp" />
 
     <style>
         /* ===== ВСЕ СТИЛИ ВСТРОЕНЫ ===== */
@@ -1447,6 +1445,7 @@
         }
         .cookie-banner a { color: var(--accent); }
         .cookie-banner .btn { flex: 0 0 auto; }
+        .cookie-banner-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 
         /* Дипломы: кликабельные карточки и модальное окно */
         .cert-item.cert-clickable {
@@ -1771,7 +1770,11 @@
             "closes": "21:00",
             "description": "По калининградскому времени (Europe/Kaliningrad, UTC+2)"
           },
-          "priceRange": "₽₽",
+          "priceRange": "4500-7000 RUB",
+          "areaServed": {
+            "@type": "Country",
+            "name": "RU"
+          },
           "offers": [
             {
               "@type": "Offer",
@@ -1780,7 +1783,7 @@
               "itemOffered": {
                 "@type": "Service",
                 "name": "Индивидуальная консультация 50 мин (онлайн)",
-                "description": "Стандартная видеосессия.",
+                "description": "Стандартная видеосессия. Онлайн-запись через календарь на сайте.",
                 "provider": { "@id": "https://психолог-для-мужчин.рф/#person" }
               }
             },
@@ -1791,7 +1794,7 @@
               "itemOffered": {
                 "@type": "Service",
                 "name": "Индивидуальная консультация 90 мин (онлайн)",
-                "description": "Расширенная индивидуальная сессия.",
+                "description": "Расширенная индивидуальная сессия. Запись через форму или мессенджеры.",
                 "provider": { "@id": "https://психолог-для-мужчин.рф/#person" }
               }
             },
@@ -1802,7 +1805,7 @@
               "itemOffered": {
                 "@type": "Service",
                 "name": "Семейная (парная) консультация 90 мин (онлайн)",
-                "description": "Для пары, если оба партнёра готовы участвовать.",
+                "description": "Для пары, если оба партнёра готовы участвовать. Онлайн-запись через календарь.",
                 "provider": { "@id": "https://психолог-для-мужчин.рф/#person" }
               }
             }
@@ -1841,7 +1844,7 @@
           "name": "Как часто нужно встречаться?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Чаще всего — 1 раз в неделю. На старте или в острый период иногда чаще. Реже раза в неделю обычно замедляет процесс."
+            "text": "Чаще всего — 1 раз в неделю: успеваете прожить изменения между встречами и не теряете нить работы. На старте или в острый период иногда встречаемся чаще. Реже раза в неделю обычно замедляет процесс. К завершению ритм можно сделать свободнее."
           }
         },
         {
@@ -1849,7 +1852,7 @@
           "name": "Сколько времени нужно, чтобы стало легче?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "У многих клиентов первое ощущение ясности появляется уже в первые встречи — это не гарантия срока. Устойчивые изменения обычно требуют нескольких месяцев регулярной работы."
+            "text": "У многих клиентов первое ощущение ясности и снижения напряжения появляется уже в первые встречи — но это не правило и не обещание срока. Более устойчивые изменения обычно требуют регулярной работы на протяжении нескольких месяцев. Темп подстраиваем под вас и запрос."
           }
         },
         {
@@ -1857,7 +1860,7 @@
           "name": "Что если опоздаю или пропущу встречу?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Предупредите не позднее чем за 24 часа — верну оплату или перенесём встречу. При отмене менее чем за 24 часа или неявке оплата не возвращается."
+            "text": "Перенос или отмена — предупредите не позднее чем за 24 часа: верну оплату или перенесём встречу. При отмене менее чем за 24 часа или неявке оплата не возвращается (для пакета сессия списывается)."
           }
         },
         {
@@ -1865,15 +1868,15 @@
           "name": "Как быть, если жена хочет развода?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "На консультации разбираем чувства и варианты действий — без готового вердикта «бороться» или «отпускать». Помогаю действовать осознаннее, с опорой на ваши решения."
+            "text": "Это один из частых запросов мужчин. На консультации разбираем ваши чувства, реакцию на ситуацию и варианты действий — без готового вердикта «бороться» или «отпускать». Задача — помочь вам действовать осознаннее и спокойнее, с опорой на свои решения, а не на импульс."
           }
         },
         {
           "@type": "Question",
-            "name": "Поможет ли при кризисе среднего возраста?",
+          "name": "Поможет ли при кризисе среднего возраста?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "С таким запросом работаю. Часто это потеря смысла, раздражительность, сомнения в работе и отношениях. Разбираем ситуацию и ищем опору и цели, которые вам подходят."
+            "text": "С таким запросом работаю. Часто это потеря смысла, раздражительность, сомнения в работе и отношениях. На встречах разбираем, что происходит, и ищем опору и цели, которые вам подходят — конфиденциально, в том числе онлайн."
           }
         },
         {
@@ -1881,7 +1884,7 @@
           "name": "Можно ли обратиться онлайн, если стыдно идти очно?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Да. Многие мужчины выбирают онлайн из дома. Содержание встреч конфиденциально, с оговорками: угроза жизни, требования закона."
+            "text": "Да. Многие мужчины выбирают онлайн именно поэтому: остаётесь дома, не нужно заходить в кабинет «на виду». Содержание встреч конфиденциально (с оговорками: угроза жизни, требования закона). По опыту клиентов видеоформат для большинства запросов работает хорошо — при стабильной связи и тихом месте."
           }
         },
         {
@@ -1889,7 +1892,7 @@
           "name": "Как записаться очно в Калининграде?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Календарь на сайте — только для онлайн. Очно: ул. Кирова, 1, по записи в Telegram или MAX. Цена та же, что онлайн."
+            "text": "Календарь на сайте — только для онлайн. Очно: кабинет на ул. Кирова, 1, по предварительной записи в Telegram или MAX. Цена та же, что онлайн."
           }
         }
       ]
@@ -1898,29 +1901,7 @@
 </head>
 <body>
 
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GT-TNH4ZN2N" height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Manager"></iframe></noscript>
-
-    <!-- Yandex.Metrika counter (ID: 110969154) -->
-    <script type="text/javascript">
-        (function(m,e,t,r,i,k,a){
-            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-            m[i].l=1*new Date();
-            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a);
-        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=110969154', 'ym');
-
-        ym(110969154, 'init', {
-            clickmap:true,
-            trackLinks:true,
-            accurateTrackBounce:true,
-            webvisor:true,
-            ecommerce:'dataLayer'
-        });
-    </script>
-    <script src="assets/analytics-events.js"></script>
-    <noscript><div><img src="https://mc.yandex.ru/watch/110969154" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-    <!-- /Yandex.Metrika counter -->
+    <!-- Аналитика подключается только после согласия (assets/consent-analytics.js) -->
 
     <!-- ===== HEADER ===== -->
     <header class="header" role="banner">
@@ -1959,7 +1940,7 @@
                 <img
                 src="assets/images/hero-460.webp"
                 srcset="assets/images/hero-460.webp 460w, assets/images/hero-920.webp 920w"
-                sizes="(max-width: 768px) 385px, 529px"
+                sizes="(max-width: 768px) 385px, 385px"
                 alt="Анна Щеголихина — онлайн-психолог для мужчин, Калининград"
                 loading="eager"
                 width="460"
@@ -2503,7 +2484,8 @@
                         <li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 6L9 17l-5-5"/></svg> Больше времени на сложный запрос</li>
                         <li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 6L9 17l-5-5"/></svg> Когда нужно разобрать ситуацию глубже</li>
                     </ul>
-                    <a href="#booking" class="btn btn-primary">Записаться онлайн</a>
+                    <a href="#contact" class="btn btn-primary">Записаться (форма / мессенджер)</a>
+                    <p style="margin:0.7rem 0 0;font-size:0.8rem;color:var(--text-muted);line-height:1.4;">В календаре сейчас слоты 50 мин и парная 90 мин. Индивидуальную 90 мин согласуем через заявку или WhatsApp / Telegram / MAX.</p>
                 </div>
 
                 <div class="pricing-card">
@@ -2545,6 +2527,16 @@
                 (function() {
                     var api = window.PSI_LEADS_API;
                     var origFetch = window.fetch;
+                    var thankYouStarted = false;
+
+                    function sessionMinutes(therapyType, startIso, endIso) {
+                        if (startIso && endIso) {
+                            var diff = Math.round((new Date(endIso) - new Date(startIso)) / 60000);
+                            if (diff > 0 && diff < 240) return diff;
+                        }
+                        if (therapyType === 'family' || therapyType === 'individual90') return 90;
+                        return 50;
+                    }
 
                     function postBookingLead(body, attempt) {
                         attempt = attempt || 0;
@@ -2552,6 +2544,9 @@
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: body
+                        }).then(function(r) {
+                            if (!r.ok) throw new Error('lead status ' + r.status);
+                            return r;
                         }).catch(function(err) {
                             if (attempt < 2) {
                                 return new Promise(function(resolve) {
@@ -2560,7 +2555,7 @@
                                     return postBookingLead(body, attempt + 1);
                                 });
                             }
-                            console.error('[booking lead]', err);
+                            throw err;
                         });
                     }
 
@@ -2568,55 +2563,95 @@
                         var url = typeof input === 'string' ? input : (input && input.url) || '';
                         var isBooking = url.indexOf('/public/bookings') !== -1 && init && String(init.method || '').toUpperCase() === 'POST';
                         return origFetch.apply(this, arguments).then(function(res) {
-                            if (!isBooking || !res.ok) return res;
+                            if (!isBooking || !res.ok || thankYouStarted) return res;
                             try {
                                 var payload = init.body ? JSON.parse(init.body) : {};
                                 var startIso = payload.startIso;
                                 var endIso = payload.endIso;
                                 if (startIso && !endIso) {
                                     var d = new Date(startIso);
-                                    var mins = payload.therapyType === 'family' ? 90 : 50;
-                                    d.setMinutes(d.getMinutes() + mins);
+                                    d.setMinutes(d.getMinutes() + sessionMinutes(payload.therapyType, startIso, endIso));
                                     endIso = d.toISOString();
                                 }
+                                var mins = sessionMinutes(payload.therapyType, startIso, endIso);
+                                var therapyType = payload.therapyType || 'individual';
+                                if (therapyType === 'individual' && mins >= 80) therapyType = 'individual90';
                                 var tracking = typeof getLeadTrackingPayload === 'function' ? getLeadTrackingPayload() : {};
-                                postBookingLead(JSON.stringify(Object.assign({
+                                var leadBody = JSON.stringify(Object.assign({
                                     source: 'booking',
                                     name: payload.name,
                                     phone: payload.phone,
-                                    therapyType: payload.therapyType,
+                                    therapyType: therapyType,
                                     startIso: startIso,
                                     endIso: endIso,
                                     clientTimezone: payload.clientTimezone,
                                     comment: payload.comment || '',
                                     website: ''
-                                }, tracking)));
-                                sessionStorage.setItem('bookingThankYou', JSON.stringify({
-                                    name: payload.name,
-                                    phone: payload.phone,
-                                    therapyType: payload.therapyType,
-                                    startIso: startIso,
-                                    endIso: endIso,
-                                    clientTimezone: payload.clientTimezone
-                                }));
-                                if (typeof window.psiMetrikaGoal === 'function') {
-                                    window.psiMetrikaGoal('lead_booking');
-                                }
-                                setTimeout(function() {
+                                }, tracking));
+                                thankYouStarted = true;
+                                postBookingLead(leadBody).then(function() {
+                                    try {
+                                        sessionStorage.setItem('bookingThankYou', JSON.stringify({
+                                            name: payload.name,
+                                            phone: payload.phone,
+                                            therapyType: therapyType,
+                                            startIso: startIso,
+                                            endIso: endIso,
+                                            clientTimezone: payload.clientTimezone
+                                        }));
+                                    } catch (e1) {}
+                                    if (typeof window.psiMetrikaGoal === 'function') {
+                                        window.psiMetrikaGoal('lead_booking');
+                                    }
                                     window.location.href = '/thank-you-booking/';
-                                }, 150);
+                                }).catch(function() {
+                                    thankYouStarted = false;
+                                    alert('Запись в календаре прошла, но уведомление мне не отправилось. Напишите в Telegram @annashhe или WhatsApp +7 913 755 62 84 — подтвердим слот.');
+                                });
                             } catch (err) {
-                                console.error('[booking thank-you]', err);
+                                thankYouStarted = false;
                             }
                             return res;
                         });
                     };
+
+                    function loadBookingWidget() {
+                        if (window.__psiWidgetLoading) return;
+                        window.__psiWidgetLoading = true;
+                        var s = document.createElement('script');
+                        s.src = 'https://anna-psy-schedule-frontend.vercel.app/widget.js';
+                        s.async = true;
+                        document.getElementById('booking').appendChild(s);
+                    }
+
+                    function setupLazyWidget() {
+                        var root = document.getElementById('booking');
+                        if (!root) return;
+                        if (!('IntersectionObserver' in window)) {
+                            loadBookingWidget();
+                            return;
+                        }
+                        var io = new IntersectionObserver(function(entries) {
+                            entries.forEach(function(entry) {
+                                if (entry.isIntersecting) {
+                                    loadBookingWidget();
+                                    io.disconnect();
+                                }
+                            });
+                        }, { rootMargin: '200px 0px' });
+                        io.observe(root);
+                    }
+
+                    if (document.readyState === 'loading') {
+                        document.addEventListener('DOMContentLoaded', setupLazyWidget);
+                    } else {
+                        setupLazyWidget();
+                    }
                 })();
             </script>
-            <script src="https://anna-psy-schedule-frontend.vercel.app/widget.js"></script>
-            <script src="assets/legal-modal.js"></script>
+            <script src="assets/legal-modal.js" defer></script>
             <div data-anna-psy-widget></div>
-            <p class="calendar-note">Если календарь не отображается, попробуйте <strong>отключить VPN</strong> или открыть страницу в другом браузере</p>
+            <p class="calendar-note">В календаре: индивидуальная 50 мин и парная 90 мин. Индивидуальную 90 мин — через <a href="#contact">форму</a> или мессенджеры. Если календарь не отображается, попробуйте <strong>отключить VPN</strong> или открыть страницу в другом браузере</p>
         </div>
     </section>
 
@@ -2644,6 +2679,7 @@
                         <p>Психологическая консультация в Калининграде — по предварительной записи через мессенджеры. Очно нельзя записаться через календарь выше: напишите мне в Telegram или MAX, согласуем дату и время.</p>
                         <div style="margin-top:1rem;display:flex;flex-wrap:wrap;gap:0.6rem;">
                             <a href="https://t.me/annashhe" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Написать в Telegram</a>
+                            <a href="https://wa.me/79137556284" target="_blank" rel="noopener" class="btn btn-outline btn-sm">WhatsApp</a>
                             <a href="https://max.ru/u/f9LHodD0cOKrHIa3XdZycCKQSXXx0dFf9Ck7hXPtx3Ti-6RSxFnoPC7d1Ag" target="_blank" rel="noopener" class="btn btn-outline btn-sm">Написать в MAX</a>
                         </div>
                     </div>
@@ -2711,6 +2747,10 @@
                             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="width:18px;height:18px;"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
                             Telegram
                         </a>
+                        <a href="https://wa.me/79137556284" target="_blank" rel="noopener" class="btn btn-outline" style="min-width:auto;padding:0.6rem 1.2rem;">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="width:18px;height:18px;"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.5L3 21l2.1-5.4A8.5 8.5 0 1 1 21 11.5z"/></svg>
+                            WhatsApp
+                        </a>
                         <a href="https://max.ru/u/f9LHodD0cOKrHIa3XdZycCKQSXXx0dFf9Ck7hXPtx3Ti-6RSxFnoPC7d1Ag" target="_blank" rel="noopener" class="btn btn-outline" style="min-width:auto;padding:0.6rem 1.2rem;">
                             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="width:18px;height:18px;"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
                             MAX
@@ -2747,7 +2787,7 @@
                             <button type="submit" class="btn btn-primary">Отправить заявку</button>
                         </form>
                         <p id="formSuccess" style="display:none;font-size:0.9rem;color:var(--text-secondary);margin-top:0.8rem;padding:0.8rem 1rem;background:var(--bg-light);border-radius:var(--radius);border:1px solid var(--border-light);"></p>
-                        <p style="font-size:0.8rem;color:var(--text-muted);margin-top:0.6rem;">Данные не передаю третьим лицам, кроме случаев, предусмотренных законом.</p>
+                        <p style="font-size:0.8rem;color:var(--text-muted);margin-top:0.6rem;">Заявку получаю через защищённый сервис уведомлений и связываюсь с вами в выбранном канале. Аналитика сайта — только после согласия на cookie. Подробности — в <a href="/privacy-policy/" target="_blank" rel="noopener">политике конфиденциальности</a>.</p>
                     </div>
 
                     <div style="margin-top:1.2rem;padding:1rem 1.2rem;background:var(--bg-light);border-radius:var(--radius);border:1px solid var(--border-light);">
@@ -2940,8 +2980,11 @@
     </button>
 
     <div class="cookie-banner" id="cookieBanner" role="dialog" aria-label="Уведомление о cookie" aria-live="polite">
-        <p>Сайт использует cookie и сервисы аналитики (Яндекс.Метрика, Google Tag Manager) для работы форм и улучшения сервиса. Подробнее — в <a href="/privacy-policy/" target="_blank" rel="noopener">политике конфиденциальности</a>.</p>
-        <button type="button" class="btn btn-primary btn-sm" id="cookieAcceptBtn">Понятно</button>
+        <p>Для аналитики посещений (Яндекс.Метрика, Google Tag) нужны cookie. Формы и запись работают и без согласия на аналитику. Подробнее — в <a href="/privacy-policy/" target="_blank" rel="noopener">политике конфиденциальности</a>.</p>
+        <div class="cookie-banner-actions">
+            <button type="button" class="btn btn-outline btn-sm" id="cookieDeclineBtn">Только необходимые</button>
+            <button type="button" class="btn btn-primary btn-sm" id="cookieAcceptBtn">Принимаю аналитику</button>
+        </div>
     </div>
 
     <!-- ===== СКРИПТЫ ===== -->
@@ -2965,14 +3008,22 @@
             // ===== COOKIE BANNER =====
             var cookieBanner = document.getElementById('cookieBanner');
             var cookieAccept = document.getElementById('cookieAcceptBtn');
+            var cookieDecline = document.getElementById('cookieDeclineBtn');
             try {
-                if (cookieBanner && !localStorage.getItem('cookieConsentV1')) {
+                if (cookieBanner && localStorage.getItem('cookieConsentV1') === null) {
                     cookieBanner.classList.add('open');
                 }
             } catch (e) {}
             if (cookieAccept) {
                 cookieAccept.addEventListener('click', function() {
                     try { localStorage.setItem('cookieConsentV1', '1'); } catch (e) {}
+                    if (cookieBanner) cookieBanner.classList.remove('open');
+                    if (typeof window.psiLoadAnalytics === 'function') window.psiLoadAnalytics();
+                });
+            }
+            if (cookieDecline) {
+                cookieDecline.addEventListener('click', function() {
+                    try { localStorage.setItem('cookieConsentV1', '0'); } catch (e) {}
                     if (cookieBanner) cookieBanner.classList.remove('open');
                 });
             }
@@ -3265,6 +3316,7 @@
                 var href = link.getAttribute('href') || '';
                 if (href.indexOf('tel:') === 0) window.psiMetrikaGoal('click_phone');
                 else if (/t\.me\/|telegram\.me\//i.test(href)) window.psiMetrikaGoal('click_telegram');
+                else if (/wa\.me\/|whatsapp\.com\//i.test(href)) window.psiMetrikaGoal('click_whatsapp');
                 else if (href.indexOf('max.ru/') !== -1) window.psiMetrikaGoal('click_max');
             });
 
