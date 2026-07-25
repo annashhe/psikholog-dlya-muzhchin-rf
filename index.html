@@ -2930,7 +2930,10 @@
                 });
             }
 
-            // ===== ФОРМА ОБРАТНОЙ СВЯЗИ =====
+            // ===== ФОРМА ОБРАТНОЙ СВЯЗИ → Cloudflare Worker → Telegram =====
+            // После деплоя Worker вставьте URL ниже (см. cloudflare/psi-leads-worker.js)
+            var LEAD_API_URL = 'https://psi-leads.anna-shhe-adwords.workers.dev';
+
             var form = document.getElementById('callbackForm');
             if (form) {
                 form.addEventListener('submit', function(e) {
@@ -2941,6 +2944,10 @@
                     var name = document.getElementById('formName').value.trim();
                     var phone = document.getElementById('formPhone').value.trim();
                     var consent = document.getElementById('formConsent').checked;
+                    var success = document.getElementById('formSuccess');
+                    var submitBtn = form.querySelector('button[type="submit"]');
+                    var defaultBtnText = submitBtn ? submitBtn.textContent : '';
+
                     if (!name || !phone || !consent) {
                         alert('Пожалуйста, заполните все поля и дайте согласие.');
                         return;
@@ -2949,13 +2956,51 @@
                         alert('Пожалуйста, введите телефон в формате +7 (900) 123-45-67');
                         return;
                     }
-                    // TODO: отправить через Telegram-бот / email + reCAPTCHA v3
-                    var success = document.getElementById('formSuccess');
-                    if (success) {
-                        success.style.display = 'block';
-                        success.innerHTML = 'Спасибо, ' + name.replace(/[<>&]/g, '') + '! Чтобы заявка точно дошла, напишите также в <a href="https://t.me/annashhe" target="_blank" rel="noopener">Telegram</a> или <a href="https://max.ru/u/f9LHodD0cOKrHIa3XdZycCKQSXXx0dFf9Ck7hXPtx3Ti-6RSxFnoPC7d1Ag" target="_blank" rel="noopener">MAX</a> — так быстрее.';
+
+                    if (!LEAD_API_URL) {
+                        if (success) {
+                            success.style.display = 'block';
+                            success.innerHTML = 'Спасибо, ' + name.replace(/[<>&]/g, '') + '! Чтобы заявка точно дошла, напишите также в <a href="https://t.me/annashhe" target="_blank" rel="noopener">Telegram</a> или <a href="https://max.ru/u/f9LHodD0cOKrHIa3XdZycCKQSXXx0dFf9Ck7hXPtx3Ti-6RSxFnoPC7d1Ag" target="_blank" rel="noopener">MAX</a> — так быстрее.';
+                        }
+                        form.reset();
+                        return;
                     }
-                    form.reset();
+
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.textContent = 'Отправка…';
+                    }
+                    if (success) success.style.display = 'none';
+
+                    fetch(LEAD_API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            name: name,
+                            phone: phone,
+                            website: honeypot ? honeypot.value : ''
+                        })
+                    })
+                    .then(function(res) {
+                        if (!res.ok) throw new Error('bad status');
+                        if (success) {
+                            success.style.display = 'block';
+                            success.innerHTML = 'Спасибо, ' + name.replace(/[<>&]/g, '') + '! Я свяжусь с вами в ближайшее время для записи на онлайн-консультацию.';
+                        }
+                        form.reset();
+                    })
+                    .catch(function() {
+                        if (success) {
+                            success.style.display = 'block';
+                            success.innerHTML = 'Не удалось отправить заявку автоматически. Напишите мне в <a href="https://t.me/annashhe" target="_blank" rel="noopener">Telegram</a> или позвоните <a href="tel:+79137556284">+7 913 755 62 84</a>.';
+                        }
+                    })
+                    .finally(function() {
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = defaultBtnText;
+                        }
+                    });
                 });
             }
 
