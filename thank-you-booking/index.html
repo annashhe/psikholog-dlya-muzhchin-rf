@@ -8,18 +8,15 @@
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/assets/thank-you-page.css" />
+    <link rel="stylesheet" href="/assets/site-chrome.css" />
     <script src="/assets/lead-tracking.js" defer></script>
     <script src="/assets/consent-analytics.js" defer></script>
     <script src="/assets/analytics-events.js" defer></script>
     <script src="/assets/thank-you-shared.js" defer></script>
+    <script src="/assets/site-chrome.js" defer></script>
 </head>
-<body>
-    <header class="header">
-        <div class="container header-inner">
-            <a href="https://психолог-для-мужчин.рф/">Анна Щеголихина <span>·</span> Психолог</a>
-            <a href="https://психолог-для-мужчин.рф/" class="header-back">← На главную</a>
-        </div>
-    </header>
+<body data-psi-header="minimal">
+    <div id="psi-chrome-header"></div>
     <main>
         <div class="container">
             <div class="card" id="thankYouContent">
@@ -29,13 +26,9 @@
             <div id="thankYouArticles"></div>
         </div>
     </main>
-    <footer class="footer">
-        <div class="container">© 2026 Анна Щеголихина</div>
-    </footer>
+    <div id="psi-chrome-footer"></div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            if (typeof window.psiLoadAnalytics === 'function') window.psiLoadAnalytics();
-
             var home = window.PSI_SITE_HOME || 'https://психолог-для-мужчин.рф/';
             var messengers = window.thankYouMessengerLinks || '';
 

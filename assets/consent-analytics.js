@@ -1,19 +1,11 @@
 /**
- * Загрузка Метрики/GTM только после согласия на cookie/аналитику.
- * localStorage.cookieConsentV1: '1' = accept, '0' = decline
+ * Яндекс.Метрика и Google Tag — подключаются при загрузке страницы.
+ * Баннер cookie только информирует; на сбор аналитики не влияет.
  */
 (function (global) {
   var METRIKA_ID = 110969154;
   var GTAG_ID = 'GT-TNH4ZN2N';
   var started = false;
-
-  function hasConsent() {
-    try {
-      return localStorage.getItem('cookieConsentV1') === '1';
-    } catch (e) {
-      return false;
-    }
-  }
 
   function loadGtag() {
     if (global.__psiGtagLoaded) return;
@@ -62,21 +54,19 @@
   }
 
   global.psiLoadAnalytics = function () {
-    if (started || !hasConsent()) return;
+    if (started) return;
     started = true;
     loadGtag();
     loadMetrika();
   };
 
-  global.psiHasAnalyticsConsent = hasConsent;
+  global.psiHasAnalyticsConsent = function () {
+    return true;
+  };
 
-  if (hasConsent()) {
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', function () {
-        global.psiLoadAnalytics();
-      });
-    } else {
-      global.psiLoadAnalytics();
-    }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', global.psiLoadAnalytics);
+  } else {
+    global.psiLoadAnalytics();
   }
 })(window);

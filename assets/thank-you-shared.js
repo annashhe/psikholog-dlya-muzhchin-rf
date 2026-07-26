@@ -106,7 +106,9 @@
       '<h2 id="thank-you-articles-title">Также вы можете почитать мои статьи</h2>' +
       '<div class="articles-list">' +
       items +
-      '</div></section>'
+      '</div>' +
+      '<p class="psi-thank-you-more"><a href="/blog/" class="psi-btn psi-btn-outline">Показать больше статей</a></p>' +
+      '</section>'
     );
   };
 })(window);

@@ -18,6 +18,7 @@
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="stylesheet" href="/assets/site-chrome.css" />
     <link rel="stylesheet" href="/assets/copy-guard.css" />
     <script src="/assets/copy-guard.js" defer></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" />
@@ -83,17 +84,7 @@
     <script src="/assets/blog-analytics.js" defer></script>
 </head>
 <body>
-    <header class="header">
-        <div class="container-wide header-inner">
-            <a href="https://психолог-для-мужчин.рф/" class="header-brand">Анна Щеголихина <span>·</span> Психолог</a>
-            <nav class="header-nav" aria-label="Навигация">
-                <a href="/#spec">Запросы</a>
-                <a href="/#pricing">Услуги и цены</a>
-                <a href="/blog/">Блог</a>
-                <a href="/#booking">Записаться онлайн</a>
-            </nav>
-        </div>
-    </header>
+    <div id="psi-chrome-header"></div>
     <nav class="breadcrumbs" aria-label="Хлебные крошки">
         <div class="container-wide">
             <ol>
@@ -139,13 +130,9 @@
             </div>
         </article>
     </main>
-    <footer class="footer">
-        <div class="container-wide">
-            © 2026 Анна Щеголихина · <a href="https://психолог-для-мужчин.рф/">На главную</a> · <a href="/blog/">Блог</a>
-            · <a href="/oferta/" target="_blank" rel="noopener">Оферта</a>
-            · <a href="/privacy-policy/" target="_blank" rel="noopener">Политика</a>
-            · <span style="font-size:.8rem;">18+ · Не медуслуга · Без гарантий результата</span>
-        </div>
-    </footer>
+    <div id="psi-blog-cta"></div>
+    <div id="psi-chrome-footer"></div>
+    <script src="/assets/lead-tracking.js" defer></script>
+    <script src="/assets/site-chrome.js" defer></script>
 </body>
 </html>

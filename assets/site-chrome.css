@@ -1,0 +1,132 @@
+/* Общая шапка и подвал (thank-you, блог, юр. страницы) */
+.psi-chrome-header {
+  padding: 14px 0;
+  border-bottom: 1px solid #eae7ea;
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+.psi-chrome-header .psi-chrome-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.psi-chrome-brand {
+  font-weight: 700;
+  color: #1a1a1a;
+  text-decoration: none;
+  font-family: Manrope, sans-serif;
+}
+.psi-chrome-brand span {
+  color: #802d4b;
+}
+.psi-chrome-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+}
+.psi-chrome-nav a {
+  color: #3d3d3d;
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 500;
+  font-family: Manrope, sans-serif;
+}
+.psi-chrome-nav a:hover {
+  color: #802d4b;
+}
+.psi-chrome-phone {
+  font-weight: 600;
+  color: #1a1a1a;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.psi-chrome-phone:hover {
+  color: #802d4b;
+}
+.psi-chrome-back {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #802d4b;
+  text-decoration: none;
+}
+.psi-chrome-footer {
+  padding: 28px 0 36px;
+  background: #f6f4f6;
+  border-top: 1px solid #eae7ea;
+  font-family: Manrope, sans-serif;
+  font-size: 0.85rem;
+  color: #6e6e6e;
+  line-height: 1.65;
+}
+.psi-chrome-footer .psi-chrome-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px;
+  text-align: center;
+}
+.psi-chrome-footer a {
+  color: #6e6e6e;
+  text-decoration: none;
+}
+.psi-chrome-footer a:hover {
+  color: #802d4b;
+}
+.psi-chrome-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 14px;
+  margin-bottom: 1rem;
+}
+.psi-blog-cta {
+  margin: 2rem 0 0;
+  padding: 1.25rem 1.5rem;
+  background: #fff;
+  border: 1px solid #eae7ea;
+  border-radius: 12px;
+  text-align: center;
+}
+.psi-blog-cta p {
+  margin: 0 0 1rem;
+  color: #3d3d3d;
+  font-size: 0.95rem;
+}
+.psi-blog-cta-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  justify-content: center;
+}
+.psi-btn {
+  display: inline-block;
+  padding: 0.55rem 1.15rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  font-family: Manrope, sans-serif;
+}
+.psi-btn-primary {
+  background: #802d4b;
+  color: #fff;
+}
+.psi-btn-outline {
+  background: transparent;
+  color: #802d4b;
+  border: 1px solid #802d4b;
+}
+.psi-btn:hover {
+  opacity: 0.92;
+}
+.psi-thank-you-more {
+  margin-top: 1rem;
+  text-align: center;
+}
