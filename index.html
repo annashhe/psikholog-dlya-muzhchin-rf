@@ -2484,8 +2484,7 @@
                         <li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 6L9 17l-5-5"/></svg> Больше времени на сложный запрос</li>
                         <li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 6L9 17l-5-5"/></svg> Когда нужно разобрать ситуацию глубже</li>
                     </ul>
-                    <a href="#contact" class="btn btn-primary">Записаться (форма / мессенджер)</a>
-                    <p style="margin:0.7rem 0 0;font-size:0.8rem;color:var(--text-muted);line-height:1.4;">В календаре сейчас слоты 50 мин и парная 90 мин. Индивидуальную 90 мин согласуем через заявку или WhatsApp / Telegram / MAX.</p>
+                    <a href="#booking" class="btn btn-primary">Записаться онлайн</a>
                 </div>
 
                 <div class="pricing-card">
@@ -2534,7 +2533,7 @@
                             var diff = Math.round((new Date(endIso) - new Date(startIso)) / 60000);
                             if (diff > 0 && diff < 240) return diff;
                         }
-                        if (therapyType === 'family' || therapyType === 'individual90') return 90;
+                        if (therapyType === 'family' || therapyType === 'individual90' || therapyType === 'individual_90') return 90;
                         return 50;
                     }
 
@@ -2575,13 +2574,18 @@
                                 }
                                 var mins = sessionMinutes(payload.therapyType, startIso, endIso);
                                 var therapyType = payload.therapyType || 'individual';
-                                if (therapyType === 'individual' && mins >= 80) therapyType = 'individual90';
+                                if (therapyType === 'individual_90') therapyType = 'individual90';
+                                else if (therapyType === 'individual' && mins >= 80) therapyType = 'individual90';
+                                var contactMethods = Array.isArray(payload.contactMethods)
+                                    ? payload.contactMethods.slice()
+                                    : [];
                                 var tracking = typeof getLeadTrackingPayload === 'function' ? getLeadTrackingPayload() : {};
                                 var leadBody = JSON.stringify(Object.assign({
                                     source: 'booking',
                                     name: payload.name,
                                     phone: payload.phone,
                                     therapyType: therapyType,
+                                    contactMethods: contactMethods,
                                     startIso: startIso,
                                     endIso: endIso,
                                     clientTimezone: payload.clientTimezone,
@@ -2595,6 +2599,7 @@
                                             name: payload.name,
                                             phone: payload.phone,
                                             therapyType: therapyType,
+                                            contactMethods: contactMethods,
                                             startIso: startIso,
                                             endIso: endIso,
                                             clientTimezone: payload.clientTimezone

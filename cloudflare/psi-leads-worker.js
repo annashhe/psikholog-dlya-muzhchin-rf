@@ -22,8 +22,33 @@ function corsOriginForRequest(origin) {
 const THERAPY = {
   individual: { title: 'Индивидуальная', label: 'Индивидуальная 50 мин' },
   individual90: { title: 'Индивидуальная 90 мин', label: 'Индивидуальная 90 мин' },
+  individual_90: { title: 'Индивидуальная 90 мин', label: 'Индивидуальная 90 мин' },
   family: { title: 'Семейная (парная)', label: 'Семейная 90 мин' },
 };
+
+const CONTACT_LABELS = {
+  telegram: 'Telegram',
+  whatsapp: 'WhatsApp',
+  max: 'MAX',
+  sms: 'SMS',
+  Telegram: 'Telegram',
+  WhatsApp: 'WhatsApp',
+  MAX: 'MAX',
+  SMS: 'SMS',
+};
+
+function formatContactMethods(methods) {
+  const list = Array.isArray(methods) ? methods : [];
+  const labels = list
+    .map((m) => {
+      const raw = String(m ?? '').trim();
+      if (!raw) return '';
+      const key = raw.toLowerCase();
+      return CONTACT_LABELS[raw] || CONTACT_LABELS[key] || raw.slice(0, 40);
+    })
+    .filter(Boolean);
+  return labels.length ? labels.join(', ') : '—';
+}
 
 function dash(val) {
   const s = String(val ?? '').trim();
@@ -121,21 +146,20 @@ function metaBlock(meta) {
 }
 
 function buildCallbackMessage(data) {
-  const methods = Array.isArray(data.contactMethods)
-    ? data.contactMethods.map((m) => String(m).slice(0, 40)).filter(Boolean)
-    : [];
   return [
     'Заявка с формы (обратный звонок)',
     '',
     `Имя: ${escHtml(dash(data.name))}`,
     phoneLineHtml(data.phone),
-    `Способ связи: ${escHtml(methods.length ? methods.join(', ') : '—')}`,
+    `Способ связи: ${escHtml(formatContactMethods(data.contactMethods))}`,
     metaBlock(data),
   ].join('\n');
 }
 
 function resolveTherapy(data) {
-  if (THERAPY[data.therapyType]) return THERAPY[data.therapyType];
+  let type = data.therapyType;
+  if (type === 'individual_90') type = 'individual90';
+  if (THERAPY[type]) return THERAPY[type];
   if (data.startIso && data.endIso) {
     const mins = Math.round((new Date(data.endIso) - new Date(data.startIso)) / 60000);
     if (mins >= 80) return THERAPY.individual90;
@@ -152,6 +176,7 @@ function buildBookingMessage(data) {
     '',
     `Имя: ${escHtml(dash(data.name))}`,
     phoneLineHtml(data.phone),
+    `Способ связи: ${escHtml(formatContactMethods(data.contactMethods))}`,
     `Формат: ${escHtml(t.label)}`,
     `Дата сессии: ${escHtml(formatSessionDate(data.startIso, clientTz))}`,
     `Часовой пояс психолога: ${escHtml(formatSlotRange(data.startIso, data.endIso, PSY_TZ))}`,

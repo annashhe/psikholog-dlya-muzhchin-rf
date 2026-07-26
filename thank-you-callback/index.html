@@ -62,11 +62,10 @@
             }
 
             function formatContactMethodsList(methods) {
-                var list = Array.isArray(methods) ? methods.filter(Boolean) : [];
-                if (!list.length) return 'Telegram, WhatsApp или MAX';
-                if (list.length === 1) return list[0];
-                if (list.length === 2) return list[0] + ' или ' + list[1];
-                return list.slice(0, -1).join(', ') + ' или ' + list[list.length - 1];
+                if (typeof window.formatContactMethodsList === 'function') {
+                    return window.formatContactMethodsList(methods);
+                }
+                return 'Telegram, WhatsApp или MAX';
             }
 
             var raw = null;

@@ -38,11 +38,6 @@
 
             var home = window.PSI_SITE_HOME || 'https://психолог-для-мужчин.рф/';
             var messengers = window.thankYouMessengerLinks || '';
-            var THERAPY = {
-                individual: { title: 'Индивидуальная консультация', duration: '50 минут', price: '4 500 ₽' },
-                individual90: { title: 'Индивидуальная консультация', duration: '90 минут', price: '7 000 ₽' },
-                family: { title: 'Семейная (парная) консультация', duration: '90 минут', price: '7 000 ₽' }
-            };
 
             function escapeHtml(s) {
                 return String(s)
@@ -59,12 +54,17 @@
             }
 
             function resolveTherapy(data) {
-                if (THERAPY[data.therapyType]) return THERAPY[data.therapyType];
-                if (data.startIso && data.endIso) {
-                    var mins = Math.round((new Date(data.endIso) - new Date(data.startIso)) / 60000);
-                    if (mins >= 80) return THERAPY.individual90;
+                if (typeof window.resolveBookingTherapy === 'function') {
+                    return window.resolveBookingTherapy(data);
                 }
-                return THERAPY.individual;
+                return { title: 'Онлайн-консультация', duration: '—', price: '—' };
+            }
+
+            function contactViaPhrase(methods) {
+                var via = typeof window.formatContactMethodsList === 'function'
+                    ? window.formatContactMethodsList(methods)
+                    : 'Telegram, WhatsApp или MAX';
+                return escapeHtml(via);
             }
 
             function formatWhen(startIso, endIso, tz) {
@@ -99,7 +99,7 @@
             var raw = null;
             try { raw = sessionStorage.getItem('bookingThankYou'); sessionStorage.removeItem('bookingThankYou'); } catch (e) {}
             if (!raw) {
-                root.innerHTML = '<h1>Спасибо!</h1><p class="lead">Если вы только что записались через календарь, заявка принята. Я свяжусь с вами в течение дня.</p><a class="btn" href="' + home + '">На главную</a>';
+                root.innerHTML = '<h1>Спасибо!</h1><p class="lead">Если вы только что записались через календарь, заявка принята. Я свяжусь с вами в течение дня тем способом, который вы указали в форме записи.</p><a class="btn" href="' + home + '">На главную</a>';
                 if (articlesEl && typeof renderThankYouArticles === 'function') {
                     articlesEl.innerHTML = renderThankYouArticles();
                 }
@@ -113,11 +113,12 @@
 
             root.innerHTML =
                 '<h1>Спасибо, ' + name + '!</h1>' +
-                '<p class="lead">Я получила вашу заявку на онлайн-консультацию и свяжусь с вами ' + phonePhrase(data.phone) + ' в течение дня, чтобы подтвердить запись.</p>' +
+                '<p class="lead">Я получила вашу заявку на онлайн-консультацию и свяжусь с вами через ' + contactViaPhrase(data.contactMethods) + ' ' + phonePhrase(data.phone) + ' в течение дня, чтобы подтвердить запись.</p>' +
                 '<dl class="details">' +
                 '<dt>Формат</dt><dd>' + therapy.title + '</dd>' +
                 '<dt>Длительность</dt><dd>' + therapy.duration + '</dd>' +
                 '<dt>Стоимость</dt><dd>' + therapy.price + '</dd>' +
+                '<dt>Способ связи</dt><dd>' + contactViaPhrase(data.contactMethods) + '</dd>' +
                 '<dt>Выбранное время</dt><dd>' + escapeHtml(when) + '</dd>' +
                 '</dl>' +
                 '<p class="note">Если нужно перенести время — напишите в ' + messengers + '.</p>' +
