@@ -113,9 +113,16 @@
     }
   };
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', global.mountPsiChrome);
-  } else {
+  function bootChrome() {
     global.mountPsiChrome();
+    if (typeof global.mountPsiCookieNotice === 'function') {
+      global.mountPsiCookieNotice();
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootChrome);
+  } else {
+    bootChrome();
   }
 })(window);

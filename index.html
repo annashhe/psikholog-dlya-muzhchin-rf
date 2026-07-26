@@ -16,6 +16,7 @@
     <script src="assets/lead-tracking.js" defer></script>
     <script src="assets/consent-analytics.js" defer></script>
     <script src="assets/analytics-events.js" defer></script>
+    <script src="assets/cookie-notice.js" defer></script>
 
     <!-- LCP: локальное фото героя -->
     <link rel="preload" as="image" type="image/webp"
@@ -480,7 +481,7 @@
             color: var(--accent);
         }
         .hero-stats .stat-label {
-            font-size: 0.92rem;
+            font-size: 1.02rem;
             color: var(--text-muted);
             line-height: 1.35;
         }
@@ -1338,6 +1339,14 @@
         }
         .faq-item .faq-answer p {
             margin-bottom: 0.4rem;
+        }
+        .faq-item .faq-answer a {
+            color: var(--accent);
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .faq-item .faq-answer a:hover {
+            text-decoration: underline;
         }
 
         /* ===== FOOTER ===== */
@@ -2326,7 +2335,7 @@
                             <li>соучредитель сервиса по подбору психологов <a href="https://www.da-online.ru/?utm_source=anna_muzhchiny" target="_blank" rel="noopener">«ДА»</a>;</li>
                         </ul>
                         <div class="personal-story">
-                            <p><strong>Как я пришла в профессию:</strong> в 2019 году меня «догнали» гиперответственность, перфекционизм и тревога — сначала пришла в личную терапию. Там я разобралась с собой, отношениями с близкими и тревожной бессонницей, а затем прошла сотни часов обучения психологии. Сейчас продолжаю личную терапию и супервизии: это помогает держать рабочую рамку и не навязывать вам свой сценарий.</p>
+                            <p><strong>Как я пришла в профессию:</strong> моя гиперответственность, перфекционизм, «я всё смогу» и тревога привели меня в 2019 году в личную терапию. С тех пор я не просто разобралась в себе, в отношениях с окружающими, избавилась от тревожной бессонницы, но и прошла очень много часов обучения психологии. И теперь опираюсь на личную терапию и супервизии — это помогает держать рабочую рамку и не давить на клиента своим сценарием.</p>
                             <p style="margin-top:0.4rem;">Если вам близок такой путь — через честный разговор и опору на себя, а не на «волшебный совет», буду рада поработать вместе.</p>
                         </div>
                     </div>
@@ -2464,14 +2473,14 @@
             </div>
 
             <div class="steps-quote">
-                «Не выбираю за вас — вместе ищем варианты, которые работают именно в вашей ситуации»
+                «Я не даю готовых решений и не выбираю за вас. Вместе мы ищем варианты, которые работают именно в вашей ситуации»
                 <cite>Анна Щеголихина</cite>
             </div>
 
             <div class="steps-meta">
                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
                 Онлайн или очно · 50 или 90 минут
-                <br><span style="font-size:0.8rem;color:var(--text-muted);">Онлайн: отправляю ссылку на видеосозвон за 5–10 минут до встречи — ничего скачивать не нужно, ссылка откроется в браузере</span>
+                <br><span style="font-size:0.8rem;color:var(--text-muted);">Онлайн: за 5–10 минут до встречи присылаю ссылку на видеосвязь в согласованном мессенджере (Telegram, WhatsApp, MAX)</span>
             </div>
         </div>
     </section>
@@ -2646,6 +2655,27 @@
                         var s = document.createElement('script');
                         s.src = 'https://anna-psy-schedule-frontend.vercel.app/widget.js';
                         s.async = true;
+                        s.onload = function() {
+                            var attempts = 0;
+                            var patchWidgetStrings = function() {
+                                attempts++;
+                                var host = document.querySelector('[data-anna-psy-widget]');
+                                if (!host) {
+                                    if (attempts < 40) setTimeout(patchWidgetStrings, 400);
+                                    return;
+                                }
+                                host.querySelectorAll('p, div, span, h2, h3, button, label, strong').forEach(function(el) {
+                                    if (el.children.length) return;
+                                    var text = el.textContent;
+                                    if (!text) return;
+                                    if (/ВИД консультации/i.test(text)) {
+                                        el.textContent = text.replace(/ВИД консультации/gi, 'ФОРМАТ консультации');
+                                    }
+                                });
+                                if (attempts < 40) setTimeout(patchWidgetStrings, 400);
+                            };
+                            patchWidgetStrings();
+                        };
                         document.getElementById('booking').appendChild(s);
                     }
 
@@ -2694,8 +2724,8 @@
                         Видеосессии для клиентов из России и по всему миру. Время встречи согласуем с учётом вашего пояса. Запись — через <a href="#booking">календарь на этой странице</a>
                     </p>
                     <ul style="margin:0.8rem 0 0 1.2rem;color:var(--text-secondary);">
-                        <li>ссылку на видеосозвон присылаю за 5–10 минут до сессии</li>
-                        <li>ничего скачивать не нужно — ссылка откроется в браузере</li>
+                        <li>ссылку на видеосвязь присылаю за 5–10 минут до сессии в согласованном мессенджере (Telegram, WhatsApp, MAX)</li>
+                        <li>дополнительные программы обычно не нужны — достаточно приложения мессенджера или браузера</li>
                     </ul>
 
                     <div class="location-offline">
@@ -2739,7 +2769,7 @@
                         <div>
                             <div class="contact-label">Телефон</div>
                             <div class="contact-value"><a href="tel:+79137556284">+7 913 755 62 84</a></div>
-                            <p class="contact-phone-note">Во время сессий, супервизий и групповой работы я могу ответить не сразу, но обязательно свяжусь с вами позже.</p>
+                            <p class="contact-phone-note">Во время сессий, супервизий и групповой работы я не могу ответить, но обязательно свяжусь с вами позже.</p>
                         </div>
                     </div>
 
@@ -2759,7 +2789,7 @@
                         </div>
                         <div>
                             <div class="contact-label">Формат</div>
-                            <div class="contact-value">Онлайн (основной) · Очно в Калининграде по записи в мессенджере</div>
+                            <div class="contact-value"><a href="#booking">Онлайн</a> (основной) · <a href="#location">Очно в Калининграде</a> по записи в мессенджере</div>
                         </div>
                     </div>
                 </div>
@@ -2804,12 +2834,12 @@
                             </fieldset>
                             <div class="checkbox-group">
                                 <input type="checkbox" id="formConsent" name="consent" required />
-                                <label for="formConsent">Я согласен на <a href="#" class="js-open-consent">обработку персональных данных</a>, принимаю <a href="/privacy-policy/" target="_blank" rel="noopener">политику конфиденциальности</a> и условия <a href="/oferta/" target="_blank" rel="noopener">публичной оферты</a>.</label>
+                                <label for="formConsent">Я согласен на <a href="/consent/" target="_blank" rel="noopener" class="js-open-consent">обработку персональных данных</a>, принимаю <a href="/privacy-policy/" target="_blank" rel="noopener">политику конфиденциальности</a> и условия <a href="/oferta/" target="_blank" rel="noopener">публичной оферты</a>.</label>
                             </div>
                             <button type="submit" class="btn btn-primary">Отправить заявку</button>
                         </form>
                         <p id="formSuccess" style="display:none;font-size:0.9rem;color:var(--text-secondary);margin-top:0.8rem;padding:0.8rem 1rem;background:var(--bg-light);border-radius:var(--radius);border:1px solid var(--border-light);"></p>
-                        <p style="font-size:0.8rem;color:var(--text-muted);margin-top:0.6rem;">Заявку получаю через защищённый сервис уведомлений и связываюсь с вами в выбранном канале. Подробности об аналитике и cookie — в <a href="/privacy-policy/" target="_blank" rel="noopener">политике конфиденциальности</a>.</p>
+                        <p style="font-size:0.8rem;color:var(--text-muted);margin-top:0.6rem;">Напишу вам в выбранном канале связи. Пожалуйста, убедитесь, что у вас включены уведомления</p>
                     </div>
 
                     <div style="margin-top:1.2rem;padding:1rem 1.2rem;background:var(--bg-light);border-radius:var(--radius);border:1px solid var(--border-light);">
@@ -2819,6 +2849,23 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- ===== БЛОГ: внутренние ссылки ===== -->
+    <section class="section bg-light" aria-labelledby="blog-teaser-title" id="articles">
+        <div class="container">
+            <div class="section-title">
+                <h2 id="blog-teaser-title">Статьи из блога</h2>
+                <p>Разборы частых запросов — без готовых скриптов и гарантий результата</p>
+            </div>
+            <ul style="list-style:none;padding:0;margin:0;display:grid;gap:0.9rem;">
+                <li><a href="/blog/zhena-hochet-razvoda/" style="color:var(--accent);font-weight:600;text-decoration:none;">Жена хочет развода: типичные реакции и ошибки</a></li>
+                <li><a href="/blog/psiholog-dlya-muzhchin-v-krizise/" style="color:var(--accent);font-weight:600;text-decoration:none;">Психолог для мужчин в кризисе: как устроена помощь</a></li>
+                <li><a href="/blog/trevoga-chto-eto-otkuda/" style="color:var(--accent);font-weight:600;text-decoration:none;">Тревога: что это, откуда берётся и что можно сделать</a></li>
+                <li><a href="/blog/hochu-razvestis-s-zhenoy/" style="color:var(--accent);font-weight:600;text-decoration:none;">Хочу развестись с женой: как принять решение</a></li>
+            </ul>
+            <p style="margin:1.2rem 0 0;"><a href="/blog/" class="btn btn-outline btn-sm">Все статьи</a></p>
         </div>
     </section>
 
@@ -2835,7 +2882,7 @@
                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 9l6 6 6-6"/></svg>
                     </button>
                     <div class="faq-answer">
-                        <p>Онлайн-консультация по смыслу как очная: вам не нужно никуда ехать. За 5–10 минут до начала пришлю ссылку на видеовстречу в удобном мессенджере (Telegram, WhatsApp, MAX) — дополнительные программы не нужны, достаточно браузера или вашего мессенджера</p>
+                        <p><a href="#booking">Онлайн</a>-консультация по смыслу как очная: вам не нужно никуда ехать. За 5–10 минут до начала пришлю ссылку на видеовстречу в удобном мессенджере (Telegram, WhatsApp, MAX) — дополнительные программы не нужны, достаточно браузера или вашего мессенджера</p>
                         <p>Длительность — 50 или 90 минут (по договорённости). Важно заранее выбрать тихое место, где вас не будут перебивать — дома, в машине или в поездке, если есть интернет</p>
                         <p>Если остались вопросы о технической части — напишите мне, помогу подготовиться к первой встрече</p>
                     </div>
@@ -2893,7 +2940,7 @@
                     </button>
                     <div class="faq-answer">
                         <p>С таким запросом работаю. Часто это потеря смысла, раздражительность, сомнения в работе и отношениях.</p>
-                        <p>На встречах разбираем, что происходит, и ищем опору и цели, которые вам подходят — конфиденциально, в том числе онлайн.</p>
+                        <p>На встречах разбираем, что происходит, и ищем опору и цели, которые вам подходят — конфиденциально, в том числе <a href="#booking">онлайн</a>.</p>
                     </div>
                 </div>
 
@@ -2903,7 +2950,7 @@
                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 9l6 6 6-6"/></svg>
                     </button>
                     <div class="faq-answer">
-                        <p>Да. Многие мужчины выбирают онлайн именно поэтому: остаётесь дома, не нужно заходить в кабинет «на виду».</p>
+                        <p>Да. Многие мужчины выбирают <a href="#booking">онлайн</a> именно поэтому: остаётесь дома, не нужно заходить в кабинет «на виду».</p>
                         <p>Содержание встреч конфиденциально (с оговорками: угроза жизни, требования закона). По опыту клиентов видеоформат для большинства запросов работает хорошо — при стабильной связи и тихом месте.</p>
                     </div>
                 </div>
@@ -2914,7 +2961,7 @@
                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 9l6 6 6-6"/></svg>
                     </button>
                     <div class="faq-answer">
-                        <p>Календарь на сайте — только для онлайн. Очно: кабинет на ул. Кирова, 1, по предварительной записи в Telegram, WhatsApp или MAX. Стоимость та же, что онлайн</p>
+                        <p>Календарь на сайте — только для <a href="#booking">онлайн</a>. <a href="#location">Очно в Калининграде</a>: кабинет на ул. Кирова, 1, по предварительной записи в Telegram, WhatsApp или MAX. Стоимость та же, что онлайн</p>
                     </div>
                 </div>
                 <div class="faq-item">
@@ -3009,12 +3056,7 @@
         <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
     </button>
 
-    <div class="cookie-banner" id="cookieBanner" role="dialog" aria-label="Уведомление о cookie" aria-live="polite">
-        <p>На сайте используются cookie для аналитики посещений (Яндекс.Метрика, Google Tag). Подробнее — в <a href="/privacy-policy/" target="_blank" rel="noopener">политике конфиденциальности</a>.</p>
-        <div class="cookie-banner-actions">
-            <button type="button" class="btn btn-primary btn-sm" id="cookieAcceptBtn">ОК</button>
-        </div>
-    </div>
+    <!-- Cookie-баннер: assets/cookie-notice.js (раз за визит) -->
 
     <!-- ===== СКРИПТЫ ===== -->
     <script>
@@ -3034,19 +3076,9 @@
                 });
             });
 
-            // ===== COOKIE BANNER =====
-            var cookieBanner = document.getElementById('cookieBanner');
-            var cookieAccept = document.getElementById('cookieAcceptBtn');
-            try {
-                if (cookieBanner && !localStorage.getItem('cookieNoticeDismissed')) {
-                    cookieBanner.classList.add('open');
-                }
-            } catch (e) {}
-            if (cookieAccept) {
-                cookieAccept.addEventListener('click', function() {
-                    try { localStorage.setItem('cookieNoticeDismissed', '1'); } catch (e) {}
-                    if (cookieBanner) cookieBanner.classList.remove('open');
-                });
+            // ===== COOKIE BANNER (assets/cookie-notice.js) =====
+            if (typeof window.mountPsiCookieNotice === 'function') {
+                window.mountPsiCookieNotice();
             }
 
             // ===== СПОЙЛЕР ДЛЯ ОБРАЗОВАНИЯ =====
@@ -3331,15 +3363,7 @@
             }
 
             // ===== ПОЯВЛЕНИЕ СЕКЦИЙ ПРИ СКРОЛЛЕ =====
-            document.body.addEventListener('click', function(e) {
-                var link = e.target.closest('a[href]');
-                if (!link || typeof window.psiMetrikaGoal !== 'function') return;
-                var href = link.getAttribute('href') || '';
-                if (href.indexOf('tel:') === 0) window.psiMetrikaGoal('click_phone');
-                else if (/t\.me\/|telegram\.me\//i.test(href)) window.psiMetrikaGoal('click_telegram');
-                else if (/wa\.me\/|whatsapp\.com\//i.test(href)) window.psiMetrikaGoal('click_whatsapp');
-                else if (href.indexOf('max.ru/') !== -1) window.psiMetrikaGoal('click_max');
-            });
+            // Клики tel/мессенджеры: assets/analytics-events.js
 
             document.querySelectorAll('.section').forEach(function(sec) {
                 sec.classList.add('fade-in');
