@@ -23,7 +23,7 @@ npx wrangler deploy
 
 Опционально: `TURNSTILE_SECRET_KEY` — если задан, Worker требует `turnstileToken` в теле (нужен виджет Turnstile на формах). Без секрета поведение как раньше.
 
-Клиент шлёт `Idempotency-Key`, чтобы повторная отправка не дублировала сообщение в Telegram.
+Клиент больше не шлёт кастомный заголовок Idempotency-Key (ломал CORS со старым Worker). Дедуп по `body.idempotencyKey` можно вернуть позже без нового header.
 
 ## Проверка www / http → apex
 

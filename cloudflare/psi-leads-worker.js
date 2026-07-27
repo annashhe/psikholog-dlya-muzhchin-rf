@@ -293,7 +293,7 @@ export default {
 
     const corsHeaders = {
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Idempotency-Key',
+      'Access-Control-Allow-Headers': 'Content-Type',
     };
     if (corsOrigin) {
       corsHeaders['Access-Control-Allow-Origin'] = corsOrigin;

@@ -334,6 +334,9 @@
             color: var(--highlight);
             font-weight: 600;
         }
+        #consentModal.consent-modal-layer {
+            z-index: 10000000;
+        }
         .contact-phone-note {
             font-size: 0.85rem;
             color: var(--text-muted);
@@ -378,7 +381,7 @@
             width: 18px;
             height: 2px;
             margin: 0 auto;
-            background: var(--text-primary);
+            background: var(--accent-dark);
             border-radius: 2px;
             transition: transform 0.25s ease, opacity 0.2s ease;
             transform-origin: center;
@@ -2666,23 +2669,11 @@
                         return 50;
                     }
 
-                    function postBookingLead(body, attempt, idempotencyKey) {
+                    function postBookingLead(body, attempt) {
                         attempt = attempt || 0;
-                        var key = idempotencyKey;
-                        if (!key) {
-                            key = (crypto.randomUUID && crypto.randomUUID()) || String(Date.now()) + Math.random();
-                            try {
-                                var parsed = JSON.parse(body);
-                                parsed.idempotencyKey = key;
-                                body = JSON.stringify(parsed);
-                            } catch (e) {}
-                        }
                         return origFetch(api, {
                             method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Idempotency-Key': key
-                            },
+                            headers: { 'Content-Type': 'application/json' },
                             body: body
                         }).then(function(r) {
                             if (!r.ok) throw new Error('lead status ' + r.status);
@@ -2692,7 +2683,7 @@
                                 return new Promise(function(resolve) {
                                     setTimeout(resolve, 700 * (attempt + 1));
                                 }).then(function() {
-                                    return postBookingLead(body, attempt + 1, key);
+                                    return postBookingLead(body, attempt + 1);
                                 });
                             }
                             throw err;
@@ -2721,7 +2712,6 @@
                                     ? payload.contactMethods.slice()
                                     : [];
                                 var tracking = typeof getLeadTrackingPayload === 'function' ? getLeadTrackingPayload() : {};
-                                var bookingIdempotencyKey = (crypto.randomUUID && crypto.randomUUID()) || String(Date.now()) + Math.random();
                                 var leadBody = JSON.stringify(Object.assign({
                                     source: 'booking',
                                     name: payload.name,
@@ -2732,11 +2722,10 @@
                                     endIso: endIso,
                                     clientTimezone: payload.clientTimezone,
                                     comment: payload.comment || '',
-                                    website: '',
-                                    idempotencyKey: bookingIdempotencyKey
+                                    website: ''
                                 }, tracking));
                                 thankYouStarted = true;
-                                postBookingLead(leadBody, 0, bookingIdempotencyKey).then(function() {
+                                postBookingLead(leadBody).then(function() {
                                     try {
                                         sessionStorage.setItem('bookingThankYou', JSON.stringify({
                                             name: payload.name,
@@ -2956,7 +2945,7 @@
                             </fieldset>
                             <div class="checkbox-group">
                                 <input type="checkbox" id="formConsent" name="consent" required />
-                                <label for="formConsent">Я согласен на <a href="/consent/" target="_blank" rel="noopener" class="js-open-consent">обработку персональных данных</a>, принимаю <a href="/privacy-policy/" target="_blank" rel="noopener">политику конфиденциальности</a> и условия <a href="/oferta/" target="_blank" rel="noopener">публичной оферты</a>.</label>
+                                <label for="formConsent">Я согласен на <a href="#consent" class="js-open-consent">обработку персональных данных</a>, принимаю <a href="/privacy-policy/" target="_blank" rel="noopener">политику конфиденциальности</a> и условия <a href="/oferta/" target="_blank" rel="noopener">публичной оферты</a>.</label>
                             </div>
                             <button type="submit" class="btn btn-primary">Отправить заявку</button>
                         </form>
@@ -3172,6 +3161,32 @@
             <p class="diploma-placeholder" id="diplomaPlaceholder" style="display:none;">
                 Изображение диплома не найдено. Проверьте файл в папке assets/images/diplomas/
             </p>
+        </div>
+    </div>
+
+    <div class="diploma-modal consent-modal-layer" id="consentModal" role="dialog" aria-modal="true" aria-labelledby="consentModalTitle">
+        <div class="diploma-modal-inner legal-modal-inner">
+            <button type="button" class="diploma-modal-close" id="consentModalClose" aria-label="Закрыть">&times;</button>
+            <h2 id="consentModalTitle">Согласие на обработку персональных данных</h2>
+            <p>Настоящим, в соответствии с требованиями Федерального закона от 27.07.2006 №&nbsp;152-ФЗ «О персональных данных», я даю согласие самозанятой <strong>Щеголихиной Анне Михайловне</strong> (Оператор) на обработку моих персональных данных на условиях ниже и в <a href="/privacy-policy/" target="_blank" rel="noopener">Политике конфиденциальности</a>.</p>
+            <h3>1. Цели</h3>
+            <ul>
+                <li>запись и обратная связь, оказание психологических услуг;</li>
+                <li>исполнение публичной оферты, платежи и чек;</li>
+                <li>аналитика посещаемости (с правом отказа в настройках cookie);</li>
+                <li>исполнение требований законодательства РФ.</li>
+            </ul>
+            <h3>2. Данные</h3>
+            <p>Имя, телефон, e-mail (при указании), способ связи, содержание обращений; технические данные (IP, cookie, аналитика по разделу 10 Политики).</p>
+            <h3>3. Действия</h3>
+            <p>Сбор, запись, хранение, использование, передача в объёме, нужном для услуг и сервисов связи/записи/аналитики, удаление и уничтожение.</p>
+            <h3>4. Срок и отзыв</h3>
+            <p>До достижения целей или отзыва (в пределах сроков Политики). Отзыв: <a href="mailto:anna-psy-online@yandex.ru">anna-psy-online@yandex.ru</a>, тел. <a href="tel:+79137556284">+7 913 755 62 84</a>, <a href="https://t.me/annashhe" target="_blank" rel="noopener">Telegram</a>.</p>
+            <h3>5. Трансграничная передача</h3>
+            <p>Возможна при использовании видеосвязи и мессенджеров (Яндекс Телемост, Салют Джаз, VK, MAX, WhatsApp, Telegram и др.). Подробности — в Политике.</p>
+            <h3>6. Подтверждение</h3>
+            <p>Отмечая чекбокс, вы подтверждаете согласие и ознакомление с <a href="/privacy-policy/" target="_blank" rel="noopener">политикой</a> и <a href="/oferta/" target="_blank" rel="noopener">офертой</a>. Полная редакция: <a href="/consent/" target="_blank" rel="noopener">страница согласия</a>.</p>
+            <p style="margin-top:1rem;font-size:.85rem;color:var(--text-secondary);">Оператор: Щеголихина Анна Михайловна, ИНН 422811411707.</p>
         </div>
     </div>
 
@@ -3438,21 +3453,16 @@
                     }
 
                     var tracking = typeof getLeadTrackingPayload === 'function' ? getLeadTrackingPayload() : {};
-                    var callbackIdempotencyKey = (crypto.randomUUID && crypto.randomUUID()) || String(Date.now()) + Math.random();
 
                     fetch(LEAD_API_URL, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Idempotency-Key': callbackIdempotencyKey
-                        },
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(Object.assign({
                             source: 'callback',
                             name: name,
                             phone: phone,
                             contactMethods: contactMethods,
-                            website: honeypot ? honeypot.value : '',
-                            idempotencyKey: callbackIdempotencyKey
+                            website: honeypot ? honeypot.value : ''
                         }, tracking))
                     })
                     .then(function(res) {
