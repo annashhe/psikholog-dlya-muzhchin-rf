@@ -57,7 +57,7 @@
           '">' +
           '<div class="psi-blog-card__media"><img src="' +
           img +
-          '" width="320" height="180" alt="" loading="lazy" decoding="async" /></div>' +
+          '" width="320" height="320" alt="" loading="lazy" decoding="async" /></div>' +
           '<div class="psi-blog-card__body">' +
           '<h3 class="psi-blog-card__title">' +
           a.title +

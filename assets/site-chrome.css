@@ -137,9 +137,45 @@ html {
   min-width: min(100%, 240px);
   text-align: center;
 }
+.psi-chrome-nav a.psi-btn {
+  font-weight: 600;
+}
+.psi-chrome-nav a.psi-btn-primary {
+  color: #fff;
+  background: #802d4b;
+}
+.psi-chrome-nav a.psi-btn-primary:hover {
+  color: #fff;
+}
+.psi-chrome-nav a.psi-btn-outline {
+  color: #802d4b;
+  background: #fff;
+}
 .psi-btn-primary {
   background: #802d4b;
   color: #fff;
+}
+a.psi-btn-primary,
+button.psi-btn-primary {
+  color: #fff;
+}
+a.psi-btn-primary:hover,
+button.psi-btn-primary:hover {
+  color: #fff;
+}
+.psi-blog-cta a.psi-btn-primary {
+  color: #fff;
+  background: #802d4b;
+}
+.psi-blog-cta a.psi-btn-outline {
+  color: #802d4b;
+  background: #fff;
+  border: 2px solid #802d4b;
+}
+.psi-blog-all-wrap a.psi-btn-outline {
+  color: #802d4b;
+  background: #fff;
+  border: 2px solid #802d4b;
 }
 .psi-btn-outline {
   background: #fff;

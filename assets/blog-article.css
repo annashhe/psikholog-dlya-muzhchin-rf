@@ -1,10 +1,12 @@
 .article-cover {
   width: 100%;
-  max-height: 420px;
-  object-fit: cover;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
   border-radius: 16px;
   margin: 0 0 1.75rem;
   border: 1px solid var(--border, #eae7ea);
+  display: block;
 }
 .article-lead {
   font-size: 1.05rem;
@@ -31,6 +33,15 @@
 }
 .article-content li { margin-bottom: 0.45rem; }
 .article-content a { color: var(--accent, #802d4b); }
+.article-after a.psi-btn-primary {
+  color: #fff;
+  background: #802d4b;
+}
+.article-after a.psi-btn-outline {
+  color: #802d4b;
+  background: #fff;
+  border: 2px solid #802d4b;
+}
 .article-content img.inline-photo {
   width: 100%;
   max-width: 480px;

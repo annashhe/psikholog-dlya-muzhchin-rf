@@ -14,7 +14,8 @@
     <link rel="icon" href="favicon.ico" sizes="any" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-    <link rel="stylesheet" href="assets/blog-cards.css" />
+    <link rel="stylesheet" href="assets/blog-cards.css" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="assets/blog-cards.css" /></noscript>
     <script src="assets/lead-tracking.js" defer></script>
     <script src="assets/cookie-notice.js" defer></script>
     <script src="assets/consent-analytics.js" defer></script>
@@ -23,7 +24,7 @@
     <!-- LCP: локальное фото героя -->
     <link rel="preload" as="image" type="image/webp"
           imagesrcset="assets/images/hero-460.webp 460w, assets/images/hero-920.webp 920w"
-          imagesizes="(max-width: 768px) 385px, 385px"
+          imagesizes="(max-width: 768px) 385px, 460px"
           href="assets/images/hero-460.webp"
           fetchpriority="high" />
 
@@ -284,6 +285,19 @@
         }
         .header-nav a:hover {
             color: var(--accent);
+        }
+        .header-actions .btn-primary,
+        .header-actions a.btn-primary {
+            color: #fff;
+            background: var(--btn-bg);
+        }
+        .header-actions .btn-primary:hover,
+        .header-actions a.btn-primary:hover {
+            color: #fff;
+        }
+        .mobile-nav a[href="#booking"] {
+            color: var(--btn-bg);
+            font-weight: 700;
         }
         .header-actions {
             display: flex;
@@ -1995,10 +2009,12 @@
     <section class="hero" aria-label="Главный блок">
         <div class="container hero-grid">
             <div class="hero-image">
-                <img
+                <picture>
+                    <source media="(max-width: 768px)" srcset="assets/images/hero-460.webp" />
+                    <img
                 src="assets/images/hero-460.webp"
                 srcset="assets/images/hero-460.webp 460w, assets/images/hero-920.webp 920w"
-                sizes="(max-width: 768px) 385px, 385px"
+                sizes="(max-width: 768px) 385px, 460px"
                 alt="Анна Щеголихина — онлайн-психолог для мужчин, Калининград"
                 loading="eager"
                 width="460"
@@ -2006,6 +2022,7 @@
                 decoding="async"
                 fetchpriority="high"
                 />
+                </picture>
             </div>
             <div class="hero-content">
                 <span class="badge">Психолог для мужчин</span>
@@ -2891,7 +2908,7 @@
             </div>
             <div class="psi-blog-grid">
                 <a class="psi-blog-card" href="/blog/zhena-hochet-razvoda/">
-                    <div class="psi-blog-card__media"><img src="assets/images/blog/zhena-hochet-razvoda.jpg" width="320" height="180" alt="" loading="lazy" decoding="async" /></div>
+                    <div class="psi-blog-card__media"><img src="assets/images/blog/zhena-hochet-razvoda.jpg" width="320" height="320" alt="" loading="lazy" decoding="async" /></div>
                     <div class="psi-blog-card__body">
                         <h3 class="psi-blog-card__title">Жена хочет развода: типичные реакции и ошибки</h3>
                         <p class="psi-blog-card__desc">Когда партнёрша говорит о разводе — что часто происходит внутри и снаружи.</p>
@@ -2899,7 +2916,7 @@
                     </div>
                 </a>
                 <a class="psi-blog-card" href="/blog/psiholog-dlya-muzhchin-v-krizise/">
-                    <div class="psi-blog-card__media"><img src="assets/images/blog/psiholog-dlya-muzhchin-v-krizise.jpg" width="320" height="180" alt="" loading="lazy" decoding="async" /></div>
+                    <div class="psi-blog-card__media"><img src="assets/images/blog/psiholog-dlya-muzhchin-v-krizise.jpg" width="320" height="320" alt="" loading="lazy" decoding="async" /></div>
                     <div class="psi-blog-card__body">
                         <h3 class="psi-blog-card__title">Психолог для мужчин в кризисе</h3>
                         <p class="psi-blog-card__desc">Как устроена помощь без ярлыков и давления — примеры из практики.</p>
@@ -2907,7 +2924,7 @@
                     </div>
                 </a>
                 <a class="psi-blog-card" href="/blog/trevoga-chto-eto-otkuda/">
-                    <div class="psi-blog-card__media"><img src="assets/images/blog/trevoga-chto-eto-otkuda.jpg" width="320" height="180" alt="" loading="lazy" decoding="async" /></div>
+                    <div class="psi-blog-card__media"><img src="assets/images/blog/trevoga-chto-eto-otkuda.jpg" width="320" height="320" alt="" loading="lazy" decoding="async" /></div>
                     <div class="psi-blog-card__body">
                         <h3 class="psi-blog-card__title">Тревога: что это и откуда берётся</h3>
                         <p class="psi-blog-card__desc">Признаки, отличие от стресса и что можно сделать самому.</p>
@@ -2915,7 +2932,7 @@
                     </div>
                 </a>
                 <a class="psi-blog-card" href="/blog/hochu-razvestis-s-zhenoy/">
-                    <div class="psi-blog-card__media"><img src="assets/images/blog/hochu-razvestis-s-zhenoy.jpg" width="320" height="180" alt="" loading="lazy" decoding="async" /></div>
+                    <div class="psi-blog-card__media"><img src="assets/images/blog/hochu-razvestis-s-zhenoy.jpg" width="320" height="320" alt="" loading="lazy" decoding="async" /></div>
                     <div class="psi-blog-card__body">
                         <h3 class="psi-blog-card__title">Хочу развестись с женой: как принять решение</h3>
                         <p class="psi-blog-card__desc">Как отличить усталость от решения и что проверить в себе.</p>

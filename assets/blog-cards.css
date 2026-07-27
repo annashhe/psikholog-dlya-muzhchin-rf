@@ -26,15 +26,18 @@
 
 .psi-blog-card__media {
     flex-shrink: 0;
-    height: 88px;
+    aspect-ratio: 1 / 1;
     overflow: hidden;
-    background: #d9d0d4;
+    background: #e8e2e5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .psi-blog-card__media img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     display: block;
 }
 
@@ -91,8 +94,5 @@
 @media (max-width: 480px) {
     .psi-blog-grid {
         grid-template-columns: 1fr;
-    }
-    .psi-blog-card__media {
-        height: 120px;
     }
 }

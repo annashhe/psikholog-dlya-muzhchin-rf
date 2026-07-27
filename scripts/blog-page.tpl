@@ -68,7 +68,7 @@
             <header>
                 <p class="article-meta"><time datetime="{{DATE}}">{{DISPLAY}}</time> · Автор: <a href="/#about">Анна Щеголихина</a>, психолог для мужчин онлайн</p>
                 <h1>{{TITLE}}</h1>
-                <img class="article-cover" src="/assets/images/blog/{{SLUG}}.jpg" width="720" height="405" alt="{{TITLE_ATTR}}" loading="eager" decoding="async" />
+                <img class="article-cover" src="/assets/images/blog/{{SLUG}}.jpg" width="720" height="720" alt="{{TITLE_ATTR}}" loading="eager" decoding="async" />
             </header>
 
             <div class="article-content">
@@ -76,7 +76,15 @@
             </div>
             <footer class="article-after">
                 <p class="article-disclaimer">Статья носит ознакомительный характер и не заменяет консультацию специалиста. Материалы не являются медицинской услугой и не содержат гарантий результата.</p>
-                <div id="psi-blog-cta"></div>
+                <div id="psi-blog-cta">
+                    <div class="psi-blog-cta">
+                        <p class="psi-blog-cta-lead">Статья носит ознакомительный характер. Чтобы разобрать именно вашу ситуацию — запишитесь на консультацию.</p>
+                        <div class="psi-blog-cta-btns">
+                            <a href="{{SITE}}/#booking" class="psi-btn psi-btn-primary psi-btn-lg">Записаться онлайн</a>
+                            <a href="{{SITE}}/#contact" class="psi-btn psi-btn-outline psi-btn-lg">Очно в Калининграде</a>
+                        </div>
+                    </div>
+                </div>
             </footer>
         </article>
     </main>

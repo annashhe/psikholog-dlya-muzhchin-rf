@@ -110,7 +110,9 @@
       footerEl.outerHTML = global.renderPsiFooter();
     }
     if (blogCtaEl && typeof global.renderBlogCta === 'function') {
-      blogCtaEl.innerHTML = global.renderBlogCta();
+      if (!blogCtaEl.querySelector('.psi-blog-cta')) {
+        blogCtaEl.innerHTML = global.renderBlogCta();
+      }
     }
   };
 

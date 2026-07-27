@@ -32,6 +32,10 @@ foreach ($a in $Articles) {
   $mark = (Read-Utf8 $markPath).Trim()
   $buduIdx = $bodyInner.IndexOf($mark)
   if ($buduIdx -ge 0) { $bodyInner = $bodyInner.Substring(0, $buduIdx).TrimEnd() }
+  $coverPath = "/assets/images/blog/$($a.slug).jpg"
+  $bodyInner = $bodyInner -replace "(?s)<p[^>]*>\s*(?:&nbsp;\s*)*<img[^>]+src=[`"']$([regex]::Escape($coverPath))[`"'][^>]*>\s*</p>", ''
+  $bodyInner = $bodyInner -replace "<img[^>]+src=[`"']$([regex]::Escape($coverPath))[`"'][^>]*>", ''
+  $bodyInner = $bodyInner -replace '(?s)<p>\s*(?:&nbsp;\s*)*</p>', ''
   $canonical = "$Site/blog/$($a.slug)/"
   $coverUrl = "$Site/assets/images/blog/$($a.slug).jpg"
   $titleAttr = ($a.title -replace '"', '&quot;')

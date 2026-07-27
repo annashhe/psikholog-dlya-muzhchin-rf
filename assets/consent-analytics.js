@@ -113,8 +113,23 @@
   };
 
   function tryLoadIfAllowed() {
-    if (typeof global.psiHasAnalyticsConsent === 'function' && global.psiHasAnalyticsConsent()) {
+    if (typeof global.psiHasAnalyticsConsent === 'function' && !global.psiHasAnalyticsConsent()) {
+      return;
+    }
+    var run = function () {
       global.psiLoadAnalytics();
+    };
+    var schedule = function () {
+      if (typeof global.requestIdleCallback === 'function') {
+        global.requestIdleCallback(run, { timeout: 3500 });
+      } else {
+        global.setTimeout(run, 2000);
+      }
+    };
+    if (document.readyState === 'complete') {
+      schedule();
+    } else {
+      global.addEventListener('load', schedule, { once: true });
     }
   }
 
