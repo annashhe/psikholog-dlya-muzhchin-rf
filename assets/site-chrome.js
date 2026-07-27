@@ -42,7 +42,30 @@
       '<a href="' +
       SITE +
       '#booking" class="psi-btn psi-btn-primary">Записаться онлайн</a>' +
-      '</nav></div></header>'
+      '</nav>' +
+      '<button type="button" class="psi-chrome-burger" id="psiChromeBurger" aria-label="Открыть меню" aria-expanded="false" aria-controls="psiChromeMobileNav">' +
+      '<span></span><span></span><span></span>' +
+      '</button>' +
+      '</div>' +
+      '<nav class="psi-chrome-mobile-nav" id="psiChromeMobileNav" aria-label="Мобильная навигация" hidden>' +
+      '<a href="' +
+      SITE +
+      '#spec">Запросы</a>' +
+      '<a href="' +
+      SITE +
+      '#reviews">Отзывы</a>' +
+      '<a href="' +
+      SITE +
+      '#pricing">Услуги и цены</a>' +
+      '<a href="/blog/">Блог</a>' +
+      '<a href="' +
+      SITE +
+      '#contact">Контакты</a>' +
+      '<a href="tel:+79137556284" class="psi-chrome-mobile-phone">+7 913 755 62 84</a>' +
+      '<a href="' +
+      SITE +
+      '#booking" class="psi-chrome-mobile-cta">Записаться онлайн</a>' +
+      '</nav></header>'
     );
   };
 
@@ -98,6 +121,34 @@
     );
   };
 
+  function bindPsiChromeBurger() {
+    var burger = document.getElementById('psiChromeBurger');
+    var mobileNav = document.getElementById('psiChromeMobileNav');
+    if (!burger || !mobileNav) return;
+
+    function setOpen(isOpen) {
+      burger.classList.toggle('open', isOpen);
+      mobileNav.classList.toggle('open', isOpen);
+      burger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      burger.setAttribute('aria-label', isOpen ? 'Закрыть меню' : 'Открыть меню');
+      if (isOpen) mobileNav.removeAttribute('hidden');
+      else mobileNav.setAttribute('hidden', '');
+      document.body.classList.toggle('psi-chrome-nav-open', isOpen);
+    }
+
+    burger.addEventListener('click', function () {
+      setOpen(!mobileNav.classList.contains('open'));
+    });
+    mobileNav.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function () {
+        setOpen(false);
+      });
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && mobileNav.classList.contains('open')) setOpen(false);
+    });
+  }
+
   global.mountPsiChrome = function () {
     var headerEl = document.getElementById('psi-chrome-header');
     var footerEl = document.getElementById('psi-chrome-footer');
@@ -114,6 +165,7 @@
         blogCtaEl.innerHTML = global.renderBlogCta();
       }
     }
+    bindPsiChromeBurger();
   };
 
   function bootChrome() {

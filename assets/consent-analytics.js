@@ -54,7 +54,8 @@
       trackLinks: true,
       accurateTrackBounce: true,
       webvisor: false,
-      ecommerce: 'dataLayer',
+      trackHash: false,
+      triggerEvent: false,
     });
   }
 
