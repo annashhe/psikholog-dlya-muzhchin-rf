@@ -85,15 +85,16 @@
   global.renderBlogCta = function () {
     return (
       '<div class="psi-blog-cta">' +
-      '<p>Готовы обсудить ваш запрос на консультации?</p>' +
+      '<p>Если после статьи хотите разобрать свою ситуацию — можно записаться на онлайн-консультацию в календаре на главной.</p>' +
       '<div class="psi-blog-cta-btns">' +
       '<a href="' +
       SITE +
-      '#booking" class="psi-btn psi-btn-primary">Записаться онлайн</a>' +
-      '<a href="' +
+      '#booking" class="psi-btn psi-btn-primary">Записаться на консультацию</a>' +
+      '</div>' +
+      '<p class="psi-blog-cta-note">Очно в Калининграде — по записи через <a href="' +
       SITE +
-      '#contact" class="psi-btn psi-btn-outline">Очно в Калининграде</a>' +
-      '</div></div>'
+      '#contact">раздел «Свяжитесь со мной»</a> (календарь только для онлайн).</p>' +
+      '</div>'
     );
   };
 

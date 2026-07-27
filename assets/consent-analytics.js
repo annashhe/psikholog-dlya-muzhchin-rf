@@ -1,6 +1,5 @@
 /**
- * Яндекс.Метрика и Google Tag — подключаются при загрузке страницы.
- * Баннер cookie только информирует; на сбор аналитики не влияет.
+ * Яндекс.Метрика и Google Tag — только после согласия на статистику (cookie-notice.js).
  */
 (function (global) {
   var METRIKA_ID = 110969154;
@@ -55,18 +54,23 @@
 
   global.psiLoadAnalytics = function () {
     if (started) return;
+    if (typeof global.psiHasAnalyticsConsent !== 'function' || !global.psiHasAnalyticsConsent()) {
+      return;
+    }
     started = true;
     loadGtag();
     loadMetrika();
   };
 
-  global.psiHasAnalyticsConsent = function () {
-    return true;
-  };
+  function tryLoadIfConsented() {
+    if (typeof global.psiHasAnalyticsConsent === 'function' && global.psiHasAnalyticsConsent()) {
+      global.psiLoadAnalytics();
+    }
+  }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', global.psiLoadAnalytics);
+    document.addEventListener('DOMContentLoaded', tryLoadIfConsented);
   } else {
-    global.psiLoadAnalytics();
+    tryLoadIfConsented();
   }
 })(window);
