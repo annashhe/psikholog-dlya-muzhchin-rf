@@ -1,0 +1,8 @@
+/* Локальный стек без Google Fonts (privacy + меньше third-party). */
+:root {
+  --psi-font: Manrope, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+  font-family: var(--psi-font);
+}

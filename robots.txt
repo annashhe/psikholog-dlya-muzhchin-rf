@@ -4,5 +4,6 @@ Disallow: /thank-you-booking/
 Disallow: /thank-you-callback/
 Disallow: /thank-you-booking.html
 Disallow: /thank-you-callback.html
+Disallow: /scripts/
 
 Sitemap: https://психолог-для-мужчин.рф/sitemap.xml

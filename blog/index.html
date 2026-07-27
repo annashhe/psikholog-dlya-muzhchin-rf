@@ -20,16 +20,14 @@
     <link rel="icon" href="../favicon.ico" sizes="any" />
     <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
-    <link rel="stylesheet" href="/assets/copy-guard.css" />
-    <script src="/assets/copy-guard.js" defer></script>
     <link rel="stylesheet" href="/assets/site-chrome.css" />
     <link rel="stylesheet" href="/assets/blog-cards.css" media="print" onload="this.media='all'" />
     <noscript><link rel="stylesheet" href="/assets/blog-cards.css" /></noscript>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="/assets/site-fonts.css" />
     <style>
         :root { --accent: #802d4b; --highlight: #802d4b; --text-muted: #6e6e6e; --border-light: #eae7ea; --muted: #6e6e6e; --border: #eae7ea; }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Manrope', sans-serif; line-height: 1.6; color: #1a1a1a; }
+        body { font-family: var(--psi-font), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.6; color: #1a1a1a; }
         .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
         html { color-scheme: light; }
         body { background: #fff; }
@@ -69,14 +67,14 @@
 <body>
     <div id="psi-chrome-header"></div>
 
-    <main class="copy-protected">
+    <main>
         <div class="container">
             <h1>Блог</h1>
             <p class="lead">Статьи про отношения, развод, ревность, тревогу и кризис — без скриптов «как вернуть» и без обещаний результата</p>
 
             <div class="psi-blog-grid">
                 <a class="psi-blog-card" href="/blog/zhena-hochet-razvoda/">
-                    <div class="psi-blog-card__media"><img src="/assets/images/blog/zhena-hochet-razvoda.jpg" width="320" height="320" alt="" loading="lazy" decoding="async" /></div>
+                    <div class="psi-blog-card__media"><img src="/assets/images/blog/zhena-hochet-razvoda.jpg" width="320" height="320" alt="Жена хочет развода: что делать мужчине — советы психолога" loading="lazy" decoding="async" /></div>
                     <div class="psi-blog-card__body">
                         <h2 class="psi-blog-card__title">Жена хочет развода: что делать мужчине — советы психолога</h2>
                         <p class="psi-blog-card__desc">Типичные ошибки и внутренние конфликты, когда партнёрша говорит о разводе.</p>
@@ -84,7 +82,7 @@
                     </div>
                 </a>
                 <a class="psi-blog-card" href="/blog/zhena-ne-hochet-imet-detey/">
-                    <div class="psi-blog-card__media"><img src="/assets/images/blog/zhena-ne-hochet-imet-detey.jpg" width="320" height="320" alt="" loading="lazy" decoding="async" /></div>
+                    <div class="psi-blog-card__media"><img src="/assets/images/blog/zhena-ne-hochet-imet-detey.jpg" width="320" height="320" alt="Жена не хочет детей: что делать мужчине — мнение психолога" loading="lazy" decoding="async" /></div>
                     <div class="psi-blog-card__body">
                         <h2 class="psi-blog-card__title">Жена не хочет детей: что делать мужчине — мнение психолога</h2>
                         <p class="psi-blog-card__desc">Ценности, страхи и диалог без давления «убедить любой ценой».</p>
@@ -92,7 +90,7 @@
                     </div>
                 </a>
                 <a class="psi-blog-card" href="/blog/govorit-li-zhene-ob-izmene/">
-                    <div class="psi-blog-card__media"><img src="/assets/images/blog/govorit-li-zhene-ob-izmene.jpg" width="320" height="320" alt="" loading="lazy" decoding="async" /></div>
+                    <div class="psi-blog-card__media"><img src="/assets/images/blog/govorit-li-zhene-ob-izmene.jpg" width="320" height="320" alt="Говорить ли жене об измене: мнение психолога для мужчин" loading="lazy" decoding="async" /></div>
                     <div class="psi-blog-card__body">
                         <h2 class="psi-blog-card__title">Говорить ли жене об измене: мнение психолога для мужчин</h2>
                         <p class="psi-blog-card__desc">Мотивы признания и молчания — без универсального «надо / не надо».</p>
@@ -100,7 +98,7 @@
                     </div>
                 </a>
                 <a class="psi-blog-card" href="/blog/hochu-razvestis-s-zhenoy/">
-                    <div class="psi-blog-card__media"><img src="/assets/images/blog/hochu-razvestis-s-zhenoy.jpg" width="320" height="320" alt="" loading="lazy" decoding="async" /></div>
+                    <div class="psi-blog-card__media"><img src="/assets/images/blog/hochu-razvestis-s-zhenoy.jpg" width="320" height="320" alt="Хочу развестись с женой: статья психолога для мужчин" loading="lazy" decoding="async" /></div>
                     <div class="psi-blog-card__body">
                         <h2 class="psi-blog-card__title">Хочу развестись с женой: статья психолога для мужчин</h2>
                         <p class="psi-blog-card__desc">Как отличить усталость от решения и что проверить в себе.</p>
@@ -108,7 +106,7 @@
                     </div>
                 </a>
                 <a class="psi-blog-card" href="/blog/psiholog-dlya-muzhchin-v-krizise/">
-                    <div class="psi-blog-card__media"><img src="/assets/images/blog/psiholog-dlya-muzhchin-v-krizise.jpg" width="320" height="320" alt="" loading="lazy" decoding="async" /></div>
+                    <div class="psi-blog-card__media"><img src="/assets/images/blog/psiholog-dlya-muzhchin-v-krizise.jpg" width="320" height="320" alt="Психолог для мужчин в кризисе: как устроена помощь" loading="lazy" decoding="async" /></div>
                     <div class="psi-blog-card__body">
                         <h2 class="psi-blog-card__title">Психолог для мужчин в кризисе: как устроена помощь</h2>
                         <p class="psi-blog-card__desc">Примеры из практики: как устроена работа без ярлыков.</p>
@@ -116,7 +114,7 @@
                     </div>
                 </a>
                 <a class="psi-blog-card" href="/blog/hochu-izbavitsya-ot-revnosti/">
-                    <div class="psi-blog-card__media"><img src="/assets/images/blog/hochu-izbavitsya-ot-revnosti.jpg" width="320" height="320" alt="" loading="lazy" decoding="async" /></div>
+                    <div class="psi-blog-card__media"><img src="/assets/images/blog/hochu-izbavitsya-ot-revnosti.jpg" width="320" height="320" alt="Как избавиться от ревности: помощь психолога" loading="lazy" decoding="async" /></div>
                     <div class="psi-blog-card__body">
                         <h2 class="psi-blog-card__title">Как избавиться от ревности: помощь психолога</h2>
                         <p class="psi-blog-card__desc">Откуда берётся ревность и что снижает «накручивание».</p>
@@ -124,7 +122,7 @@
                     </div>
                 </a>
                 <a class="psi-blog-card" href="/blog/v-chem-smysl-zhizni/">
-                    <div class="psi-blog-card__media"><img src="/assets/images/blog/v-chem-smysl-zhizni.jpg" width="320" height="320" alt="" loading="lazy" decoding="async" /></div>
+                    <div class="psi-blog-card__media"><img src="/assets/images/blog/v-chem-smysl-zhizni.jpg" width="320" height="320" alt="В чём смысл жизни: взгляд психолога" loading="lazy" decoding="async" /></div>
                     <div class="psi-blog-card__body">
                         <h2 class="psi-blog-card__title">В чём смысл жизни: взгляд психолога</h2>
                         <p class="psi-blog-card__desc">Почему вопрос о смысле встаёт в 35–50 и как искать опору.</p>
@@ -132,7 +130,7 @@
                     </div>
                 </a>
                 <a class="psi-blog-card" href="/blog/trevoga-chto-eto-otkuda/">
-                    <div class="psi-blog-card__media"><img src="/assets/images/blog/trevoga-chto-eto-otkuda.jpg" width="320" height="320" alt="" loading="lazy" decoding="async" /></div>
+                    <div class="psi-blog-card__media"><img src="/assets/images/blog/trevoga-chto-eto-otkuda.jpg" width="320" height="320" alt="Тревога: что это, откуда берётся и что с этим делать" loading="lazy" decoding="async" /></div>
                     <div class="psi-blog-card__body">
                         <h2 class="psi-blog-card__title">Тревога: что это, откуда берётся и что с этим делать</h2>
                         <p class="psi-blog-card__desc">Признаки, отличие от стресса, когда нужен специалист.</p>
@@ -140,7 +138,7 @@
                     </div>
                 </a>
                 <a class="psi-blog-card" href="/blog/kak-zabyt-cheloveka/">
-                    <div class="psi-blog-card__media"><img src="/assets/images/blog/kak-zabyt-cheloveka.jpg" width="320" height="320" alt="" loading="lazy" decoding="async" /></div>
+                    <div class="psi-blog-card__media"><img src="/assets/images/blog/kak-zabyt-cheloveka.jpg" width="320" height="320" alt="Как забыть любимого человека после расставания — советы психолога" loading="lazy" decoding="async" /></div>
                     <div class="psi-blog-card__body">
                         <h2 class="psi-blog-card__title">Как забыть любимого человека после расставания — советы психолога</h2>
                         <p class="psi-blog-card__desc">Почему «выкинуть из головы» не работает и как проживать расставание.</p>

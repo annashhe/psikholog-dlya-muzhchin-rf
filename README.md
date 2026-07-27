@@ -21,6 +21,10 @@ npx wrangler deploy
 
 Секреты в Cloudflare Dashboard → Worker `psi-leads` → Variables: `BOT_TOKEN`, `CHAT_ID`.
 
+Опционально: `TURNSTILE_SECRET_KEY` — если задан, Worker требует `turnstileToken` в теле (нужен виджет Turnstile на формах). Без секрета поведение как раньше.
+
+Клиент шлёт `Idempotency-Key`, чтобы повторная отправка не дублировала сообщение в Telegram.
+
 ## Проверка www / http → apex
 
 ```bash

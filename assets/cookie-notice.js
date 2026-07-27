@@ -143,7 +143,7 @@
       '<input type="checkbox" id="psiCookieAnalytics"' +
       (analyticsOn ? ' checked' : '') +
       ' />' +
-      '<label for="psiCookieAnalytics"><strong>Статистика посещений</strong>Обезличенная аналитика (Яндекс.Метрика, Google Tag Manager).</label>' +
+      '<label for="psiCookieAnalytics"><strong>Статистика посещений</strong>Обезличенная аналитика (Яндекс.Метрика, Google Tag).</label>' +
       '</div>' +
       '<div class="psi-cookie-modal-actions">' +
       '<button type="button" class="psi-cookie-reject-analytics">Только необходимые</button>' +

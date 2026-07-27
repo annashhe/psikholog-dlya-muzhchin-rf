@@ -1,11 +1,14 @@
 /**
  * Cloudflare Worker: заявки с сайта → Telegram.
  * Secrets/vars в Dashboard: BOT_TOKEN, CHAT_ID
+ * Optional: TURNSTILE_SECRET_KEY (если задан — нужен body.turnstileToken)
  */
 const PSY_TZ = 'Europe/Kaliningrad';
 const SITE_HOME = 'https://психолог-для-мужчин.рф';
 const RATE_LIMIT_WINDOW_SEC = 60;
 const RATE_LIMIT_MAX = 8;
+const IDEMPOTENCY_TTL_SEC = 600;
+const IDEMPOTENCY_KEY_MAX = 64;
 const NAME_MAX = 80;
 const PHONE_DIGITS_MIN = 11;
 const PHONE_DIGITS_MAX = 15;
@@ -16,6 +19,35 @@ function corsOriginForRequest(origin) {
     'https://xn-----glcflhfsdlncbk4a6bya1c4j.xn--p1ai',
   ]);
   if (origin && allowed.has(origin)) return origin;
+  return null;
+}
+
+function allowedSitePrefixes() {
+  return [
+    'https://психолог-для-мужчин.рф',
+    'https://xn-----glcflhfsdlncbk4a6bya1c4j.xn--p1ai',
+  ];
+}
+
+function corsOriginFromReferer(referer) {
+  const ref = String(referer ?? '').trim();
+  if (!ref) return null;
+  const ok = allowedSitePrefixes().some((prefix) => ref.startsWith(prefix));
+  if (!ok) return null;
+  try {
+    return corsOriginForRequest(new URL(ref).origin);
+  } catch {
+    return null;
+  }
+}
+
+function resolveCorsOrigin(request) {
+  const origin = request.headers.get('Origin') || '';
+  const fromOrigin = corsOriginForRequest(origin);
+  if (fromOrigin) return fromOrigin;
+  if (!origin) {
+    return corsOriginFromReferer(request.headers.get('Referer') || '');
+  }
   return null;
 }
 
@@ -211,14 +243,57 @@ async function checkRateLimit(request) {
   return true;
 }
 
+function idempotencyCacheRequest(rawKey) {
+  const key = String(rawKey ?? '').trim().slice(0, IDEMPOTENCY_KEY_MAX);
+  if (!key) return null;
+  return new Request(`https://psi-leads.idem/${encodeURIComponent(key)}`);
+}
+
+async function idempotencyHit(cacheReq) {
+  if (!cacheReq) return false;
+  const hit = await caches.default.match(cacheReq);
+  return Boolean(hit);
+}
+
+async function idempotencyStore(cacheReq) {
+  if (!cacheReq) return;
+  await caches.default.put(
+    cacheReq,
+    new Response('1', {
+      headers: { 'Cache-Control': `max-age=${IDEMPOTENCY_TTL_SEC}` },
+    })
+  );
+}
+
+function clientIp(request) {
+  return (
+    request.headers.get('CF-Connecting-IP') ||
+    request.headers.get('X-Forwarded-For')?.split(',')[0]?.trim() ||
+    ''
+  );
+}
+
+async function verifyTurnstile(token, env, ip) {
+  const form = new URLSearchParams();
+  form.set('secret', env.TURNSTILE_SECRET_KEY);
+  form.set('response', token);
+  if (ip) form.set('remoteip', ip);
+  const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+    method: 'POST',
+    body: form,
+  });
+  if (!res.ok) return false;
+  const data = await res.json();
+  return Boolean(data && data.success);
+}
+
 export default {
   async fetch(request, env) {
-    const origin = request.headers.get('Origin') || '';
-    const corsOrigin = corsOriginForRequest(origin);
+    const corsOrigin = resolveCorsOrigin(request);
 
     const corsHeaders = {
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Headers': 'Content-Type, Idempotency-Key',
     };
     if (corsOrigin) {
       corsHeaders['Access-Control-Allow-Origin'] = corsOrigin;
@@ -245,6 +320,26 @@ export default {
 
       if (body.website) {
         return Response.json({ ok: true }, { headers: corsHeaders });
+      }
+
+      const idemHeader = request.headers.get('Idempotency-Key');
+      const idemRaw =
+        (idemHeader && String(idemHeader).trim()) ||
+        (body.idempotencyKey != null ? String(body.idempotencyKey).trim() : '');
+      const idemCacheReq = idempotencyCacheRequest(idemRaw);
+      if (idemCacheReq && (await idempotencyHit(idemCacheReq))) {
+        return Response.json({ ok: true }, { headers: corsHeaders });
+      }
+
+      if (env.TURNSTILE_SECRET_KEY) {
+        const token = body.turnstileToken != null ? String(body.turnstileToken).trim() : '';
+        if (!token) {
+          return Response.json({ error: 'Captcha required' }, { status: 400, headers: corsHeaders });
+        }
+        const ip = clientIp(request);
+        if (!(await verifyTurnstile(token, env, ip))) {
+          return Response.json({ error: 'Captcha failed' }, { status: 403, headers: corsHeaders });
+        }
       }
 
       if (!isValidName(body.name) || !isValidPhone(body.phone)) {
@@ -285,6 +380,10 @@ export default {
       if (!tgRes.ok) {
         console.error('Telegram status', tgRes.status);
         return Response.json({ error: 'Telegram error' }, { status: 502, headers: corsHeaders });
+      }
+
+      if (idemCacheReq) {
+        await idempotencyStore(idemCacheReq);
       }
 
       return Response.json({ ok: true }, { headers: corsHeaders });
