@@ -8,15 +8,17 @@
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/assets/thank-you-page.css" />
-    <script src="/assets/lead-tracking.js"></script>
+    <link rel="stylesheet" href="/assets/blog-cards.css" />
+    <link rel="stylesheet" href="/assets/site-chrome.css" />
+    <script src="/assets/lead-tracking.js" defer></script>
+    <script src="/assets/cookie-notice.js" defer></script>
+    <script src="/assets/consent-analytics.js" defer></script>
+    <script src="/assets/analytics-events.js" defer></script>
+    <script src="/assets/blog-articles-data.js" defer></script>
+    <script src="/assets/site-chrome.js" defer></script>
 </head>
-<body>
-    <header class="header">
-        <div class="container header-inner">
-            <a href="https://психолог-для-мужчин.рф/">Анна Щеголихина <span>·</span> Психолог</a>
-            <a href="https://психолог-для-мужчин.рф/" class="header-back">← На главную</a>
-        </div>
-    </header>
+<body data-psi-header="minimal">
+    <div id="psi-chrome-header"></div>
     <main>
         <div class="container">
             <div class="card">
@@ -26,10 +28,22 @@
                 <a class="btn" href="https://психолог-для-мужчин.рф/#booking" style="margin-left:0.5rem;background:transparent;color:#b4436c;border:1px solid #b4436c;">Записаться онлайн</a></p>
                 <p style="margin-top:1rem;font-size:0.9rem;color:#6e6e6e;">Или напишите в <a href="https://t.me/annashhe" target="_blank" rel="noopener">Telegram</a>.</p>
             </div>
+            <div id="psi404Articles"></div>
         </div>
     </main>
-    <footer class="footer">
-        <div class="container">© 2026 Анна Щеголихина</div>
-    </footer>
+    <div id="psi-chrome-footer"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var el = document.getElementById('psi404Articles');
+            if (el && typeof window.renderPsiBlogCards === 'function') {
+                el.innerHTML = window.renderPsiBlogCards({
+                    limit: 4,
+                    showAllBtn: true,
+                    heading: 'Может быть полезно из блога',
+                    headingId: 'psi404-articles-title',
+                });
+            }
+        });
+    </script>
 </body>
 </html>

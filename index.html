@@ -14,6 +14,7 @@
     <link rel="icon" href="favicon.ico" sizes="any" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <link rel="stylesheet" href="assets/blog-cards.css" />
     <script src="assets/lead-tracking.js" defer></script>
     <script src="assets/cookie-notice.js" defer></script>
     <script src="assets/consent-analytics.js" defer></script>
@@ -329,65 +330,6 @@
             color: var(--text-muted);
             margin-top: 0.35rem;
             line-height: 1.45;
-        }
-
-        /* Карточки блога на главной */
-        .blog-teaser-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.25rem;
-        }
-        .blog-teaser-card {
-            display: flex;
-            flex-direction: column;
-            background: var(--bg-white);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-            transition: box-shadow 0.25s ease, transform 0.25s ease;
-            text-decoration: none;
-            color: inherit;
-            height: 100%;
-        }
-        .blog-teaser-card:hover {
-            box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
-        }
-        .blog-teaser-card img {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            object-fit: cover;
-            background: #d9d0d4;
-        }
-        .blog-teaser-card-body {
-            padding: 1rem 1.15rem 1.2rem;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        .blog-teaser-card h3 {
-            font-size: 1rem;
-            line-height: 1.35;
-            color: var(--highlight);
-            margin-bottom: 0.45rem;
-        }
-        .blog-teaser-card p {
-            font-size: 0.88rem;
-            color: var(--text-muted);
-            line-height: 1.5;
-            margin: 0;
-            flex: 1;
-        }
-        .blog-teaser-card time {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            margin-top: 0.65rem;
-        }
-        @media (max-width: 640px) {
-            .blog-teaser-grid {
-                grid-template-columns: 1fr;
-            }
         }
 
         /* Форма: honeypot — скрытое поле от ботов */
@@ -2947,41 +2889,41 @@
                 <h2 id="blog-teaser-title">Статьи из блога</h2>
                 <p>Разборы частых запросов — без готовых скриптов и гарантий результата</p>
             </div>
-            <div class="blog-teaser-grid">
-                <a class="blog-teaser-card" href="/blog/zhena-hochet-razvoda/">
-                    <img src="assets/images/blog/zhena-hochet-razvoda.jpg" width="640" height="360" alt="" loading="lazy" decoding="async" />
-                    <div class="blog-teaser-card-body">
-                        <h3>Жена хочет развода: типичные реакции и ошибки</h3>
-                        <p>Когда партнёрша говорит о разводе — что часто происходит внутри и снаружи.</p>
+            <div class="psi-blog-grid">
+                <a class="psi-blog-card" href="/blog/zhena-hochet-razvoda/">
+                    <div class="psi-blog-card__media"><img src="assets/images/blog/zhena-hochet-razvoda.jpg" width="320" height="180" alt="" loading="lazy" decoding="async" /></div>
+                    <div class="psi-blog-card__body">
+                        <h3 class="psi-blog-card__title">Жена хочет развода: типичные реакции и ошибки</h3>
+                        <p class="psi-blog-card__desc">Когда партнёрша говорит о разводе — что часто происходит внутри и снаружи.</p>
                         <time datetime="2026-06-17">17 июня 2026</time>
                     </div>
                 </a>
-                <a class="blog-teaser-card" href="/blog/psiholog-dlya-muzhchin-v-krizise/">
-                    <img src="assets/images/blog/psiholog-dlya-muzhchin-v-krizise.jpg" width="640" height="360" alt="" loading="lazy" decoding="async" />
-                    <div class="blog-teaser-card-body">
-                        <h3>Психолог для мужчин в кризисе</h3>
-                        <p>Как устроена помощь без ярлыков и давления — примеры из практики.</p>
+                <a class="psi-blog-card" href="/blog/psiholog-dlya-muzhchin-v-krizise/">
+                    <div class="psi-blog-card__media"><img src="assets/images/blog/psiholog-dlya-muzhchin-v-krizise.jpg" width="320" height="180" alt="" loading="lazy" decoding="async" /></div>
+                    <div class="psi-blog-card__body">
+                        <h3 class="psi-blog-card__title">Психолог для мужчин в кризисе</h3>
+                        <p class="psi-blog-card__desc">Как устроена помощь без ярлыков и давления — примеры из практики.</p>
                         <time datetime="2026-05-15">15 мая 2026</time>
                     </div>
                 </a>
-                <a class="blog-teaser-card" href="/blog/trevoga-chto-eto-otkuda/">
-                    <img src="assets/images/blog/trevoga-chto-eto-otkuda.jpg" width="640" height="360" alt="" loading="lazy" decoding="async" />
-                    <div class="blog-teaser-card-body">
-                        <h3>Тревога: что это и откуда берётся</h3>
-                        <p>Признаки, отличие от стресса и что можно сделать самому.</p>
+                <a class="psi-blog-card" href="/blog/trevoga-chto-eto-otkuda/">
+                    <div class="psi-blog-card__media"><img src="assets/images/blog/trevoga-chto-eto-otkuda.jpg" width="320" height="180" alt="" loading="lazy" decoding="async" /></div>
+                    <div class="psi-blog-card__body">
+                        <h3 class="psi-blog-card__title">Тревога: что это и откуда берётся</h3>
+                        <p class="psi-blog-card__desc">Признаки, отличие от стресса и что можно сделать самому.</p>
                         <time datetime="2026-04-29">29 апреля 2026</time>
                     </div>
                 </a>
-                <a class="blog-teaser-card" href="/blog/hochu-razvestis-s-zhenoy/">
-                    <img src="assets/images/blog/hochu-razvestis-s-zhenoy.jpg" width="640" height="360" alt="" loading="lazy" decoding="async" />
-                    <div class="blog-teaser-card-body">
-                        <h3>Хочу развестись с женой: как принять решение</h3>
-                        <p>Как отличить усталость от решения и что проверить в себе.</p>
+                <a class="psi-blog-card" href="/blog/hochu-razvestis-s-zhenoy/">
+                    <div class="psi-blog-card__media"><img src="assets/images/blog/hochu-razvestis-s-zhenoy.jpg" width="320" height="180" alt="" loading="lazy" decoding="async" /></div>
+                    <div class="psi-blog-card__body">
+                        <h3 class="psi-blog-card__title">Хочу развестись с женой: как принять решение</h3>
+                        <p class="psi-blog-card__desc">Как отличить усталость от решения и что проверить в себе.</p>
                         <time datetime="2026-06-01">1 июня 2026</time>
                     </div>
                 </a>
             </div>
-            <p style="margin:1.5rem 0 0;text-align:center;"><a href="/blog/" class="btn btn-outline btn-sm">Все статьи</a></p>
+            <p class="psi-blog-all-wrap"><a href="/blog/" class="btn btn-outline btn-sm">Показать все статьи психолога</a></p>
         </div>
     </section>
 

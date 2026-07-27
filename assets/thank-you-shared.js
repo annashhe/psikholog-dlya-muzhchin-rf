@@ -61,54 +61,14 @@
     return map.individual;
   };
 
-  var ARTICLES = [
-    {
-      url: '/blog/zhena-hochet-razvoda/',
-      title: 'Жена хочет развода: что делать мужчине — советы психолога',
-      desc: 'Типичные ошибки и спокойные шаги, когда жена говорит о разводе.',
-      date: '17 июня 2026',
-    },
-    {
-      url: '/blog/psiholog-dlya-muzhchin-v-krizise/',
-      title: 'Психолог для мужчин в кризисе: как устроена помощь',
-      desc: 'Почему мужчины приходят поздно и как выглядит работа без ярлыков.',
-      date: '15 мая 2026',
-    },
-    {
-      url: '/blog/trevoga-chto-eto-otkuda/',
-      title: 'Тревога: что это, откуда берётся и что с этим делать',
-      desc: 'Признаки тревоги и бережные шаги — без обещаний «вылечим за N дней».',
-      date: '29 апреля 2026',
-    },
-  ];
-
   global.renderThankYouArticles = function () {
-    if (!ARTICLES.length) return '';
-    var items = ARTICLES.map(function (a) {
-      return (
-        '<article class="article-card">' +
-        '<h3><a href="' +
-        a.url +
-        '">' +
-        a.title +
-        '</a></h3>' +
-        '<p>' +
-        a.desc +
-        '</p>' +
-        '<time>' +
-        a.date +
-        '</time>' +
-        '</article>'
-      );
-    }).join('');
-    return (
-      '<section class="articles-block" aria-labelledby="thank-you-articles-title">' +
-      '<h2 id="thank-you-articles-title">Также вы можете почитать мои статьи</h2>' +
-      '<div class="articles-list">' +
-      items +
-      '</div>' +
-      '<p class="psi-thank-you-more"><a href="/blog/" class="psi-btn psi-btn-outline">Показать больше статей</a></p>' +
-      '</section>'
-    );
+    if (typeof global.renderPsiBlogCards === 'function') {
+      return global.renderPsiBlogCards({
+        limit: 4,
+        showAllBtn: true,
+        headingId: 'thank-you-articles-title',
+      });
+    }
+    return '';
   };
 })(window);
