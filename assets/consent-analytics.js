@@ -1,5 +1,6 @@
 /**
- * Яндекс.Метрика и Google Tag — только после согласия на статистику (cookie-notice.js).
+ * Яндекс.Метрика и Google Tag.
+ * По умолчанию статистика включена до явного отказа в настройках cookie (cookie-notice.js).
  */
 (function (global) {
   var METRIKA_ID = 110969154;
@@ -15,6 +16,11 @@
       function () {
         global.dataLayer.push(arguments);
       };
+    global.gtag('consent', 'default', {
+      analytics_storage: 'granted',
+      ad_storage: 'denied',
+      wait_for_update: 500,
+    });
     global.gtag('js', new Date());
     global.gtag('config', GTAG_ID);
     var s = document.createElement('script');
@@ -52,9 +58,40 @@
     });
   }
 
+  function deleteCookie(name, path, domain) {
+    var expires = 'Thu, 01 Jan 1970 00:00:00 GMT';
+    document.cookie = name + '=; expires=' + expires + '; path=' + (path || '/') + ';';
+    if (domain) {
+      document.cookie = name + '=; expires=' + expires + '; path=' + (path || '/') + '; domain=' + domain + ';';
+    }
+  }
+
+  function clearAnalyticsCookies() {
+    var host = global.location && global.location.hostname;
+    var parts = host ? host.split('.') : [];
+    var domains = [''];
+    if (host) {
+      domains.push(host);
+      if (parts.length > 1) domains.push('.' + parts.slice(-2).join('.'));
+    }
+    var raw = document.cookie ? document.cookie.split(';') : [];
+    var names = [];
+    for (var i = 0; i < raw.length; i++) {
+      var pair = raw[i].trim().split('=');
+      var n = pair[0];
+      if (/^(_ym|_ga|_gid|_gat)/.test(n)) names.push(n);
+    }
+    names.forEach(function (name) {
+      domains.forEach(function (d) {
+        deleteCookie(name, '/', d || undefined);
+      });
+    });
+  }
+
   global.psiLoadAnalytics = function () {
+    if (global.__psiAnalyticsDisabled) return;
     if (started) return;
-    if (typeof global.psiHasAnalyticsConsent !== 'function' || !global.psiHasAnalyticsConsent()) {
+    if (typeof global.psiHasAnalyticsConsent === 'function' && !global.psiHasAnalyticsConsent()) {
       return;
     }
     started = true;
@@ -62,15 +99,28 @@
     loadMetrika();
   };
 
-  function tryLoadIfConsented() {
+  global.psiStopAnalytics = function () {
+    global.__psiAnalyticsDisabled = true;
+    clearAnalyticsCookies();
+    if (typeof global.gtag === 'function') {
+      try {
+        global.gtag('consent', 'update', {
+          analytics_storage: 'denied',
+          ad_storage: 'denied',
+        });
+      } catch (e) {}
+    }
+  };
+
+  function tryLoadIfAllowed() {
     if (typeof global.psiHasAnalyticsConsent === 'function' && global.psiHasAnalyticsConsent()) {
       global.psiLoadAnalytics();
     }
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', tryLoadIfConsented);
+    document.addEventListener('DOMContentLoaded', tryLoadIfAllowed);
   } else {
-    tryLoadIfConsented();
+    tryLoadIfAllowed();
   }
 })(window);

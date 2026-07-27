@@ -3,7 +3,7 @@
  * Цели Метрики: lead_callback, lead_booking, click_phone, click_telegram, click_max, click_whatsapp, click_blog_cta
  */
 window.psiMetrikaGoal = function (goalId, params) {
-  if (!goalId) return;
+  if (!goalId || window.__psiAnalyticsDisabled) return;
   try {
     if (typeof window.gtag === 'function') {
       window.gtag('event', goalId, params || {});

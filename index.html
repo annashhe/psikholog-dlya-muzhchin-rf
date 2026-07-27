@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
     <!-- SEO: основной домен психолог-для-мужчин.рф -->
-    <title>Психолог для мужчин онлайн и очно | Анна Щеголихина</title>
-    <meta name="description" content="Психолог для мужчин: в основном онлайн, также очно в Калининграде. Кризис отношений, тревога, выгорание. Связь и сессии Пн–Вс 9–21 по калининградскому времени." />
+    <title>Психолог для мужчин онлайн и в Калининграде | Анна Щеголихина</title>
+    <meta name="description" content="Отношения, тревога, выгорание, развод — консультации онлайн по всему миру и очно в Калининграде. Запись в календаре на сайте. Пн–Вс 9–21 (Калининград)." />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://психолог-для-мужчин.рф/" />
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
@@ -25,15 +26,15 @@
           href="assets/images/hero-460.webp"
           fetchpriority="high" />
 
-    <meta property="og:title" content="Психолог для мужчин онлайн и очно | Анна Щеголихина" />
-    <meta property="og:description" content="Психолог для мужчин: в основном онлайн, также очно в Калининграде. Кризис отношений, тревога, выгорание. Связь и сессии Пн–Вс 9–21 по калининградскому времени." />
+    <meta property="og:title" content="Психолог для мужчин онлайн и в Калининграде | Анна Щеголихина" />
+    <meta property="og:description" content="Отношения, тревога, выгорание, развод — консультации онлайн по всему миру и очно в Калининграде. Запись в календаре на сайте. Пн–Вс 9–21 (Калининград)." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://психолог-для-мужчин.рф/" />
     <meta property="og:image" content="https://психолог-для-мужчин.рф/assets/images/hero-920.webp" />
     <meta property="og:locale" content="ru_RU" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Психолог для мужчин онлайн и очно | Анна Щеголихина" />
-    <meta name="twitter:description" content="Онлайн-психолог для мужчин. Также очно в Калининграде. Кризис отношений, тревога, выгорание." />
+    <meta name="twitter:title" content="Психолог для мужчин онлайн и в Калининграде | Анна Щеголихина" />
+    <meta name="twitter:description" content="Психолог для мужчин: онлайн и очно в Калининграде. Кризис в паре, тревога, усталость — запись на сайте." />
     <meta name="twitter:image" content="https://психолог-для-мужчин.рф/assets/images/hero-920.webp" />
 
     <style>
@@ -73,6 +74,8 @@
         html {
             scroll-behavior: smooth;
             -webkit-font-smoothing: antialiased;
+            color-scheme: light;
+            background-color: #ffffff;
         }
         body {
             font-family: var(--font);
@@ -81,6 +84,27 @@
             color: var(--text-primary);
             background: var(--bg-white);
             overflow-x: hidden;
+        }
+        @media (prefers-color-scheme: dark) {
+            html {
+                color-scheme: light;
+                background-color: #ffffff;
+            }
+            body {
+                background: #ffffff;
+                color: #1a1a1a;
+            }
+            .header {
+                background: rgba(255, 255, 255, 0.98);
+            }
+            a {
+                color: var(--accent);
+            }
+            .btn-outline {
+                color: var(--btn-bg);
+                border-color: var(--btn-bg);
+                background: #fff;
+            }
         }
         img {
             max-width: 100%;
@@ -307,6 +331,65 @@
             line-height: 1.45;
         }
 
+        /* Карточки блога на главной */
+        .blog-teaser-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+        }
+        .blog-teaser-card {
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.25s ease, transform 0.25s ease;
+            text-decoration: none;
+            color: inherit;
+            height: 100%;
+        }
+        .blog-teaser-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        .blog-teaser-card img {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            background: #d9d0d4;
+        }
+        .blog-teaser-card-body {
+            padding: 1rem 1.15rem 1.2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .blog-teaser-card h3 {
+            font-size: 1rem;
+            line-height: 1.35;
+            color: var(--highlight);
+            margin-bottom: 0.45rem;
+        }
+        .blog-teaser-card p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin: 0;
+            flex: 1;
+        }
+        .blog-teaser-card time {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 0.65rem;
+        }
+        @media (max-width: 640px) {
+            .blog-teaser-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* Форма: honeypot — скрытое поле от ботов */
         .hp-field {
             position: absolute;
@@ -350,7 +433,7 @@
             display: none;
             flex-direction: column;
             width: 100%;
-            padding: 24px 0; /* UX: увеличенные отступы мобильного меню */
+            padding: 16px 24px 24px;
             gap: 18px;
             border-top: 1px solid var(--border-light);
         }
@@ -1706,6 +1789,10 @@
             .container {
                 padding: 0 16px;
             }
+            .mobile-nav {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
             .pricing-card {
                 padding: 24px 16px;
             }
@@ -1930,7 +2017,7 @@
 </head>
 <body>
 
-    <!-- Аналитика — только после выбора в cookie-notice.js -->
+    <!-- Cookie и аналитика: см. cookie-notice.js, consent-analytics.js и раздел 10 политики -->
 
     <!-- ===== HEADER ===== -->
     <header class="header" role="banner">
@@ -1981,7 +2068,7 @@
             <div class="hero-content">
                 <span class="badge">Психолог для мужчин</span>
                 <h1>Помогаю <span class="highlight accent-dark">мужчинам</span> — в отношениях и жизни</h1>
-                <p class="subhead">Анна Щеголихина — клинический и семейный психолог. Онлайн по всей России и очно в Калининграде.</p>
+                <p class="subhead">Анна Щеголихина — клинический и семейный психолог. Онлайн по всему миру и очно в Калининграде</p>
                 <p class="subhead2">Более 75% моих клиентов в индивидуальной работе — мужчины. Разбираем ситуацию спокойно и по делу: что происходит и какие есть варианты дальше</p>
 
                 <div class="quote-block">
@@ -2480,7 +2567,7 @@
             <div class="steps-meta">
                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
                 Онлайн или очно · 50 или 90 минут
-                <br><span style="font-size:0.8rem;color:var(--text-muted);">Онлайн: за 5–10 минут до встречи присылаю ссылку на видеосвязь (Телемост, Джаз, VK или MAX). Запись и переписка — Telegram, WhatsApp, MAX или SMS</span>
+                <br><span style="font-size:0.8rem;color:var(--text-muted);">Онлайн: за 5–10 минут до встречи присылаю ссылку на видеосвязь в согласованном мессенджере (Telegram, WhatsApp, MAX)</span>
             </div>
         </div>
     </section>
@@ -2721,11 +2808,12 @@
                 <div class="location-info">
                     <h3>Онлайн — из любого города</h3>
                     <p style="color:var(--text-secondary);">
-                        Видеосессии для клиентов из России и по всему миру. Время встречи согласуем с учётом вашего пояса. Запись — через <a href="#booking">календарь на этой странице</a>
+                        Видеосессии для клиентов из России и по всему миру. Запись — через <a href="#booking">календарь на этой странице</a>
                     </p>
                     <ul style="margin:0.8rem 0 0 1.2rem;color:var(--text-secondary);">
-                        <li>ссылку на видеосвязь присылаю за 5–10 минут до сессии (Телемост, Джаз, VK или MAX — как договоримся); запись и напоминания — в Telegram, WhatsApp, MAX или SMS</li>
-                        <li>для сессии нужны тихое место и интернет: дома, в машине или в переговорке — главное, чтобы вас никто не перебивал (в парной — без посторонних)</li>
+                        <li>ссылку на видеосвязь присылаю за 5–10 минут до сессии в согласованном мессенджере (Telegram, WhatsApp, MAX) или SMS</li>
+                        <li>ничего скачивать не нужно — ссылка откроется в вашем браузере</li>
+                        <li>для сессии нужны тихое место и стабильный интернет: дома, в машине или в переговорке — главное, чтобы вам никто не мешал</li>
                     </ul>
 
                     <div class="location-offline">
@@ -2859,13 +2947,41 @@
                 <h2 id="blog-teaser-title">Статьи из блога</h2>
                 <p>Разборы частых запросов — без готовых скриптов и гарантий результата</p>
             </div>
-            <ul style="list-style:none;padding:0;margin:0;display:grid;gap:0.9rem;">
-                <li><a href="/blog/zhena-hochet-razvoda/" style="color:var(--accent);font-weight:600;text-decoration:none;">Жена хочет развода: типичные реакции и ошибки</a></li>
-                <li><a href="/blog/psiholog-dlya-muzhchin-v-krizise/" style="color:var(--accent);font-weight:600;text-decoration:none;">Психолог для мужчин в кризисе: как устроена помощь</a></li>
-                <li><a href="/blog/trevoga-chto-eto-otkuda/" style="color:var(--accent);font-weight:600;text-decoration:none;">Тревога: что это, откуда берётся и что можно сделать</a></li>
-                <li><a href="/blog/hochu-razvestis-s-zhenoy/" style="color:var(--accent);font-weight:600;text-decoration:none;">Хочу развестись с женой: как принять решение</a></li>
-            </ul>
-            <p style="margin:1.2rem 0 0;"><a href="/blog/" class="btn btn-outline btn-sm">Все статьи</a></p>
+            <div class="blog-teaser-grid">
+                <a class="blog-teaser-card" href="/blog/zhena-hochet-razvoda/">
+                    <img src="assets/images/blog/zhena-hochet-razvoda.jpg" width="640" height="360" alt="" loading="lazy" decoding="async" />
+                    <div class="blog-teaser-card-body">
+                        <h3>Жена хочет развода: типичные реакции и ошибки</h3>
+                        <p>Когда партнёрша говорит о разводе — что часто происходит внутри и снаружи.</p>
+                        <time datetime="2026-06-17">17 июня 2026</time>
+                    </div>
+                </a>
+                <a class="blog-teaser-card" href="/blog/psiholog-dlya-muzhchin-v-krizise/">
+                    <img src="assets/images/blog/psiholog-dlya-muzhchin-v-krizise.jpg" width="640" height="360" alt="" loading="lazy" decoding="async" />
+                    <div class="blog-teaser-card-body">
+                        <h3>Психолог для мужчин в кризисе</h3>
+                        <p>Как устроена помощь без ярлыков и давления — примеры из практики.</p>
+                        <time datetime="2026-05-15">15 мая 2026</time>
+                    </div>
+                </a>
+                <a class="blog-teaser-card" href="/blog/trevoga-chto-eto-otkuda/">
+                    <img src="assets/images/blog/trevoga-chto-eto-otkuda.jpg" width="640" height="360" alt="" loading="lazy" decoding="async" />
+                    <div class="blog-teaser-card-body">
+                        <h3>Тревога: что это и откуда берётся</h3>
+                        <p>Признаки, отличие от стресса и что можно сделать самому.</p>
+                        <time datetime="2026-04-29">29 апреля 2026</time>
+                    </div>
+                </a>
+                <a class="blog-teaser-card" href="/blog/hochu-razvestis-s-zhenoy/">
+                    <img src="assets/images/blog/hochu-razvestis-s-zhenoy.jpg" width="640" height="360" alt="" loading="lazy" decoding="async" />
+                    <div class="blog-teaser-card-body">
+                        <h3>Хочу развестись с женой: как принять решение</h3>
+                        <p>Как отличить усталость от решения и что проверить в себе.</p>
+                        <time datetime="2026-06-01">1 июня 2026</time>
+                    </div>
+                </a>
+            </div>
+            <p style="margin:1.5rem 0 0;text-align:center;"><a href="/blog/" class="btn btn-outline btn-sm">Все статьи</a></p>
         </div>
     </section>
 
@@ -3006,6 +3122,8 @@
                 <a href="/privacy-policy/" target="_blank" rel="noopener">Политика конфиденциальности</a>
                 <span style="margin:0 8px;">·</span>
                 <a href="/consent/" target="_blank" rel="noopener">Согласие на обработку данных</a>
+                <span style="margin:0 8px;">·</span>
+                <a href="#" class="js-cookie-settings">Настройки cookie</a>
                 </p>
                 <p style="margin:0;font-size:0.8rem;color:var(--text-muted);">Сайт носит информационный характер и не заменяет очную консультацию специалиста. Материалы не являются медицинской услугой и не содержат гарантий результата. · 18+</p>
             </div>
@@ -3030,7 +3148,7 @@
             <h2 id="consentModalTitle">Согласие на обработку персональных данных</h2>
             <p>Настоящим я даю своё согласие физическому лицу, являющемуся плательщиком налога на профессиональный доход (самозанятой) <strong>Щеголихиной Анне Михайловне</strong> (далее — Оператор), на обработку моих персональных данных на условиях ниже и в соответствии с <a href="/privacy-policy/" target="_blank" rel="noopener">Политикой конфиденциальности</a>.</p>
             <h3>1. Перечень данных</h3>
-            <p>Имя (и фамилия — при указании), телефон, адрес электронной почты (при указании), выбранный способ связи, содержание обращений через форму сайта или мессенджеры; технические данные (IP, cookie, данные аналитики) при посещении сайта.</p>
+            <p>Имя (и фамилия — при указании), телефон, адрес электронной почты (при указании), выбранный способ связи, содержание обращений через форму сайта или мессенджеры; технические данные (IP, cookie, данные аналитики по разделу 10 Политики).</p>
             <h3>2. Цели обработки</h3>
             <ul>
                 <li>обратная связь и запись на консультацию;</li>
@@ -3080,6 +3198,15 @@
             if (typeof window.mountPsiCookieNotice === 'function') {
                 window.mountPsiCookieNotice();
             }
+            document.addEventListener('click', function (e) {
+                var link = e.target && e.target.closest && e.target.closest('.js-cookie-settings');
+                if (link) {
+                    e.preventDefault();
+                    if (typeof window.psiOpenCookieSettings === 'function') {
+                        window.psiOpenCookieSettings();
+                    }
+                }
+            });
 
             // ===== СПОЙЛЕР ДЛЯ ОБРАЗОВАНИЯ =====
             var toggleBtn = document.getElementById('certToggle');

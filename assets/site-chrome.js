@@ -75,7 +75,7 @@
       SITE +
       '">Психолог для мужчин онлайн</a> · <a href="' +
       SITE +
-      '#about">Об Анне</a> · <a href="/blog/">Блог</a> · <a href="/oferta/" target="_blank" rel="noopener">Публичная оферта</a> · <a href="/privacy-policy/" target="_blank" rel="noopener">Политика конфиденциальности</a> · <a href="/consent/" target="_blank" rel="noopener">Согласие на обработку данных</a>' +
+      '#about">Об Анне</a> · <a href="/blog/">Блог</a> · <a href="/oferta/" target="_blank" rel="noopener">Публичная оферта</a> · <a href="/privacy-policy/" target="_blank" rel="noopener">Политика конфиденциальности</a> · <a href="/consent/" target="_blank" rel="noopener">Согласие на обработку данных</a> · <a href="#" class="js-cookie-settings">Настройки cookie</a>' +
       '</p>' +
       '<p style="margin:0;font-size:0.8rem;">Сайт носит информационный характер и не заменяет очную консультацию специалиста. Материалы не являются медицинской услугой и не содержат гарантий результата. · 18+</p>' +
       '</div></footer>'
@@ -85,15 +85,15 @@
   global.renderBlogCta = function () {
     return (
       '<div class="psi-blog-cta">' +
-      '<p>Если после статьи хотите разобрать свою ситуацию — можно записаться на онлайн-консультацию в календаре на главной.</p>' +
+      '<p class="psi-blog-cta-lead">Статья носит ознакомительный характер. Чтобы разобрать именно вашу ситуацию — запишитесь на консультацию.</p>' +
       '<div class="psi-blog-cta-btns">' +
       '<a href="' +
       SITE +
-      '#booking" class="psi-btn psi-btn-primary">Записаться на консультацию</a>' +
-      '</div>' +
-      '<p class="psi-blog-cta-note">Очно в Калининграде — по записи через <a href="' +
+      '#booking" class="psi-btn psi-btn-primary psi-btn-lg">Записаться онлайн</a>' +
+      '<a href="' +
       SITE +
-      '#contact">раздел «Свяжитесь со мной»</a> (календарь только для онлайн).</p>' +
+      '#contact" class="psi-btn psi-btn-outline psi-btn-lg">Очно в Калининграде</a>' +
+      '</div>' +
       '</div>'
     );
   };
@@ -116,6 +116,15 @@
 
   function bootChrome() {
     global.mountPsiChrome();
+    document.addEventListener('click', function (e) {
+      var t = e.target;
+      if (t && t.closest && t.closest('.js-cookie-settings')) {
+        e.preventDefault();
+        if (typeof global.psiOpenCookieSettings === 'function') {
+          global.psiOpenCookieSettings();
+        }
+      }
+    });
     if (typeof global.mountPsiCookieNotice === 'function') {
       global.mountPsiCookieNotice();
     }

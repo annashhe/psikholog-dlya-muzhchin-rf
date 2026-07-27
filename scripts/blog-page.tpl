@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
     <title>{{TITLE}}</title>
     <meta name="description" content="{{DESC}}" />
     <meta name="robots" content="index, follow" />
@@ -27,8 +28,9 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" />
     <style>
         :root { --accent: #802d4b; --muted: #6e6e6e; --border: #eae7ea; --bg: #f6f4f6; }
+        html { color-scheme: light; background: #fff; }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Manrope', sans-serif; line-height: 1.75; color: #1a1a1a; }
+        body { font-family: 'Manrope', sans-serif; line-height: 1.75; color: #1a1a1a; background: #fff; }
         .container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
         .container-wide { max-width: 900px; margin: 0 auto; padding: 0 24px; }
         .breadcrumbs { background: var(--bg); border-bottom: 1px solid var(--border); padding: 10px 0; font-size: .85rem; }
@@ -36,7 +38,7 @@
         .breadcrumbs li { color: var(--muted); }
         .breadcrumbs li:not(:last-child)::after { content: '›'; margin-left: 6px; }
         .breadcrumbs a { color: var(--muted); text-decoration: none; }
-        main { padding: 48px 0 64px; }
+        main { padding: 48px 0 32px; }
         .article-meta { color: var(--muted); font-size: .9rem; margin-bottom: 1.5rem; }
         h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); margin-bottom: .8rem; line-height: 1.25; color: var(--accent); }
         .note-box { background: var(--bg); padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 12px; border: 1px solid var(--border); font-size: .95rem; color: #3d3d3d; }
@@ -70,13 +72,15 @@
             </header>
 
             <div class="article-content">
-                <div class="note-box">Материал для ознакомления, не заменяет консультацию психолога. Гарантий результата нет. При насилии или угрозе безопасности — обращайтесь за профильной помощью.</div>
 {{BODY}}
             </div>
+            <footer class="article-after">
+                <p class="article-disclaimer">Статья носит ознакомительный характер и не заменяет консультацию специалиста. Материалы не являются медицинской услугой и не содержат гарантий результата.</p>
+                <div id="psi-blog-cta"></div>
+            </footer>
         </article>
     </main>
 
-    <div id="psi-blog-cta"></div>
     <div id="psi-chrome-footer"></div>
 </body>
 </html>

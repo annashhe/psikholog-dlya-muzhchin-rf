@@ -39,3 +39,6 @@
   margin: 1.25rem auto;
   display: block;
 }
+main article.container {
+  padding-bottom: 48px;
+}

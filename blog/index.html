@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Блог | Психолог для мужчин онлайн — Анна Щеголихина</title>
-    <meta name="description" content="Статьи о психологии для мужчин: отношения, кризис, тревога, развод, онлайн-консультации." />
-    <meta property="og:title" content="Блог | Психолог для мужчин онлайн — Анна Щеголихина" />
-    <meta property="og:description" content="Статьи о психологии для мужчин: отношения, кризис, тревога, развод, онлайн-консультации." />
+    <title>Блог психолога для мужчин | Анна Щеголихина</title>
+    <meta name="description" content="Статьи про отношения, развод, ревность, тревогу и кризис — без скриптов «как вернуть» и без обещаний результата. Читайте и записывайтесь, если нужен разбор вашей ситуации." />
+    <meta property="og:title" content="Блог психолога для мужчин | Анна Щеголихина" />
+    <meta property="og:description" content="Статьи про отношения, развод, ревность, тревогу и кризис — без скриптов «как вернуть» и без обещаний результата. Читайте и записывайтесь, если нужен разбор вашей ситуации." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://психолог-для-мужчин.рф/blog/" />
     <meta property="og:image" content="https://психолог-для-мужчин.рф/assets/images/hero-920.webp" />
     <meta property="og:locale" content="ru_RU" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Блог | Психолог для мужчин онлайн — Анна Щеголихина" />
-    <meta name="twitter:description" content="Статьи о психологии для мужчин: отношения, кризис, тревога, развод, онлайн-консультации." />
+    <meta name="twitter:title" content="Блог психолога для мужчин | Анна Щеголихина" />
+    <meta name="twitter:description" content="Статьи про отношения, развод, ревность, тревогу и кризис — без скриптов «как вернуть» и без обещаний результата. Читайте и записывайтесь, если нужен разбор вашей ситуации." />
     <meta name="twitter:image" content="https://психолог-для-мужчин.рф/assets/images/hero-920.webp" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://психолог-для-мужчин.рф/blog/" />
@@ -28,27 +28,68 @@
         :root { --accent: #802d4b; --btn-bg: #802d4b; --muted: #6e6e6e; --border: #eae7ea; --bg: #f6f4f6; }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Manrope', sans-serif; line-height: 1.6; color: #1a1a1a; }
-        .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
-        .header { padding: 14px 0; border-bottom: 1px solid var(--border); background: #fff; position: sticky; top: 0; z-index: 10; }
-        .header-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-        .header-brand { font-weight: 700; color: #1a1a1a; text-decoration: none; }
-        .header-brand span { color: var(--accent); }
-        .header-nav { display: flex; gap: 20px; flex-wrap: wrap; }
-        .header-nav a { color: #3d3d3d; text-decoration: none; font-size: .9rem; font-weight: 500; }
-        .header-nav a:hover { color: var(--accent); }
+        .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+        html { color-scheme: light; }
+        body { background: #fff; }
         main { padding: 56px 0 72px; }
         h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); margin-bottom: .5rem; }
         .lead { color: var(--muted); font-size: 1.05rem; margin-bottom: 2.5rem; }
-        .articles-list { display: grid; gap: 20px; }
-        .articles-list article { padding: 24px; border: 1px solid var(--border); border-radius: 16px; background: #fff; }
-        .articles-list h2 { font-size: 1.15rem; margin-bottom: 0.5rem; line-height: 1.35; }
-        .articles-list h2 a { color: var(--accent); text-decoration: none; }
-        .articles-list h2 a:hover { text-decoration: underline; }
-        .articles-list p { color: var(--muted); font-size: 0.95rem; margin-bottom: 0.6rem; }
-        time { font-size: 0.85rem; color: var(--muted); }
-        .footer { padding: 32px 0; background: var(--bg); border-top: 1px solid var(--border); text-align: center; font-size: .85rem; color: var(--muted); }
-        .footer a { color: var(--muted); text-decoration: none; }
-        .footer a:hover { color: var(--accent); }
+        .articles-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+        }
+        .blog-card {
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+            text-decoration: none;
+            color: inherit;
+            height: 100%;
+            transition: box-shadow 0.25s ease, transform 0.25s ease;
+        }
+        .blog-card:hover {
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+            transform: translateY(-2px);
+        }
+        .blog-card img {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            background: #d9d0d4;
+        }
+        .blog-card-body {
+            padding: 1rem 1.15rem 1.2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .blog-card h2 {
+            font-size: 1rem;
+            line-height: 1.35;
+            color: var(--accent);
+            margin-bottom: 0.45rem;
+            font-weight: 700;
+        }
+        .blog-card p {
+            color: var(--muted);
+            font-size: 0.88rem;
+            line-height: 1.5;
+            margin: 0;
+            flex: 1;
+        }
+        .blog-card time {
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-top: 0.65rem;
+        }
+        @media (max-width: 640px) {
+            .articles-list { grid-template-columns: 1fr; }
+        }
     </style>
     <script type="application/ld+json">
     {
@@ -73,59 +114,85 @@
     <main class="copy-protected">
         <div class="container">
             <h1>Блог</h1>
-            <p class="lead">Статьи о психологии для мужчин: отношения, кризис, тревога, развод — без готовых скриптов и гарантий результата</p>
+            <p class="lead">Статьи про отношения, развод, ревность, тревогу и кризис — без скриптов «как вернуть» и без обещаний результата</p>
 
             <div class="articles-list">
-                <article>
-                    <h2><a href="/blog/zhena-hochet-razvoda/">Жена хочет развода: что делать мужчине — советы психолога</a></h2>
-                    <p>Типичные ошибки и внутренние конфликты, когда партнёрша говорит о разводе.</p>
-                    <time datetime="2026-06-17">17 июня 2026</time>
-                </article>
-                <article>
-                    <h2><a href="/blog/zhena-ne-hochet-imet-detey/">Жена не хочет детей: что делать мужчине — мнение психолога</a></h2>
-                    <p>Ценности, страхи и диалог без давления «убедить любой ценой».</p>
-                    <time datetime="2026-06-10">10 июня 2026</time>
-                </article>
-                <article>
-                    <h2><a href="/blog/govorit-li-zhene-ob-izmene/">Говорить ли жене об измене: мнение психолога для мужчин</a></h2>
-                    <p>Мотивы признания и молчания — без универсального «надо / не надо».</p>
-                    <time datetime="2026-06-23">23 июня 2026</time>
-                </article>
-                <article>
-                    <h2><a href="/blog/hochu-razvestis-s-zhenoy/">Хочу развестись с женой: статья психолога для мужчин</a></h2>
-                    <p>Как отличить усталость от решения и что проверить в себе.</p>
-                    <time datetime="2026-06-01">1 июня 2026</time>
-                </article>
-                <article>
-                    <h2><a href="/blog/psiholog-dlya-muzhchin-v-krizise/">Психолог для мужчин в кризисе: как устроена помощь</a></h2>
-                    <p>Примеры из практики: как устроена работа без ярлыков.</p>
-                    <time datetime="2026-05-15">15 мая 2026</time>
-                </article>
-                <article>
-                    <h2><a href="/blog/hochu-izbavitsya-ot-revnosti/">Как избавиться от ревности: помощь психолога</a></h2>
-                    <p>Откуда берётся ревность и что снижает «накручивание».</p>
-                    <time datetime="2026-05-10">10 мая 2026</time>
-                </article>
-                <article>
-                    <h2><a href="/blog/v-chem-smysl-zhizni/">В чём смысл жизни: взгляд психолога</a></h2>
-                    <p>Почему вопрос о смысле встаёт в 35–50 и как искать опору.</p>
-                    <time datetime="2026-05-06">6 мая 2026</time>
-                </article>
-                <article>
-                    <h2><a href="/blog/trevoga-chto-eto-otkuda/">Тревога: что это, откуда берётся и что с этим делать</a></h2>
-                    <p>Признаки, отличие от стресса, когда нужен специалист.</p>
-                    <time datetime="2026-04-29">29 апреля 2026</time>
-                </article>
-                <article>
-                    <h2><a href="/blog/kak-zabyt-cheloveka/">Как забыть любимого человека после расставания — советы психолога</a></h2>
-                    <p>Почему «выкинуть из головы» не работает и как проживать расставание.</p>
-                    <time datetime="2026-04-27">27 апреля 2026</time>
-                </article>
+                <a class="blog-card" href="/blog/zhena-hochet-razvoda/">
+                    <img src="/assets/images/blog/zhena-hochet-razvoda.jpg" width="640" height="360" alt="" loading="lazy" decoding="async" />
+                    <div class="blog-card-body">
+                        <h2>Жена хочет развода: что делать мужчине — советы психолога</h2>
+                        <p>Типичные ошибки и внутренние конфликты, когда партнёрша говорит о разводе.</p>
+                        <time datetime="2026-06-17">17 июня 2026</time>
+                    </div>
+                </a>
+                <a class="blog-card" href="/blog/zhena-ne-hochet-imet-detey/">
+                    <img src="/assets/images/blog/zhena-ne-hochet-imet-detey.jpg" width="640" height="360" alt="" loading="lazy" decoding="async" />
+                    <div class="blog-card-body">
+                        <h2>Жена не хочет детей: что делать мужчине — мнение психолога</h2>
+                        <p>Ценности, страхи и диалог без давления «убедить любой ценой».</p>
+                        <time datetime="2026-06-10">10 июня 2026</time>
+                    </div>
+                </a>
+                <a class="blog-card" href="/blog/govorit-li-zhene-ob-izmene/">
+                    <img src="/assets/images/blog/govorit-li-zhene-ob-izmene.jpg" width="640" height="360" alt="" loading="lazy" decoding="async" />
+                    <div class="blog-card-body">
+                        <h2>Говорить ли жене об измене: мнение психолога для мужчин</h2>
+                        <p>Мотивы признания и молчания — без универсального «надо / не надо».</p>
+                        <time datetime="2026-06-23">23 июня 2026</time>
+                    </div>
+                </a>
+                <a class="blog-card" href="/blog/hochu-razvestis-s-zhenoy/">
+                    <img src="/assets/images/blog/hochu-razvestis-s-zhenoy.jpg" width="640" height="360" alt="" loading="lazy" decoding="async" />
+                    <div class="blog-card-body">
+                        <h2>Хочу развестись с женой: статья психолога для мужчин</h2>
+                        <p>Как отличить усталость от решения и что проверить в себе.</p>
+                        <time datetime="2026-06-01">1 июня 2026</time>
+                    </div>
+                </a>
+                <a class="blog-card" href="/blog/psiholog-dlya-muzhchin-v-krizise/">
+                    <img src="/assets/images/blog/psiholog-dlya-muzhchin-v-krizise.jpg" width="640" height="360" alt="" loading="lazy" decoding="async" />
+                    <div class="blog-card-body">
+                        <h2>Психолог для мужчин в кризисе: как устроена помощь</h2>
+                        <p>Примеры из практики: как устроена работа без ярлыков.</p>
+                        <time datetime="2026-05-15">15 мая 2026</time>
+                    </div>
+                </a>
+                <a class="blog-card" href="/blog/hochu-izbavitsya-ot-revnosti/">
+                    <img src="/assets/images/blog/hochu-izbavitsya-ot-revnosti.jpg" width="640" height="360" alt="" loading="lazy" decoding="async" />
+                    <div class="blog-card-body">
+                        <h2>Как избавиться от ревности: помощь психолога</h2>
+                        <p>Откуда берётся ревность и что снижает «накручивание».</p>
+                        <time datetime="2026-05-10">10 мая 2026</time>
+                    </div>
+                </a>
+                <a class="blog-card" href="/blog/v-chem-smysl-zhizni/">
+                    <img src="/assets/images/blog/v-chem-smysl-zhizni.jpg" width="640" height="360" alt="" loading="lazy" decoding="async" />
+                    <div class="blog-card-body">
+                        <h2>В чём смысл жизни: взгляд психолога</h2>
+                        <p>Почему вопрос о смысле встаёт в 35–50 и как искать опору.</p>
+                        <time datetime="2026-05-06">6 мая 2026</time>
+                    </div>
+                </a>
+                <a class="blog-card" href="/blog/trevoga-chto-eto-otkuda/">
+                    <img src="/assets/images/blog/trevoga-chto-eto-otkuda.jpg" width="640" height="360" alt="" loading="lazy" decoding="async" />
+                    <div class="blog-card-body">
+                        <h2>Тревога: что это, откуда берётся и что с этим делать</h2>
+                        <p>Признаки, отличие от стресса, когда нужен специалист.</p>
+                        <time datetime="2026-04-29">29 апреля 2026</time>
+                    </div>
+                </a>
+                <a class="blog-card" href="/blog/kak-zabyt-cheloveka/">
+                    <img src="/assets/images/blog/kak-zabyt-cheloveka.jpg" width="640" height="360" alt="" loading="lazy" decoding="async" />
+                    <div class="blog-card-body">
+                        <h2>Как забыть любимого человека после расставания — советы психолога</h2>
+                        <p>Почему «выкинуть из головы» не работает и как проживать расставание.</p>
+                        <time datetime="2026-04-27">27 апреля 2026</time>
+                    </div>
+                </a>
             </div>
         </div>
     </main>
 
-    <div id="psi-blog-cta"></div>
     <div id="psi-chrome-footer"></div>
 </body>
 </html>
