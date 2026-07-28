@@ -3343,6 +3343,7 @@
             var headerEl = document.querySelector('.header');
             var lastScrollY = window.scrollY || 0;
             var headerTicking = false;
+            var lastScrollChangeAt = Date.now();
 
             function showHeader() {
                 if (headerEl) headerEl.classList.remove('header-hidden');
@@ -3376,6 +3377,9 @@
                 var delta = y - lastScrollY;
                 if (delta > 0.5) hideHeader();
                 if (delta < -0.5) showHeader();
+                if (Math.abs(delta) > 0.5) {
+                    lastScrollChangeAt = Date.now();
+                }
                 lastScrollY = y;
             }
 
@@ -3391,10 +3395,22 @@
             window.addEventListener('resize', function() {
                 showHeader();
                 lastScrollY = window.scrollY || 0;
+                lastScrollChangeAt = Date.now();
             });
-            // Fallback: некоторые iframe-зоны не шлют scroll наверх в родителя.
-            // Поллинг гарантирует, что направление скролла всё равно будет учтено.
-            setInterval(updateHeaderByScroll, 120);
+            // Fallback: некоторые iframe-зоны перехватывают жесты, и header может "залипнуть" скрытым.
+            // Если прокрутка страницы не меняется короткое время, возвращаем header.
+            setInterval(function() {
+                updateHeaderByScroll();
+                if (!headerEl) return;
+                if (window.innerWidth > 900) return;
+                if (mobileNav && mobileNav.classList.contains('open')) return;
+                var y = window.scrollY || 0;
+                if (y <= 64) return;
+                var hidden = headerEl.classList.contains('header-hidden');
+                if (hidden && Date.now() - lastScrollChangeAt > 280) {
+                    showHeader();
+                }
+            }, 120);
             updateHeaderByScroll();
 
             // ===== COOKIE BANNER (assets/cookie-notice.js) =====
