@@ -3364,32 +3364,10 @@
                     lastScrollY = y;
                     return;
                 }
-                if (mobileNav && mobileNav.classList.contains('open')) {
-                    showHeader();
-                    lastScrollY = y;
-                    return;
-                }
-                var bookingTop = bookingSectionEl ? bookingSectionEl.offsetTop : Number.POSITIVE_INFINITY;
-                if (y >= bookingTop - 600) {
-                    // В зоне виджета и ниже оставляем хедер видимым:
-                    // iframe виджета может перехватывать жесты и "залиплять" hidden-состояние.
-                    showHeader();
-                    lastScrollY = y;
-                    return;
-                }
-                if (y <= 64) {
-                    showHeader();
-                    lastScrollY = y;
-                    return;
-                }
-
-                var delta = y - lastScrollY;
-                if (delta > 0.5) hideHeader();
-                if (delta < -0.5) showHeader();
-                if (Math.abs(delta) > 0.5) {
-                    lastScrollChangeAt = Date.now();
-                }
+                // Мобильный режим: хедер всегда видим (защита от iframe/виджета).
+                showHeader();
                 lastScrollY = y;
+                return;
             }
 
             function scheduleHeaderUpdate() {
@@ -3412,18 +3390,7 @@
                 updateHeaderByScroll();
                 if (!headerEl) return;
                 if (window.innerWidth > 900) return;
-                if (mobileNav && mobileNav.classList.contains('open')) return;
-                var y = window.scrollY || 0;
-                var bookingTop = bookingSectionEl ? bookingSectionEl.offsetTop : Number.POSITIVE_INFINITY;
-                if (y >= bookingTop - 600) {
-                    showHeader();
-                    return;
-                }
-                if (y <= 64) return;
-                var hidden = headerEl.classList.contains('header-hidden');
-                if (hidden && Date.now() - lastScrollChangeAt > 280) {
-                    showHeader();
-                }
+                showHeader();
             }, 120);
             updateHeaderByScroll();
 
