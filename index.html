@@ -3370,7 +3370,7 @@
                     return;
                 }
                 var bookingTop = bookingSectionEl ? bookingSectionEl.offsetTop : Number.POSITIVE_INFINITY;
-                if (y >= bookingTop - 24) {
+                if (y >= bookingTop - 600) {
                     // В зоне виджета и ниже оставляем хедер видимым:
                     // iframe виджета может перехватывать жесты и "залиплять" hidden-состояние.
                     showHeader();
@@ -3414,6 +3414,11 @@
                 if (window.innerWidth > 900) return;
                 if (mobileNav && mobileNav.classList.contains('open')) return;
                 var y = window.scrollY || 0;
+                var bookingTop = bookingSectionEl ? bookingSectionEl.offsetTop : Number.POSITIVE_INFINITY;
+                if (y >= bookingTop - 600) {
+                    showHeader();
+                    return;
+                }
                 if (y <= 64) return;
                 var hidden = headerEl.classList.contains('header-hidden');
                 if (hidden && Date.now() - lastScrollChangeAt > 280) {
