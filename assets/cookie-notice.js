@@ -94,7 +94,7 @@
       '.psi-cookie-notice{position:fixed;left:16px;right:16px;bottom:16px;z-index:1200;max-width:560px;margin:0 auto;background:#fff;border:1px solid #eae7ea;border-radius:12px;box-shadow:0 12px 40px rgba(26,26,26,.12);padding:1rem 1.2rem;display:none;align-items:flex-start;gap:1rem;flex-wrap:wrap;font-family:Manrope,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color-scheme:light}' +
       '.psi-cookie-notice.open{display:flex}' +
       '.psi-cookie-notice p{flex:1 1 240px;margin:0;font-size:.85rem;color:#3d3d3d;line-height:1.5}' +
-      '.psi-cookie-notice a.psi-cookie-settings-link,.psi-cookie-notice a.psi-cookie-policy-link{color:#5c2238;font-weight:600;text-decoration:none}' +
+      '.psi-cookie-notice a.psi-cookie-settings-link,.psi-cookie-notice a.psi-cookie-policy-link{color:#5c2238;font-weight:inherit;text-decoration:none}' +
       '.psi-cookie-notice a.psi-cookie-settings-link{cursor:pointer}' +
       '.psi-cookie-notice a.psi-cookie-settings-link:hover,.psi-cookie-notice a.psi-cookie-policy-link:hover{color:#802d4b;text-decoration:none}' +
       '.psi-cookie-notice-actions{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;flex-shrink:0}' +

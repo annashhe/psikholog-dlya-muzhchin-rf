@@ -2431,7 +2431,7 @@
         <div class="container">
             <div class="about-grid">
                 <div class="about-text">
-                    <h2 id="about-title">Обо мне</h2>
+                    <h2 id="about-title">Обо мне — Анна Щеголихина</h2>
                     <p class="lead">Клинический и семейный психолог. Групповой психолог — в процессе обучения. Основной формат — онлайн-консультации; чаще всего работаю с мужчинами.</p>
                     <p class="about-work-lead"><strong>Как обычно проходит работа с мужчинами:</strong> говорим прямо и по делу — что происходит сейчас, какие есть варианты, какие шаги реалистичны. Без морализаторства, ярлыков и готовых советов «как правильно жить»</p>
                     <div class="bio">
@@ -2707,19 +2707,43 @@
                         var type = getPendingTherapyType();
                         if (!type) return false;
                         var matchers = {
-                            individual: /(индивидуальн|50\s*мин|стандарт)/i,
-                            individual90: /(индивидуальн|90\s*мин|расшир)/i,
-                            family: /(семейн|парн)/i
+                            individual: {
+                                include: [/(индивидуальн)/i, /(50\s*мин)/i, /(стандарт)/i],
+                                exclude: [/(90\s*мин)/i, /(расшир)/i]
+                            },
+                            individual90: {
+                                include: [/(90\s*мин)/i, /(расшир)/i, /(индивидуальн)/i],
+                                exclude: [/(50\s*мин)/i, /(стандарт)/i]
+                            },
+                            family: {
+                                include: [/(семейн)/i, /(парн)/i],
+                                exclude: []
+                            }
                         };
-                        var test = matchers[type] || null;
-                        if (!test) return false;
+                        var rule = matchers[type] || null;
+                        if (!rule) return false;
                         var candidates = host.querySelectorAll('button, [role="button"], label, [data-therapy-type]');
+                        var bestEl = null;
+                        var bestScore = -1;
                         for (var i = 0; i < candidates.length; i++) {
                             var el = candidates[i];
                             var text = (el.textContent || '').trim();
-                            if (!text || !test.test(text)) continue;
+                            if (!text) continue;
+                            var score = 0;
+                            for (var j = 0; j < rule.include.length; j++) {
+                                if (rule.include[j].test(text)) score += 2;
+                            }
+                            for (var k = 0; k < rule.exclude.length; k++) {
+                                if (rule.exclude[k].test(text)) score -= 3;
+                            }
+                            if (score > bestScore) {
+                                bestScore = score;
+                                bestEl = el;
+                            }
+                        }
+                        if (bestEl && bestScore > 0) {
                             try {
-                                el.click();
+                                bestEl.click();
                                 clearPendingTherapyType();
                                 return true;
                             } catch (e) {}
@@ -3310,6 +3334,7 @@
             var headerEl = document.querySelector('.header');
             var lastScrollY = window.scrollY || 0;
             var headerTicking = false;
+            var headerIdleTimer = null;
 
             function updateHeaderByScroll() {
                 headerTicking = false;
@@ -3336,6 +3361,13 @@
                     headerEl.classList.remove('header-hidden');
                 }
                 lastScrollY = y;
+
+                if (headerIdleTimer) clearTimeout(headerIdleTimer);
+                headerIdleTimer = setTimeout(function() {
+                    if (!mobileNav || !mobileNav.classList.contains('open')) {
+                        headerEl.classList.remove('header-hidden');
+                    }
+                }, 220);
             }
 
             window.addEventListener('scroll', function() {
