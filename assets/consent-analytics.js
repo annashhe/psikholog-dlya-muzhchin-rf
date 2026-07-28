@@ -53,7 +53,7 @@
       clickmap: true,
       trackLinks: true,
       accurateTrackBounce: true,
-      webvisor: false,
+      webvisor: true,
       trackHash: false,
       triggerEvent: false,
     });
