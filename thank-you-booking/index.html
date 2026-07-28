@@ -112,10 +112,10 @@
                 '<p class="lead">Я получила вашу заявку на онлайн-консультацию и свяжусь с вами через ' + contactViaPhrase(data.contactMethods) + ' ' + phonePhrase(data.phone) + ' в течение дня, чтобы подтвердить запись.</p>' +
                 '<dl class="details">' +
                 '<dt>Формат</dt><dd>' + therapy.title + '</dd>' +
-                '<dt>Длительность</dt><dd>' + therapy.duration + '</dd>' +
-                '<dt>Стоимость</dt><dd>' + therapy.price + '</dd>' +
+                '<dt>Длительность</dt><dd class="details-highlight">' + escapeHtml(therapy.duration) + '</dd>' +
+                '<dt>Стоимость</dt><dd class="details-highlight">' + escapeHtml(therapy.price) + '</dd>' +
                 '<dt>Способ связи</dt><dd>' + contactViaPhrase(data.contactMethods) + '</dd>' +
-                '<dt>Выбранное время</dt><dd>' + escapeHtml(when) + '</dd>' +
+                '<dt>Выбранное время</dt><dd class="details-highlight">' + escapeHtml(when) + '</dd>' +
                 '</dl>' +
                 '<p class="note">Если нужно перенести время — напишите в ' + messengers + '.</p>' +
                 '<a class="btn" href="' + home + '">Вернуться на сайт</a>';
