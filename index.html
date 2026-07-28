@@ -3341,6 +3341,7 @@
 
             // ===== МОБИЛЬНЫЙ ХЕДЕР: скрыть вниз / показать вверх =====
             var headerEl = document.querySelector('.header');
+            var bookingSectionEl = document.getElementById('booking');
             var lastScrollY = window.scrollY || 0;
             var headerTicking = false;
             var lastScrollChangeAt = Date.now();
@@ -3364,6 +3365,14 @@
                     return;
                 }
                 if (mobileNav && mobileNav.classList.contains('open')) {
+                    showHeader();
+                    lastScrollY = y;
+                    return;
+                }
+                var bookingTop = bookingSectionEl ? bookingSectionEl.offsetTop : Number.POSITIVE_INFINITY;
+                if (y >= bookingTop - 24) {
+                    // В зоне виджета и ниже оставляем хедер видимым:
+                    // iframe виджета может перехватывать жесты и "залиплять" hidden-состояние.
                     showHeader();
                     lastScrollY = y;
                     return;
