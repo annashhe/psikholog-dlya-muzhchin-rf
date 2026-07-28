@@ -21,6 +21,10 @@
 
     function ensureModal() {
         var modal = $(MODAL_ID);
+        if (modal && !modal.querySelector('.psi-site-modal')) {
+            modal.remove();
+            modal = null;
+        }
         if (modal) return modal;
         modal = document.createElement('div');
         modal.id = MODAL_ID;
@@ -29,11 +33,17 @@
         modal.setAttribute('aria-modal', 'true');
         modal.setAttribute('aria-labelledby', 'psiValidationModalTitle');
         modal.innerHTML =
-            '<div class="diploma-modal-inner legal-modal-inner psi-validation-modal">' +
-            '<button type="button" class="diploma-modal-close" id="psiValidationModalClose" aria-label="Закрыть">&times;</button>' +
+            '<div class="diploma-modal-inner legal-modal-inner psi-site-modal psi-site-modal--narrow">' +
+            '<div class="psi-site-modal__header">' +
             '<h2 id="psiValidationModalTitle">Дозаполните форму</h2>' +
+            '<button type="button" class="diploma-modal-close psi-site-modal__close" id="psiValidationModalClose" aria-label="Закрыть">&times;</button>' +
+            '</div>' +
+            '<div class="psi-site-modal__body">' +
             '<ul id="psiValidationModalList" class="psi-validation-list"></ul>' +
+            '</div>' +
+            '<div class="psi-site-modal__footer">' +
             '<button type="button" class="btn btn-primary psi-validation-ok" id="psiValidationModalOk">Понятно</button>' +
+            '</div>' +
             '</div>';
         document.body.appendChild(modal);
 
