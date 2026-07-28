@@ -1650,6 +1650,19 @@
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 992px) {
+            .header {
+                position: fixed;
+                left: 0;
+                right: 0;
+                top: 0;
+                z-index: 1000;
+            }
+            .header.header-hidden {
+                transform: none !important;
+            }
+            body {
+                padding-top: 74px;
+            }
             .hero-grid {
                 grid-template-columns: 1fr;
                 gap: 36px;
