@@ -149,6 +149,71 @@
     });
   }
 
+  function bindPsiChromeHeaderScroll() {
+    var header = document.querySelector('.psi-chrome-header');
+    if (!header) return;
+    var mobileNav = document.getElementById('psiChromeMobileNav');
+    var lastY = global.scrollY || 0;
+    var ticking = false;
+    var releaseTimer = null;
+
+    function show() {
+      header.classList.remove('header-hidden');
+    }
+
+    function hide() {
+      header.classList.add('header-hidden');
+    }
+
+    function update() {
+      ticking = false;
+      var y = global.scrollY || 0;
+      if (global.innerWidth > 900) {
+        show();
+        lastY = y;
+        return;
+      }
+      if (mobileNav && mobileNav.classList.contains('open')) {
+        show();
+        lastY = y;
+        return;
+      }
+      if (y <= 64) {
+        show();
+        lastY = y;
+        return;
+      }
+      var delta = y - lastY;
+      if (delta > 1) hide();
+      if (delta < -1) show();
+      lastY = y;
+    }
+
+    function schedule() {
+      if (ticking) return;
+      ticking = true;
+      global.requestAnimationFrame(update);
+    }
+
+    global.addEventListener('scroll', schedule, { passive: true });
+    global.addEventListener('touchmove', schedule, { passive: true });
+    global.addEventListener('wheel', schedule, { passive: true });
+    global.addEventListener('touchend', function () {
+      if (releaseTimer) global.clearTimeout(releaseTimer);
+      releaseTimer = global.setTimeout(function () {
+        if (global.innerWidth > 900) return;
+        if (mobileNav && mobileNav.classList.contains('open')) return;
+        show();
+      }, 160);
+    }, { passive: true });
+    global.addEventListener('resize', function () {
+      show();
+      lastY = global.scrollY || 0;
+    });
+
+    update();
+  }
+
   global.mountPsiChrome = function () {
     var headerEl = document.getElementById('psi-chrome-header');
     var footerEl = document.getElementById('psi-chrome-footer');
@@ -165,7 +230,11 @@
         blogCtaEl.innerHTML = global.renderBlogCta();
       }
     }
+    if (document.body) {
+      document.body.classList.add('psi-chrome-has-fixed-header');
+    }
     bindPsiChromeBurger();
+    bindPsiChromeHeaderScroll();
   };
 
   function bootChrome() {
