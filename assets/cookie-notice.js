@@ -191,7 +191,7 @@
     el.setAttribute('aria-label', 'Уведомление о cookie');
     el.setAttribute('aria-live', 'polite');
     el.innerHTML =
-      '<p>Мы используем cookie: необходимые — для работы сайта; статистику можно <a href="#" class="psi-cookie-settings-link" role="button">настроить</a>. Подробнее — в <a href="/privacy-policy/" class="psi-cookie-policy-link" target="_blank" rel="noopener">политике конфиденциальности</a>.</p>' +
+      '<p>Мы используем cookie: необходимые — для работы сайта; сбор статистики можно <a href="#" class="psi-cookie-settings-link" role="button">настроить</a>. Подробнее — в <a href="/privacy-policy/" class="psi-cookie-policy-link" target="_blank" rel="noopener">политике конфиденциальности</a>.</p>' +
       '<div class="psi-cookie-notice-actions">' +
       '<button type="button" class="psi-cookie-ok" id="psiCookieNoticeOk">Ок</button>' +
       '</div>';
