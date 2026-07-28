@@ -20,6 +20,7 @@
     <script src="assets/cookie-notice.js" defer></script>
     <script src="assets/consent-analytics.js" defer></script>
     <script src="assets/analytics-events.js" defer></script>
+    <script src="assets/form-validation-ui.js" defer></script>
 
     <!-- LCP: локальное фото героя -->
     <link rel="preload" as="image" type="image/webp"
@@ -341,6 +342,53 @@
         }
         #consentModal.consent-modal-layer {
             z-index: 10000000;
+        }
+        .psi-validation-layer {
+            z-index: 10000001;
+        }
+        .psi-validation-modal {
+            max-width: min(480px, 92vw);
+        }
+        .psi-validation-list {
+            margin: 0 0 1.25rem 1.1rem;
+            padding: 0;
+        }
+        .psi-validation-list li {
+            margin-bottom: 0.45rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .psi-validation-modal .btn.psi-validation-ok {
+            margin-top: 0;
+            width: 100%;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+        }
+        .contact-form input.form-field-error,
+        .contact-form textarea.form-field-error {
+            border-color: var(--highlight) !important;
+            box-shadow: 0 0 0 2px rgba(128, 45, 75, 0.18);
+        }
+        .contact-form fieldset.contact-methods.form-field-error {
+            border: 1px solid rgba(128, 45, 75, 0.55);
+            border-radius: var(--radius);
+            box-shadow: 0 0 0 2px rgba(128, 45, 75, 0.12);
+        }
+        .contact-form .checkbox-group.form-field-error {
+            padding: 0.5rem 0.6rem;
+            margin: 0 -0.6rem;
+            border-radius: var(--radius);
+            box-shadow: 0 0 0 2px rgba(128, 45, 75, 0.18);
+        }
+        #booking .form-field-error,
+        [data-anna-psy-widget] .form-field-error {
+            border-color: #b4436c !important;
+            box-shadow: 0 0 0 2px rgba(180, 67, 108, 0.2) !important;
+        }
+        [data-anna-psy-widget] fieldset.form-field-error {
+            border-radius: 8px;
+            box-shadow: 0 0 0 2px rgba(180, 67, 108, 0.15);
         }
         .contact-phone-note {
             font-size: 0.85rem;
@@ -3606,6 +3654,10 @@
                     var honeypot = document.getElementById('formWebsite');
                     if (honeypot && honeypot.value.trim() !== '') return;
 
+                    if (window.psiFormValidation && !window.psiFormValidation.validateCallbackForm(form)) {
+                        return;
+                    }
+
                     var name = document.getElementById('formName').value.trim();
                     var phone = document.getElementById('formPhone').value.trim();
                     var consent = document.getElementById('formConsent').checked;
@@ -3616,21 +3668,13 @@
                     var submitBtn = form.querySelector('button[type="submit"]');
                     var defaultBtnText = submitBtn ? submitBtn.textContent : '';
 
-                    if (!name || !phone || !consent) {
-                        alert('Пожалуйста, заполните все поля и дайте согласие.');
-                        return;
-                    }
-                    if (!/^\+7\s?\(\d{3}\)\s?\d{3}-\d{2}-\d{2}$/.test(phone)) {
-                        alert('Пожалуйста, введите телефон в формате +7 (900) 123-45-67');
-                        return;
-                    }
-                    if (contactMethods.length === 0) {
-                        alert('Выберите хотя бы один способ связи.');
-                        return;
-                    }
-
                     if (!LEAD_API_URL) {
-                        alert('Форма временно недоступна. Напишите в Telegram или позвоните.');
+                        if (window.psiFormValidation) {
+                            window.psiFormValidation.show({
+                                title: 'Форма временно недоступна',
+                                messages: ['Напишите в Telegram @annashhe или позвоните +7 913 755 62 84.']
+                            });
+                        }
                         return;
                     }
 
@@ -3665,7 +3709,12 @@
                         window.location.href = '/thank-you-callback/';
                     })
                     .catch(function() {
-                        alert('Не удалось отправить заявку. Напишите в Telegram @annashhe или позвоните +7 913 755 62 84.');
+                        if (window.psiFormValidation) {
+                            window.psiFormValidation.show({
+                                title: 'Не удалось отправить',
+                                messages: ['Напишите в Telegram @annashhe или позвоните +7 913 755 62 84.']
+                            });
+                        }
                     })
                     .finally(function() {
                         if (submitBtn) {
