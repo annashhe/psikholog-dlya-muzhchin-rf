@@ -1,10 +1,11 @@
 /**
- * Cloudflare Worker: заявки с сайта → Telegram.
+ * Cloudflare Worker: заявки с сайтов → Telegram (мужской + семейный).
  * Secrets/vars в Dashboard: BOT_TOKEN, CHAT_ID
  * Optional: TURNSTILE_SECRET_KEY (если задан — нужен body.turnstileToken)
  */
 const PSY_TZ = 'Europe/Kaliningrad';
-const SITE_HOME = 'https://психолог-для-мужчин.рф';
+const SITE_MALE_HOME = 'https://психолог-для-мужчин.рф';
+const SITE_FAMILY_HOME = 'https://психолог-семейный-онлайн.рф';
 const RATE_LIMIT_WINDOW_SEC = 60;
 const RATE_LIMIT_MAX = 8;
 const IDEMPOTENCY_TTL_SEC = 600;
@@ -13,20 +14,30 @@ const NAME_MAX = 80;
 const PHONE_DIGITS_MIN = 11;
 const PHONE_DIGITS_MAX = 15;
 
+const ALLOWED_ORIGINS = [
+  SITE_MALE_HOME,
+  'https://xn-----glcflhfsdlncbk4a6bya1c4j.xn--p1ai',
+  SITE_FAMILY_HOME,
+  'https://xn-----8kcjlarmacnhiqcdcbjg6bg0gwh.xn--p1ai',
+];
+
+const MALE_HOSTS = new Set([
+  'психолог-для-мужчин.рф',
+  'xn-----glcflhfsdlncbk4a6bya1c4j.xn--p1ai',
+]);
+
+const FAMILY_HOSTS = new Set([
+  'психолог-семейный-онлайн.рф',
+  'xn-----8kcjlarmacnhiqcdcbjg6bg0gwh.xn--p1ai',
+]);
+
 function corsOriginForRequest(origin) {
-  const allowed = new Set([
-    'https://психолог-для-мужчин.рф',
-    'https://xn-----glcflhfsdlncbk4a6bya1c4j.xn--p1ai',
-  ]);
-  if (origin && allowed.has(origin)) return origin;
+  if (origin && ALLOWED_ORIGINS.includes(origin)) return origin;
   return null;
 }
 
 function allowedSitePrefixes() {
-  return [
-    'https://психолог-для-мужчин.рф',
-    'https://xn-----glcflhfsdlncbk4a6bya1c4j.xn--p1ai',
-  ];
+  return ALLOWED_ORIGINS.slice();
 }
 
 function corsOriginFromReferer(referer) {
@@ -118,21 +129,49 @@ function phoneLineHtml(phone) {
   return `Телефон: <a href="tel:${escHtml(p)}">${escHtml(p)}</a>`;
 }
 
-function displayPageUrl(url) {
+function siteFromHost(host) {
+  const h = String(host ?? '').toLowerCase();
+  if (MALE_HOSTS.has(h)) return { tag: 'МУЖСКОЙ', home: SITE_MALE_HOME };
+  if (FAMILY_HOSTS.has(h)) return { tag: 'СЕМЕЙНЫЙ', home: SITE_FAMILY_HOME };
+  return null;
+}
+
+function siteFromUrlLike(value) {
+  const s = String(value ?? '').trim();
+  if (!s) return null;
+  try {
+    return siteFromHost(new URL(s).hostname);
+  } catch {
+    return null;
+  }
+}
+
+function detectSiteContext({ pageUrl, origin, referer }) {
+  return (
+    siteFromUrlLike(pageUrl) ||
+    siteFromUrlLike(origin) ||
+    siteFromUrlLike(referer) || { tag: 'ЗАЯВКА', home: SITE_MALE_HOME }
+  );
+}
+
+function siteTagLine(tag) {
+  return `<b>${tag}</b>`;
+}
+
+function displayPageUrl(url, fallbackHome) {
+  const fallback = fallbackHome || SITE_MALE_HOME;
   const s = String(url ?? '').trim();
-  if (!s) return SITE_HOME;
+  if (!s) return fallback;
   try {
     const u = new URL(s);
     const host = u.hostname.toLowerCase();
-    if (
-      host === 'xn-----glcflhfsdlncbk4a6bya1c4j.xn--p1ai' ||
-      host === 'психолог-для-мужчин.рф'
-    ) {
-      return `${SITE_HOME.replace(/\/$/, '')}${u.pathname || '/'}`;
+    const site = siteFromHost(host);
+    if (site) {
+      return `${site.home.replace(/\/$/, '')}${u.pathname || '/'}`;
     }
     return u.origin + (u.pathname || '/');
   } catch {
-    return SITE_HOME;
+    return fallback;
   }
 }
 
@@ -165,10 +204,11 @@ function formatSlotRange(startIso, endIso, tz) {
 }
 
 function metaBlock(meta) {
+  const home = meta.siteCtx?.home || SITE_MALE_HOME;
   return [
     '',
     'Дополнительная информация:',
-    `Страница заявки: ${escHtml(displayPageUrl(meta.pageUrl))}`,
+    `Страница заявки: ${escHtml(displayPageUrl(meta.pageUrl, home))}`,
     `UTM source: ${escHtml(dash(meta.utmSource))}`,
     `UTM medium: ${escHtml(dash(meta.utmMedium))}`,
     `UTM campaign: ${escHtml(dash(meta.utmCampaign))}`,
@@ -178,13 +218,15 @@ function metaBlock(meta) {
 }
 
 function buildCallbackMessage(data) {
+  const siteCtx = data.siteCtx || detectSiteContext({ pageUrl: data.pageUrl });
   return [
+    siteTagLine(siteCtx.tag),
     'Заявка с формы (обратный звонок)',
     '',
     `Имя: ${escHtml(dash(data.name))}`,
     phoneLineHtml(data.phone),
     `Способ связи: ${escHtml(formatContactMethods(data.contactMethods))}`,
-    metaBlock(data),
+    metaBlock({ ...data, siteCtx }),
   ].join('\n');
 }
 
@@ -200,10 +242,12 @@ function resolveTherapy(data) {
 }
 
 function buildBookingMessage(data) {
+  const siteCtx = data.siteCtx || detectSiteContext({ pageUrl: data.pageUrl });
   const t = resolveTherapy(data);
   const clientTz = data.clientTimezone || PSY_TZ;
   const note = data.comment ? String(data.comment).trim().slice(0, 500) : '';
   const lines = [
+    siteTagLine(siteCtx.tag),
     'Запись Онлайн через календарь',
     '',
     `Имя: ${escHtml(dash(data.name))}`,
@@ -217,7 +261,7 @@ function buildBookingMessage(data) {
   if (note) {
     lines.push('', `Комментарий клиента: ${escHtml(note)}`);
   }
-  lines.push(metaBlock(data));
+  lines.push(metaBlock({ ...data, siteCtx }));
   return lines.join('\n');
 }
 
@@ -346,6 +390,12 @@ export default {
         return Response.json({ error: 'Invalid fields' }, { status: 400, headers: corsHeaders });
       }
 
+      const siteCtx = detectSiteContext({
+        pageUrl: body.pageUrl,
+        origin: corsOrigin,
+        referer: request.headers.get('Referer') || '',
+      });
+
       const meta = {
         pageUrl: body.pageUrl,
         utmSource: body.utmSource,
@@ -353,6 +403,7 @@ export default {
         utmCampaign: body.utmCampaign,
         utmContent: body.utmContent,
         utmTerm: body.utmTerm,
+        siteCtx,
       };
 
       let text;
