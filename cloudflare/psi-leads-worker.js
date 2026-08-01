@@ -129,6 +129,31 @@ function phoneLineHtml(phone) {
   return `Телефон: <a href="tel:${escHtml(p)}">${escHtml(p)}</a>`;
 }
 
+function phoneLinePlain(phone) {
+  const p = normalizePhone(phone);
+  return `Телефон: ${escHtml(p || '—')}`;
+}
+
+function isKaliningradPage(...urls) {
+  for (const value of urls) {
+    const s = String(value ?? '').trim();
+    if (!s) continue;
+    try {
+      if (/\/kaliningrad(\/|$)/i.test(new URL(s).pathname)) return true;
+    } catch {
+      if (/\/kaliningrad(\/|$)/i.test(s)) return true;
+    }
+  }
+  return false;
+}
+
+function familyCallbackTitle(pageUrl, referer) {
+  if (isKaliningradPage(pageUrl, referer)) {
+    return '<b>СЕМЕЙНЫЙ</b> · Заявка с формы (очно / Калининград)';
+  }
+  return '<b>СЕМЕЙНЫЙ</b> · Заявка с формы';
+}
+
 function siteFromHost(host) {
   const h = String(host ?? '').toLowerCase();
   if (MALE_HOSTS.has(h)) return { tag: 'МУЖСКОЙ', home: SITE_MALE_HOME };
@@ -219,15 +244,49 @@ function metaBlock(meta) {
 
 function buildCallbackMessage(data) {
   const siteCtx = data.siteCtx || detectSiteContext({ pageUrl: data.pageUrl });
-  return [
+  const page = String(data.pageUrl || '').toLowerCase();
+  const isKaliningrad = page.includes('/kaliningrad');
+  const title =
+    siteCtx.tag === 'СЕМЕЙНЫЙ' && isKaliningrad
+      ? 'Заявка с формы (очно / Калининград)'
+      : siteCtx.tag === 'СЕМЕЙНЫЙ'
+        ? 'Заявка с формы'
+        : 'Заявка с формы (обратный звонок)';
+  const note = data.comment ? String(data.comment).trim().slice(0, 500) : '';
+  const lines = [
     siteTagLine(siteCtx.tag),
-    'Заявка с формы (обратный звонок)',
+    title,
     '',
     `Имя: ${escHtml(dash(data.name))}`,
     phoneLineHtml(data.phone),
     `Способ связи: ${escHtml(formatContactMethods(data.contactMethods))}`,
-    metaBlock({ ...data, siteCtx }),
-  ].join('\n');
+  ];
+  if (note) {
+    lines.push('', `Комментарий: ${escHtml(note)}`);
+  }
+  lines.push(metaBlock({ ...data, siteCtx }));
+  return lines.join('\n');
+}
+
+function buildFamilyCallbackMessage(data) {
+  const siteCtx = data.siteCtx || detectSiteContext({
+    pageUrl: data.pageUrl,
+    origin: data.origin,
+    referer: data.referer,
+  });
+  const note = data.comment ? String(data.comment).trim().slice(0, 500) : '';
+  const lines = [
+    familyCallbackTitle(data.pageUrl, data.referer),
+    '',
+    `Имя: ${escHtml(dash(data.name))}`,
+    phoneLinePlain(data.phone),
+    `Способ связи: ${escHtml(formatContactMethods(data.contactMethods))}`,
+  ];
+  if (note) {
+    lines.push(`Комментарий: ${escHtml(note)}`);
+  }
+  lines.push(metaBlock({ ...data, siteCtx }));
+  return lines.join('\n');
 }
 
 function resolveTherapy(data) {
@@ -390,11 +449,13 @@ export default {
         return Response.json({ error: 'Invalid fields' }, { status: 400, headers: corsHeaders });
       }
 
+      const referer = request.headers.get('Referer') || '';
       const siteCtx = detectSiteContext({
         pageUrl: body.pageUrl,
         origin: corsOrigin,
-        referer: request.headers.get('Referer') || '',
+        referer,
       });
+      const familyFromOrigin = siteFromUrlLike(corsOrigin)?.tag === 'СЕМЕЙНЫЙ';
 
       const meta = {
         pageUrl: body.pageUrl,
@@ -413,6 +474,14 @@ export default {
           return Response.json({ error: 'Missing fields' }, { status: 400, headers: corsHeaders });
         }
         text = buildBookingMessage({ ...body, ...meta });
+      } else if (familyFromOrigin || siteCtx.tag === 'СЕМЕЙНЫЙ') {
+        text = buildFamilyCallbackMessage({
+          ...body,
+          ...meta,
+          siteCtx: familyFromOrigin ? siteFromUrlLike(corsOrigin) : siteCtx,
+          origin: corsOrigin,
+          referer,
+        });
       } else {
         text = buildCallbackMessage({ ...body, ...meta });
       }
