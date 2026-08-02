@@ -1,11 +1,12 @@
 /**
- * Cloudflare Worker: заявки с сайтов → Telegram (мужской + семейный).
+ * Cloudflare Worker: заявки с сайтов → Telegram (мужской + семейный + тест).
  * Secrets/vars в Dashboard: BOT_TOKEN, CHAT_ID
  * Optional: TURNSTILE_SECRET_KEY (если задан — нужен body.turnstileToken)
  */
 const PSY_TZ = 'Europe/Kaliningrad';
 const SITE_MALE_HOME = 'https://психолог-для-мужчин.рф';
 const SITE_FAMILY_HOME = 'https://психолог-семейный-онлайн.рф';
+const SITE_TEST_HOME = 'https://muzhskoy-psikholog.ru';
 const RATE_LIMIT_WINDOW_SEC = 60;
 const RATE_LIMIT_MAX = 8;
 const IDEMPOTENCY_TTL_SEC = 600;
@@ -19,6 +20,8 @@ const ALLOWED_ORIGINS = [
   'https://xn-----glcflhfsdlncbk4a6bya1c4j.xn--p1ai',
   SITE_FAMILY_HOME,
   'https://xn-----8kcjlarmacnhiqcdcbjg6bg0gwh.xn--p1ai',
+  SITE_TEST_HOME,
+  'http://muzhskoy-psikholog.ru',
 ];
 
 const MALE_HOSTS = new Set([
@@ -30,6 +33,8 @@ const FAMILY_HOSTS = new Set([
   'психолог-семейный-онлайн.рф',
   'xn-----8kcjlarmacnhiqcdcbjg6bg0gwh.xn--p1ai',
 ]);
+
+const TEST_HOSTS = new Set(['muzhskoy-psikholog.ru']);
 
 function corsOriginForRequest(origin) {
   if (origin && ALLOWED_ORIGINS.includes(origin)) return origin;
@@ -158,6 +163,7 @@ function siteFromHost(host) {
   const h = String(host ?? '').toLowerCase();
   if (MALE_HOSTS.has(h)) return { tag: 'МУЖСКОЙ', home: SITE_MALE_HOME };
   if (FAMILY_HOSTS.has(h)) return { tag: 'СЕМЕЙНЫЙ', home: SITE_FAMILY_HOME };
+  if (TEST_HOSTS.has(h)) return { tag: 'TEST', home: SITE_TEST_HOME };
   return null;
 }
 
@@ -179,8 +185,15 @@ function detectSiteContext({ pageUrl, origin, referer }) {
   );
 }
 
-function siteTagLine(tag) {
-  return `<b>${tag}</b>`;
+function siteTagLine(siteCtxOrTag) {
+  const ctx =
+    typeof siteCtxOrTag === 'object' && siteCtxOrTag !== null
+      ? siteCtxOrTag
+      : { tag: String(siteCtxOrTag ?? 'ЗАЯВКА') };
+  if (ctx.tag === 'TEST') {
+    return '<b>TEST</b> · Тест muzhskoy-psikholog.ru';
+  }
+  return `<b>${ctx.tag || 'ЗАЯВКА'}</b>`;
 }
 
 function displayPageUrl(url, fallbackHome) {
@@ -247,14 +260,16 @@ function buildCallbackMessage(data) {
   const page = String(data.pageUrl || '').toLowerCase();
   const isKaliningrad = page.includes('/kaliningrad');
   const title =
-    siteCtx.tag === 'СЕМЕЙНЫЙ' && isKaliningrad
-      ? 'Заявка с формы (очно / Калининград)'
-      : siteCtx.tag === 'СЕМЕЙНЫЙ'
-        ? 'Заявка с формы'
-        : 'Заявка с формы (обратный звонок)';
+    siteCtx.tag === 'TEST'
+      ? 'Заявка с формы'
+      : siteCtx.tag === 'СЕМЕЙНЫЙ' && isKaliningrad
+        ? 'Заявка с формы (очно / Калининград)'
+        : siteCtx.tag === 'СЕМЕЙНЫЙ'
+          ? 'Заявка с формы'
+          : 'Заявка с формы (обратный звонок)';
   const note = data.comment ? String(data.comment).trim().slice(0, 500) : '';
   const lines = [
-    siteTagLine(siteCtx.tag),
+    siteTagLine(siteCtx),
     title,
     '',
     `Имя: ${escHtml(dash(data.name))}`,
@@ -306,7 +321,7 @@ function buildBookingMessage(data) {
   const clientTz = data.clientTimezone || PSY_TZ;
   const note = data.comment ? String(data.comment).trim().slice(0, 500) : '';
   const lines = [
-    siteTagLine(siteCtx.tag),
+    siteTagLine(siteCtx),
     'Запись Онлайн через календарь',
     '',
     `Имя: ${escHtml(dash(data.name))}`,

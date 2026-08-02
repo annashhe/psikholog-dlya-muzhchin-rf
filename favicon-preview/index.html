@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Варианты favicon</title>
+    <style>
+        :root { --accent: #802d4b; --text: #1a1a1a; --muted: #666; --bg: #faf8f9; }
+        body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; margin: 0; padding: 2rem 1rem 3rem; }
+        .wrap { max-width: 880px; margin: 0 auto; }
+        h1 { font-size: 1.5rem; margin: 0 0 .5rem; }
+        .lead, .hint { color: var(--muted); margin: 0 0 1rem; max-width: 58ch; font-size: .9rem; }
+        .hint { background: #fff; border: 1px solid #eae7ea; border-radius: 8px; padding: .75rem 1rem; margin-bottom: 1.5rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+        .card { background: #fff; border: 1px solid #eae7ea; border-radius: 12px; padding: 1.25rem; }
+        .card h2 { font-size: 1rem; margin: 0 0 .35rem; }
+        .card p { font-size: .85rem; color: var(--muted); margin: 0 0 1rem; min-height: 3.2em; }
+        .sizes { display: flex; align-items: flex-end; gap: 1rem; flex-wrap: wrap; }
+        .size { text-align: center; font-size: .75rem; color: var(--muted); }
+        .size img { display: block; margin: 0 auto .35rem; image-rendering: auto; }
+        .current { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #eae7ea; }
+        a { color: var(--accent); }
+        code { font-size: .8rem; background: #f3eef0; padding: .1rem .35rem; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <h1>Варианты favicon</h1>
+        <p class="lead">Служебная страница для выбора иконки. На проде пока активен <code>favicon.svg</code> (буква «А»).</p>
+        <p class="hint">Открывайте этот файл через локальный сервер или после деплоя на сайте (<code>/favicon-preview/</code>). Пути относительные — работают из папки проекта. В Simple Browser Cursor иногда не грузит SVG по <code>file://</code>; тогда откройте страницу в обычном Chrome после <code>git push</code> или через Live Preview.</p>
+        <div class="grid">
+            <article class="card">
+                <h2>A — Опора</h2>
+                <p>Два штриха и перемычка: опора, ясность.</p>
+                <div class="sizes">
+                    <div class="size"><img src="../assets/favicons/variant-a-opora.svg" width="32" height="32" alt="A 32px" />32 px</div>
+                    <div class="size"><img src="../assets/favicons/variant-a-opora.svg" width="16" height="16" alt="A 16px" />16 px</div>
+                </div>
+            </article>
+            <article class="card">
+                <h2>B — Диалог</h2>
+                <p>Два собеседника — формат консультации.</p>
+                <div class="sizes">
+                    <div class="size"><img src="../assets/favicons/variant-b-dialog.svg" width="32" height="32" alt="B 32px" />32 px</div>
+                    <div class="size"><img src="../assets/favicons/variant-b-dialog.svg" width="16" height="16" alt="B 16px" />16 px</div>
+                </div>
+            </article>
+            <article class="card">
+                <h2>C — Компас</h2>
+                <p>Направление и выбор.</p>
+                <div class="sizes">
+                    <div class="size"><img src="../assets/favicons/variant-c-compass.svg" width="32" height="32" alt="C 32px" />32 px</div>
+                    <div class="size"><img src="../assets/favicons/variant-c-compass.svg" width="16" height="16" alt="C 16px" />16 px</div>
+                </div>
+            </article>
+            <article class="card">
+                <h2>D — «М»</h2>
+                <p>Мужская аудитория, знак ниши.</p>
+                <div class="sizes">
+                    <div class="size"><img src="../assets/favicons/variant-d-m.svg" width="32" height="32" alt="D 32px" />32 px</div>
+                    <div class="size"><img src="../assets/favicons/variant-d-m.svg" width="16" height="16" alt="D 16px" />16 px</div>
+                </div>
+            </article>
+            <article class="card">
+                <h2>E — Дверь</h2>
+                <p>Приватный вход в работу.</p>
+                <div class="sizes">
+                    <div class="size"><img src="../assets/favicons/variant-e-door.svg" width="32" height="32" alt="E 32px" />32 px</div>
+                    <div class="size"><img src="../assets/favicons/variant-e-door.svg" width="16" height="16" alt="E 16px" />16 px</div>
+                </div>
+            </article>
+        </div>
+        <div class="current">
+            <h2 style="font-size:1rem;margin:0 0 .75rem;">Текущий favicon</h2>
+            <div class="sizes">
+                <div class="size"><img src="../favicon.svg" width="32" height="32" alt="Текущий 32px" />32 px</div>
+                <div class="size"><img src="../favicon.svg" width="16" height="16" alt="Текущий 16px" />16 px</div>
+            </div>
+            <p style="margin:1rem 0 0;font-size:.85rem;color:var(--muted);">Файлы: <code>assets/favicons/variant-*.svg</code> · <a href="../index.html">На главную (локально)</a></p>
+        </div>
+    </div>
+</body>
+</html>
