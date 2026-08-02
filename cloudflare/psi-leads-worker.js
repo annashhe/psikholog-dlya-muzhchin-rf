@@ -1,7 +1,13 @@
 /**
- * Cloudflare Worker: заявки с сайтов → Telegram (мужской + семейный + тест).
- * Secrets/vars в Dashboard: BOT_TOKEN, CHAT_ID
+ * Cloudflare Worker: заявки с сайтов → Postgres (anna-backend) + Telegram.
+ * Secrets/vars в Dashboard / wrangler:
+ *   BOT_TOKEN, CHAT_ID (обязательно)
+ *   LEADS_INGEST_SECRET (тот же, что LEADS_INGEST_SECRET на VPS backend)
+ *   BACKEND_LEADS_URL (опционально; default https://anna-backend.ru/public/leads)
  * Optional: TURNSTILE_SECRET_KEY (если задан — нужен body.turnstileToken)
+ *
+ * Deploy: cd cloudflare && npx wrangler deploy
+ * Secret: npx wrangler secret put LEADS_INGEST_SECRET
  */
 const PSY_TZ = 'Europe/Kaliningrad';
 const SITE_MALE_HOME = 'https://психолог-для-мужчин.рф';
@@ -405,6 +411,34 @@ async function verifyTurnstile(token, env, ip) {
   return Boolean(data && data.success);
 }
 
+/**
+ * Persist form lead to anna-backend Postgres (Bookings stay out — source=booking skips this).
+ * Prefer save-before-Telegram so a TG outage does not lose the lead.
+ */
+async function saveLeadToBackend(env, payload) {
+  const url = String(env.BACKEND_LEADS_URL || 'https://anna-backend.ru/public/leads').trim();
+  if (!url) return false;
+  const headers = { 'Content-Type': 'application/json' };
+  const secret = env.LEADS_INGEST_SECRET != null ? String(env.LEADS_INGEST_SECRET).trim() : '';
+  if (secret) headers['X-Leads-Secret'] = secret;
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const bodyText = await res.text().catch(() => '');
+      console.error('Backend leads save failed', res.status, bodyText.slice(0, 200));
+      return false;
+    }
+    return true;
+  } catch (e) {
+    console.error('Backend leads save error', e && e.message ? e.message : 'unknown');
+    return false;
+  }
+}
+
 export default {
   async fetch(request, env) {
     const corsOrigin = resolveCorsOrigin(request);
@@ -501,6 +535,36 @@ export default {
         text = buildCallbackMessage({ ...body, ...meta });
       }
 
+      // Forms → Postgres first; calendar bookings already live in Booking table.
+      let savedToDb = false;
+      if (body.source !== 'booking') {
+        const contactMethods = Array.isArray(body.contactMethods) ? body.contactMethods : [];
+        savedToDb = await saveLeadToBackend(env, {
+          name: String(body.name ?? '').trim(),
+          phone: normalizePhone(body.phone) || String(body.phone ?? '').trim(),
+          email: body.email != null ? String(body.email).trim() : undefined,
+          contactMethods,
+          comment: body.comment != null ? String(body.comment).trim().slice(0, 2000) : undefined,
+          source: 'form',
+          site: siteCtx.tag || undefined,
+          pageUrl: body.pageUrl != null ? String(body.pageUrl).trim() : undefined,
+          utmSource: body.utmSource != null ? String(body.utmSource).trim() : undefined,
+          utmMedium: body.utmMedium != null ? String(body.utmMedium).trim() : undefined,
+          utmCampaign: body.utmCampaign != null ? String(body.utmCampaign).trim() : undefined,
+          utmContent: body.utmContent != null ? String(body.utmContent).trim() : undefined,
+          utmTerm: body.utmTerm != null ? String(body.utmTerm).trim() : undefined,
+          isTest: siteCtx.tag === 'TEST',
+          raw: {
+            origin: corsOrigin,
+            referer,
+            source: body.source || 'form',
+          },
+        });
+        if (!savedToDb) {
+          console.error('Lead DB save failed; continuing to Telegram');
+        }
+      }
+
       const tgRes = await fetch(`https://api.telegram.org/bot${env.BOT_TOKEN}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -514,6 +578,13 @@ export default {
 
       if (!tgRes.ok) {
         console.error('Telegram status', tgRes.status);
+        // Form already in DB → still OK for the visitor; booking TG failure remains an error.
+        if (savedToDb) {
+          if (idemCacheReq) {
+            await idempotencyStore(idemCacheReq);
+          }
+          return Response.json({ ok: true, telegram: false }, { headers: corsHeaders });
+        }
         return Response.json({ error: 'Telegram error' }, { status: 502, headers: corsHeaders });
       }
 
