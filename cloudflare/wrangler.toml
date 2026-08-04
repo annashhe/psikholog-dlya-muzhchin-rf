@@ -1,13 +1,15 @@
 name = "psi-leads"
 main = "psi-leads-worker.js"
 compatibility_date = "2024-01-01"
+account_id = "f480ee9a20c8270499364bf5fbb05de6"
 
-# Dashboard / wrangler secrets:
-#   BOT_TOKEN, CHAT_ID
-#   LEADS_INGEST_SECRET  (same as VPS backend .env — header X-Leads-Secret)
-# Optional vars:
+# Fail deploy if these secrets are missing on the Worker (prevents silent Telegram breakage).
+[secrets]
+required = ["BOT_TOKEN", "CHAT_ID", "LEADS_INGEST_SECRET"]
+
+# Optional vars (Dashboard / wrangler):
 #   BACKEND_LEADS_URL = https://anna-backend.ru/public/leads
 #   TURNSTILE_SECRET_KEY
 #
 # Deploy: npx wrangler deploy
-# Secret: npx wrangler secret put LEADS_INGEST_SECRET
+# Secrets: npx wrangler secret put BOT_TOKEN | CHAT_ID | LEADS_INGEST_SECRET
