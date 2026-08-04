@@ -565,19 +565,54 @@ export default {
         }
       }
 
-      const tgRes = await fetch(`https://api.telegram.org/bot${env.BOT_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: env.CHAT_ID,
+      const botToken = env.BOT_TOKEN != null ? String(env.BOT_TOKEN).trim() : '';
+      const chatId = env.CHAT_ID != null ? String(env.CHAT_ID).trim() : '';
+      if (!botToken || !chatId) {
+        console.error('Telegram secrets missing', {
+          hasBotToken: Boolean(botToken),
+          hasChatId: Boolean(chatId),
+        });
+      }
+
+      let tgOk = false;
+      if (botToken && chatId) {
+        const tgPayload = {
+          chat_id: chatId,
           text,
           parse_mode: 'HTML',
           disable_web_page_preview: true,
-        }),
-      });
+        };
+        let tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(tgPayload),
+        });
+        if (!tgRes.ok) {
+          const errBody = await tgRes.text().catch(() => '');
+          console.error('Telegram status', tgRes.status, errBody.slice(0, 300));
+          // Retry without HTML if Telegram rejected parse_mode formatting.
+          const plainPayload = {
+            chat_id: chatId,
+            text: String(text).replace(/<\/?b>/gi, ''),
+            disable_web_page_preview: true,
+          };
+          tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(plainPayload),
+          });
+          if (!tgRes.ok) {
+            const errBody2 = await tgRes.text().catch(() => '');
+            console.error('Telegram plain retry failed', tgRes.status, errBody2.slice(0, 300));
+          } else {
+            tgOk = true;
+          }
+        } else {
+          tgOk = true;
+        }
+      }
 
-      if (!tgRes.ok) {
-        console.error('Telegram status', tgRes.status);
+      if (!tgOk) {
         // Form already in DB → still OK for the visitor; booking TG failure remains an error.
         if (savedToDb) {
           if (idemCacheReq) {
