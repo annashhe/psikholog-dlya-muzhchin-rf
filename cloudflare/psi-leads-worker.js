@@ -417,21 +417,40 @@ async function verifyTurnstile(token, env, ip) {
  */
 async function saveLeadToBackend(env, payload) {
   const url = String(env.BACKEND_LEADS_URL || 'https://anna-backend.ru/public/leads').trim();
-  if (!url) return false;
+  if (!url) {
+    console.error('Backend leads save skipped: empty BACKEND_LEADS_URL');
+    return false;
+  }
   const headers = { 'Content-Type': 'application/json' };
   const secret = env.LEADS_INGEST_SECRET != null ? String(env.LEADS_INGEST_SECRET).trim() : '';
-  if (secret) headers['X-Leads-Secret'] = secret;
+  if (secret) {
+    headers['X-Leads-Secret'] = secret;
+  } else {
+    console.error(
+      'Backend leads: LEADS_INGEST_SECRET missing on Worker — ingest will 401 if VPS secret is set'
+    );
+  }
   try {
     const res = await fetch(url, {
       method: 'POST',
       headers,
       body: JSON.stringify(payload),
     });
+    const bodyText = await res.text().catch(() => '');
     if (!res.ok) {
-      const bodyText = await res.text().catch(() => '');
-      console.error('Backend leads save failed', res.status, bodyText.slice(0, 200));
+      console.error('Backend leads save failed', {
+        status: res.status,
+        url,
+        hasSecret: Boolean(secret),
+        secretLen: secret.length,
+        body: bodyText.slice(0, 400),
+      });
       return false;
     }
+    console.log('Backend leads save ok', {
+      status: res.status,
+      body: bodyText.slice(0, 200),
+    });
     return true;
   } catch (e) {
     console.error('Backend leads save error', e && e.message ? e.message : 'unknown');
@@ -553,6 +572,7 @@ export default {
           utmCampaign: body.utmCampaign != null ? String(body.utmCampaign).trim() : undefined,
           utmContent: body.utmContent != null ? String(body.utmContent).trim() : undefined,
           utmTerm: body.utmTerm != null ? String(body.utmTerm).trim() : undefined,
+          // Keyword test/тест is also detected server-side; pass site TEST explicitly.
           isTest: siteCtx.tag === 'TEST',
           raw: {
             origin: corsOrigin,
@@ -561,7 +581,10 @@ export default {
           },
         });
         if (!savedToDb) {
-          console.error('Lead DB save failed; continuing to Telegram');
+          console.error('Lead DB save failed; continuing to Telegram', {
+            name: String(body.name ?? '').trim().slice(0, 40),
+            site: siteCtx.tag,
+          });
         }
       }
 
