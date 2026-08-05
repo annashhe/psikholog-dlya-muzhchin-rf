@@ -11,5 +11,9 @@ required = ["BOT_TOKEN", "CHAT_ID", "LEADS_INGEST_SECRET"]
 #   BACKEND_LEADS_URL = https://anna-backend.ru/public/leads
 #   TURNSTILE_SECRET_KEY
 #
+# Server relay (VPS alerts): POST /telegram-relay with header X-Leads-Secret
+#   VPS env: TELEGRAM_RELAY_URL=https://psi-leads.anna-shhe-adwords.workers.dev/telegram-relay
+#            LEADS_INGEST_SECRET=<same as Worker>
+#
 # Deploy: npx wrangler deploy
 # Secrets: npx wrangler secret put BOT_TOKEN | CHAT_ID | LEADS_INGEST_SECRET

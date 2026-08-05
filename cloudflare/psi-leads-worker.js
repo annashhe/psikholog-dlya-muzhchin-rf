@@ -6,6 +6,10 @@
  *   BACKEND_LEADS_URL (опционально; default https://anna-backend.ru/public/leads)
  * Optional: TURNSTILE_SECRET_KEY (если задан — нужен body.turnstileToken)
  *
+ * Also: POST /telegram-relay — server-to-server alert relay for VPS
+ *   (VPS often cannot reach api.telegram.org). Auth: X-Leads-Secret.
+ *   Body: { "text": "...", "parseMode": "HTML" | null }
+ *
  * Deploy: cd cloudflare && npx wrangler deploy
  * Secret: npx wrangler secret put LEADS_INGEST_SECRET
  */
@@ -458,8 +462,100 @@ async function saveLeadToBackend(env, payload) {
   }
 }
 
+async function sendTelegramMessage(env, text, parseMode) {
+  const botToken = env.BOT_TOKEN != null ? String(env.BOT_TOKEN).trim() : '';
+  const chatId = env.CHAT_ID != null ? String(env.CHAT_ID).trim() : '';
+  if (!botToken || !chatId) {
+    return { ok: false, status: 500, error: 'Telegram secrets missing' };
+  }
+
+  const payload = {
+    chat_id: chatId,
+    text: String(text).slice(0, 4000),
+    disable_web_page_preview: true,
+  };
+  if (parseMode) payload.parse_mode = parseMode;
+
+  let tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (tgRes.ok) return { ok: true, status: tgRes.status };
+
+  const errBody = await tgRes.text().catch(() => '');
+  console.error('Telegram status', tgRes.status, errBody.slice(0, 300));
+
+  if (parseMode) {
+    const plain = {
+      chat_id: chatId,
+      text: String(text)
+        .slice(0, 4000)
+        .replace(/<\/?b>/gi, ''),
+      disable_web_page_preview: true,
+    };
+    tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(plain),
+    });
+    if (tgRes.ok) return { ok: true, status: tgRes.status };
+    const errBody2 = await tgRes.text().catch(() => '');
+    console.error('Telegram plain retry failed', tgRes.status, errBody2.slice(0, 300));
+  }
+
+  return { ok: false, status: 502, error: 'Telegram error' };
+}
+
+/**
+ * VPS / cron → Worker → Telegram (bypasses RU host blocks on api.telegram.org).
+ * Auth: same LEADS_INGEST_SECRET as /public/leads ingest (header X-Leads-Secret).
+ */
+async function handleTelegramRelay(request, env) {
+  const expected = env.LEADS_INGEST_SECRET != null ? String(env.LEADS_INGEST_SECRET).trim() : '';
+  const got = request.headers.get('X-Leads-Secret') || '';
+  if (!expected || got !== expected) {
+    return Response.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  if (!(await checkRateLimit(request))) {
+    return Response.json({ error: 'Too many requests' }, { status: 429 });
+  }
+
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return Response.json({ error: 'Invalid JSON' }, { status: 400 });
+  }
+
+  const text = body && body.text != null ? String(body.text).trim() : '';
+  if (!text) {
+    return Response.json({ error: 'text required' }, { status: 400 });
+  }
+
+  const parseMode =
+    body.parseMode === null || body.parseMode === "" || body.parse_mode === null
+      ? null
+      : "HTML";
+
+  const result = await sendTelegramMessage(env, text, parseMode);
+  if (!result.ok) {
+    return Response.json(
+      { error: result.error || 'Telegram error' },
+      { status: result.status || 502 }
+    );
+  }
+  return Response.json({ ok: true });
+}
+
 export default {
   async fetch(request, env) {
+    const url = new URL(request.url);
+    if (request.method === 'POST' && url.pathname === '/telegram-relay') {
+      return handleTelegramRelay(request, env);
+    }
+
     const corsOrigin = resolveCorsOrigin(request);
 
     const corsHeaders = {
@@ -588,52 +684,8 @@ export default {
         }
       }
 
-      const botToken = env.BOT_TOKEN != null ? String(env.BOT_TOKEN).trim() : '';
-      const chatId = env.CHAT_ID != null ? String(env.CHAT_ID).trim() : '';
-      if (!botToken || !chatId) {
-        console.error('Telegram secrets missing', {
-          hasBotToken: Boolean(botToken),
-          hasChatId: Boolean(chatId),
-        });
-      }
-
-      let tgOk = false;
-      if (botToken && chatId) {
-        const tgPayload = {
-          chat_id: chatId,
-          text,
-          parse_mode: 'HTML',
-          disable_web_page_preview: true,
-        };
-        let tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(tgPayload),
-        });
-        if (!tgRes.ok) {
-          const errBody = await tgRes.text().catch(() => '');
-          console.error('Telegram status', tgRes.status, errBody.slice(0, 300));
-          // Retry without HTML if Telegram rejected parse_mode formatting.
-          const plainPayload = {
-            chat_id: chatId,
-            text: String(text).replace(/<\/?b>/gi, ''),
-            disable_web_page_preview: true,
-          };
-          tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(plainPayload),
-          });
-          if (!tgRes.ok) {
-            const errBody2 = await tgRes.text().catch(() => '');
-            console.error('Telegram plain retry failed', tgRes.status, errBody2.slice(0, 300));
-          } else {
-            tgOk = true;
-          }
-        } else {
-          tgOk = true;
-        }
-      }
+      const tgSend = await sendTelegramMessage(env, text, 'HTML');
+      const tgOk = Boolean(tgSend.ok);
 
       if (!tgOk) {
         // Form already in DB → still OK for the visitor; booking TG failure remains an error.
