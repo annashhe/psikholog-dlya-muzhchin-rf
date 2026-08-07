@@ -694,10 +694,12 @@ export default {
       let text;
 
       if (body.source === 'booking') {
-        if (!body.startIso) {
-          return Response.json({ error: 'Missing fields' }, { status: 400, headers: corsHeaders });
-        }
-        text = buildBookingMessage({ ...body, ...meta });
+        // Calendar bookings are saved + notified by anna-backend /public/bookings.
+        // Legacy clients may still POST here; acknowledge without a second Telegram.
+        return Response.json(
+          { ok: true, telegram: 'skipped_booking_notified_by_backend' },
+          { headers: corsHeaders }
+        );
       } else if (familyFromOrigin || siteCtx.tag === 'СЕМЕЙНЫЙ') {
         text = buildFamilyCallbackMessage({
           ...body,
