@@ -17,6 +17,19 @@
     <script src="/assets/blog-articles-data.js" defer></script>
     <script src="/assets/thank-you-shared.js" defer></script>
     <script src="/assets/site-chrome.js" defer></script>
+    <style>
+      .thank-footer { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.85rem; }
+      .thank-footer .note { margin: 0; }
+      .thank-messengers { display: flex; flex-wrap: wrap; gap: 0.35rem 1rem; }
+      .thank-messengers a { font-weight: 600; }
+      .thank-details { background: var(--bg); border-radius: 8px; padding: 16px 18px; margin: 1.2rem 0 0; }
+      .thank-row { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 0.35rem 1rem; margin-top: 0.55rem; align-items: baseline; }
+      .thank-row:first-child { margin-top: 0; }
+      .thank-row span { color: var(--muted); font-size: 0.88rem; font-weight: 600; }
+      .thank-row strong { font-weight: 600; color: var(--text); }
+      .card .btn { width: 100%; text-align: center; margin-top: 0.25rem; }
+      @media (max-width: 480px) { .thank-row { grid-template-columns: 1fr; gap: 0.15rem; } }
+    </style>
 </head>
 <body data-psi-header="minimal">
     <div id="psi-chrome-header"></div>
@@ -55,23 +68,51 @@
                 return '+7 ' + digits.slice(1, 4) + ' ' + digits.slice(4, 7) + '-' + digits.slice(7, 9) + '-' + digits.slice(9, 11);
             }
 
-            function phonePhrase(phone) {
-                var shown = displayPhone(phone);
-                if (shown) return 'по телефону <strong>' + escapeHtml(shown) + '</strong>';
-                return 'по указанному телефону';
-            }
-
             function formatContactMethodsList(methods) {
                 if (typeof window.formatContactMethodsList === 'function') {
                     return window.formatContactMethodsList(methods);
                 }
-                return 'Telegram, WhatsApp или MAX';
+                var CONTACT = { telegram: 'Telegram', whatsapp: 'WhatsApp', max: 'MAX', sms: 'SMS' };
+                var list = (Array.isArray(methods) ? methods : []).map(function (m) {
+                    var key = String(m || '').toLowerCase();
+                    return CONTACT[key] || String(m || '').trim();
+                }).filter(Boolean);
+                return list.join(', ');
+            }
+
+            function row(label, value) {
+                if (!value) return '';
+                return '<div class="thank-row"><span>' + escapeHtml(label) + '</span><strong>' + value + '</strong></div>';
+            }
+
+            function messengerBlock() {
+                if (messengers) return '<div class="thank-messengers">' + messengers + '</div>';
+                return (
+                    '<div class="thank-messengers">' +
+                    '<a href="https://t.me/annashhe" target="_blank" rel="noopener">Telegram</a>' +
+                    '<a href="https://wa.me/79137556284" target="_blank" rel="noopener">WhatsApp</a>' +
+                    '<a href="https://max.ru/u/f9LHodD0cOKrHIa3XdZycCKQSXXx0dFf9Ck7hXPtx3Ti-6RSxFnoPC7d1Ag" target="_blank" rel="noopener">MAX</a>' +
+                    '</div>'
+                );
             }
 
             var raw = null;
             try { raw = sessionStorage.getItem('callbackThankYou'); sessionStorage.removeItem('callbackThankYou'); } catch (e) {}
+
+            function paint(title, lead, detailsHtml) {
+                root.innerHTML =
+                    '<h1>' + title + '</h1>' +
+                    '<p class="lead">' + lead + '</p>' +
+                    (detailsHtml || '') +
+                    '<div class="thank-footer">' +
+                    '<p class="note">Если вопрос срочный — напишите напрямую:</p>' +
+                    messengerBlock() +
+                    '<a class="btn" href="' + home + '">Вернуться на сайт</a>' +
+                    '</div>';
+            }
+
             if (!raw) {
-                root.innerHTML = '<h1>Спасибо!</h1><p class="lead">Если вы только что отправили заявку, я скоро свяжусь с вами.</p><a class="btn" href="' + home + '">На главную</a>';
+                paint('Спасибо!', 'Если вы только что отправили заявку, я скоро свяжусь с вами.', '');
                 if (articlesEl && typeof renderThankYouArticles === 'function') {
                     articlesEl.innerHTML = renderThankYouArticles();
                 }
@@ -79,14 +120,22 @@
             }
             var data;
             try { data = JSON.parse(raw); } catch (e) { data = {}; }
-            var name = escapeHtml(data.name || 'коллега');
+            var name = escapeHtml(data.name || '');
             var via = formatContactMethodsList(data.contactMethods);
+            var phone = displayPhone(data.phone);
+            var details =
+                '<div class="thank-details">' +
+                row('Телефон', phone ? escapeHtml(phone) : '') +
+                row('Способ связи', via ? escapeHtml(via) : '') +
+                row('Комментарий', data.comment ? escapeHtml(data.comment) : '') +
+                '</div>';
+            if (!phone && !via && !data.comment) details = '';
 
-            root.innerHTML =
-                '<h1>Спасибо, ' + name + '!</h1>' +
-                '<p class="lead">Я получила вашу заявку и свяжусь с вами через ' + escapeHtml(via) + ' ' + phonePhrase(data.phone) + ' в течение дня, чтобы обсудить ваш вопрос.</p>' +
-                '<p class="note">Если вопрос срочный, можете написать мне напрямую в ' + messengers + '.</p>' +
-                '<a class="btn" href="' + home + '">Вернуться на сайт</a>';
+            paint(
+                name ? 'Спасибо, ' + name + '!' : 'Спасибо!',
+                'Я получила вашу заявку и свяжусь с вами в течение дня.',
+                details
+            );
 
             if (articlesEl && typeof renderThankYouArticles === 'function') {
                 articlesEl.innerHTML = renderThankYouArticles();
