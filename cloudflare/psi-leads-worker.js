@@ -171,9 +171,9 @@ function isKaliningradPage(...urls) {
 
 function familyCallbackTitle(pageUrl, referer) {
   if (isKaliningradPage(pageUrl, referer)) {
-    return '<b>СЕМЕЙНЫЙ</b> · Заявка с формы (очно / Калининград)';
+    return 'Заявка с формы (очно / Калининград)';
   }
-  return '<b>СЕМЕЙНЫЙ</b> · Заявка с формы';
+  return 'Заявка с формы';
 }
 
 function siteFromHost(host) {
@@ -203,15 +203,30 @@ function detectSiteContext({ pageUrl, origin, referer }) {
   );
 }
 
+/** Line 1: site badge from domain only. */
 function siteTagLine(siteCtxOrTag) {
   const ctx =
     typeof siteCtxOrTag === 'object' && siteCtxOrTag !== null
       ? siteCtxOrTag
       : { tag: String(siteCtxOrTag ?? 'ЗАЯВКА') };
-  if (ctx.tag === 'TEST') {
-    return '<b>TEST</b> · Тест muzhskoy-psikholog.ru';
-  }
   return `<b>${ctx.tag || 'ЗАЯВКА'}</b>`;
+}
+
+function formRequestTitle(data, siteCtx) {
+  const source = String(data.source || '').toLowerCase();
+  const page = String(data.pageUrl || '').toLowerCase();
+  if (source === 'booking') return 'Запись через онлайн-календарь';
+  if (source.includes('vopros') || page.includes('/vopros-psikhologu')) {
+    return 'Вопрос психологу';
+  }
+  if (siteCtx.tag === 'СЕМЕЙНЫЙ' && (page.includes('/kaliningrad') || isKaliningradPage(data.pageUrl, data.referer))) {
+    return 'Заявка с формы (очно / Калининград)';
+  }
+  if (siteCtx.tag === 'СЕМЕЙНЫЙ') return 'Заявка с формы';
+  if (siteCtx.tag === 'МУЖСКОЙ' || siteCtx.tag === 'ОСНОВНОЙ' || siteCtx.tag === 'TEST') {
+    return 'Заявка с формы';
+  }
+  return 'Заявка с формы';
 }
 
 function displayPageUrl(url, fallbackHome) {
@@ -275,16 +290,7 @@ function metaBlock(meta) {
 
 function buildCallbackMessage(data) {
   const siteCtx = data.siteCtx || detectSiteContext({ pageUrl: data.pageUrl });
-  const page = String(data.pageUrl || '').toLowerCase();
-  const isKaliningrad = page.includes('/kaliningrad');
-  const title =
-    siteCtx.tag === 'TEST'
-      ? 'Заявка с формы'
-      : siteCtx.tag === 'СЕМЕЙНЫЙ' && isKaliningrad
-        ? 'Заявка с формы (очно / Калининград)'
-        : siteCtx.tag === 'СЕМЕЙНЫЙ'
-          ? 'Заявка с формы'
-          : 'Заявка с формы (обратный звонок)';
+  const title = formRequestTitle(data, siteCtx);
   const note = data.comment ? String(data.comment).trim().slice(0, 500) : '';
   const lines = [
     siteTagLine(siteCtx),
@@ -309,6 +315,7 @@ function buildFamilyCallbackMessage(data) {
   });
   const note = data.comment ? String(data.comment).trim().slice(0, 500) : '';
   const lines = [
+    siteTagLine(siteCtx),
     familyCallbackTitle(data.pageUrl, data.referer),
     '',
     `Имя: ${escHtml(dash(data.name))}`,
@@ -340,7 +347,7 @@ function buildBookingMessage(data) {
   const note = data.comment ? String(data.comment).trim().slice(0, 500) : '';
   const lines = [
     siteTagLine(siteCtx),
-    'Запись Онлайн через календарь',
+    'Запись через онлайн-календарь',
     '',
     `Имя: ${escHtml(dash(data.name))}`,
     phoneLineHtml(data.phone),
