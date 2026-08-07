@@ -3,10 +3,9 @@ main = "psi-leads-worker.js"
 compatibility_date = "2024-01-01"
 account_id = "f480ee9a20c8270499364bf5fbb05de6"
 
-# Fail deploy if these secrets are missing on the Worker (prevents silent Telegram breakage).
-[secrets]
-required = ["BOT_TOKEN", "CHAT_ID", "LEADS_INGEST_SECRET"]
-
+# Required Worker secrets (set once via wrangler / Dashboard — not in this file):
+#   BOT_TOKEN, CHAT_ID, LEADS_INGEST_SECRET
+#
 # Optional vars (Dashboard / wrangler):
 #   BACKEND_LEADS_URL = https://anna-backend.ru/public/leads
 #   TURNSTILE_SECRET_KEY
@@ -17,5 +16,4 @@ required = ["BOT_TOKEN", "CHAT_ID", "LEADS_INGEST_SECRET"]
 #
 # Deploy: push to main (paths under cloudflare/) → GitHub Action
 #   or: npx wrangler deploy
-# Secrets: npx wrangler secret put BOT_TOKEN | CHAT_ID | LEADS_INGEST_SECRET
 # CI needs repo secret CLOUDFLARE_API_TOKEN (Workers Scripts Edit)
