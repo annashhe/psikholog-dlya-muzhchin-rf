@@ -556,11 +556,18 @@ async function sendTelegramMessage(env, text, parseMode) {
   console.error('Telegram status', tgRes.status, errBody.slice(0, 300));
 
   if (parseMode) {
+    const plainText = String(text)
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/<\/?blockquote(?:\s+expandable)?>/gi, '')
+      .replace(/<\/?[a-z][^>]*>/gi, '')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&amp;/g, '&')
+      .slice(0, 4000);
     const plain = {
       chat_id: chatId,
-      text: String(text)
-        .slice(0, 4000)
-        .replace(/<\/?b>/gi, ''),
+      text: plainText,
       disable_web_page_preview: true,
     };
     tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
