@@ -15,16 +15,24 @@ window.PSI_SITE_HOME = 'https://психолог-для-мужчин.рф/';
           has = true;
         }
       });
-      if (has) {
-        sessionStorage.setItem('psiUtms', JSON.stringify(utm));
-        try {
-          if (!localStorage.getItem('psiUtmsFirst')) {
-            localStorage.setItem('psiUtmsFirst', JSON.stringify(utm));
-          }
-        } catch (e1) {}
-      }
+      if (!has) return;
+      // First-touch only: never overwrite after the landing hit.
+      try {
+        if (!sessionStorage.getItem('psiUtms')) {
+          sessionStorage.setItem('psiUtms', JSON.stringify(utm));
+        }
+      } catch (e0) {}
+      try {
+        if (!localStorage.getItem('psiUtmsFirst')) {
+          localStorage.setItem('psiUtmsFirst', JSON.stringify(utm));
+        }
+      } catch (e1) {}
       if (window.location.search) {
-        sessionStorage.setItem('psiLandingQuery', window.location.search);
+        try {
+          if (!sessionStorage.getItem('psiLandingQuery')) {
+            sessionStorage.setItem('psiLandingQuery', window.location.search);
+          }
+        } catch (e2) {}
       }
     } catch (e) {}
   }
@@ -68,7 +76,7 @@ function getLeadTrackingPayload() {
   var utm = {};
   try {
     utm = JSON.parse(
-      sessionStorage.getItem('psiUtms') || localStorage.getItem('psiUtmsFirst') || '{}'
+      localStorage.getItem('psiUtmsFirst') || sessionStorage.getItem('psiUtms') || '{}'
     );
   } catch (e2) {}
 
