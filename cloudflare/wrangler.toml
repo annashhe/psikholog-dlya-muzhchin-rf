@@ -15,5 +15,7 @@ required = ["BOT_TOKEN", "CHAT_ID", "LEADS_INGEST_SECRET"]
 #   VPS env: TELEGRAM_RELAY_URL=https://psi-leads.anna-shhe-adwords.workers.dev/telegram-relay
 #            LEADS_INGEST_SECRET=<same as Worker>
 #
-# Deploy: npx wrangler deploy
+# Deploy: push to main (paths under cloudflare/) → GitHub Action
+#   or: npx wrangler deploy
 # Secrets: npx wrangler secret put BOT_TOKEN | CHAT_ID | LEADS_INGEST_SECRET
+# CI needs repo secret CLOUDFLARE_API_TOKEN (Workers Scripts Edit)

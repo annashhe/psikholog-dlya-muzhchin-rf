@@ -1,0 +1,36 @@
+name: Deploy psi-leads Worker
+
+# Deploys Cloudflare Worker when cloudflare/ changes on main.
+# Secret required in this repo: CLOUDFLARE_API_TOKEN
+# (same token as for Pages — Account → Workers Scripts Edit is enough)
+on:
+  push:
+    branches: [main]
+    paths:
+      - "cloudflare/psi-leads-worker.js"
+      - "cloudflare/wrangler.toml"
+      - ".github/workflows/deploy-psi-leads.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: psi-leads-worker
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: cloudflare
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy Worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: f480ee9a20c8270499364bf5fbb05de6
+          workingDirectory: cloudflare
+          command: deploy
