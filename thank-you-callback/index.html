@@ -45,15 +45,19 @@
                     .replace(/"/g, '&quot;');
             }
 
-            function maskPhone(phone) {
+            function displayPhone(phone) {
                 var digits = String(phone || '').replace(/\D/g, '');
-                if (digits.length < 11) return '';
-                return '+7 ••• ••• ' + digits.slice(-4, -2) + '-' + digits.slice(-2);
+                if (digits.charAt(0) === '8') digits = '7' + digits.slice(1);
+                if (digits.length === 10) digits = '7' + digits;
+                if (digits.length !== 11 || digits.charAt(0) !== '7') {
+                    return String(phone || '').trim();
+                }
+                return '+7 ' + digits.slice(1, 4) + ' ' + digits.slice(4, 7) + '-' + digits.slice(7, 9) + '-' + digits.slice(9, 11);
             }
 
             function phonePhrase(phone) {
-                var masked = maskPhone(phone);
-                if (masked) return 'по телефону <strong>' + escapeHtml(masked) + '</strong>';
+                var shown = displayPhone(phone);
+                if (shown) return 'по телефону <strong>' + escapeHtml(shown) + '</strong>';
                 return 'по указанному телефону';
             }
 

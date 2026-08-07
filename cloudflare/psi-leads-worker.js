@@ -279,7 +279,9 @@ function metaBlock(meta) {
   return [
     '',
     'Дополнительная информация:',
+    '',
     `Страница заявки: ${escHtml(displayPageUrl(meta.pageUrl, home))}`,
+    '',
     `UTM source: ${escHtml(dash(meta.utmSource))}`,
     `UTM medium: ${escHtml(dash(meta.utmMedium))}`,
     `UTM campaign: ${escHtml(dash(meta.utmCampaign))}`,
