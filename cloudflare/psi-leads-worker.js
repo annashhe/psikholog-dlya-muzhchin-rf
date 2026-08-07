@@ -16,6 +16,7 @@
 const PSY_TZ = 'Europe/Kaliningrad';
 const SITE_MALE_HOME = 'https://психолог-для-мужчин.рф';
 const SITE_FAMILY_HOME = 'https://психолог-семейный-онлайн.рф';
+const SITE_MAIN_HOME = 'https://anna-psy.online';
 const SITE_TEST_HOME = 'https://muzhskoy-psikholog.ru';
 const RATE_LIMIT_WINDOW_SEC = 60;
 const RATE_LIMIT_MAX = 8;
@@ -30,6 +31,10 @@ const ALLOWED_ORIGINS = [
   'https://xn-----glcflhfsdlncbk4a6bya1c4j.xn--p1ai',
   SITE_FAMILY_HOME,
   'https://xn-----8kcjlarmacnhiqcdcbjg6bg0gwh.xn--p1ai',
+  SITE_MAIN_HOME,
+  'https://www.anna-psy.online',
+  'http://anna-psy.online',
+  'http://www.anna-psy.online',
   SITE_TEST_HOME,
   'http://muzhskoy-psikholog.ru',
 ];
@@ -43,6 +48,8 @@ const FAMILY_HOSTS = new Set([
   'психолог-семейный-онлайн.рф',
   'xn-----8kcjlarmacnhiqcdcbjg6bg0gwh.xn--p1ai',
 ]);
+
+const MAIN_HOSTS = new Set(['anna-psy.online', 'www.anna-psy.online']);
 
 const TEST_HOSTS = new Set(['muzhskoy-psikholog.ru']);
 
@@ -173,6 +180,7 @@ function siteFromHost(host) {
   const h = String(host ?? '').toLowerCase();
   if (MALE_HOSTS.has(h)) return { tag: 'МУЖСКОЙ', home: SITE_MALE_HOME };
   if (FAMILY_HOSTS.has(h)) return { tag: 'СЕМЕЙНЫЙ', home: SITE_FAMILY_HOME };
+  if (MAIN_HOSTS.has(h)) return { tag: 'ОСНОВНОЙ', home: SITE_MAIN_HOME };
   if (TEST_HOSTS.has(h)) return { tag: 'TEST', home: SITE_TEST_HOME };
   return null;
 }
@@ -423,7 +431,7 @@ async function saveLeadToBackend(env, payload) {
   const url = String(env.BACKEND_LEADS_URL || 'https://anna-backend.ru/public/leads').trim();
   if (!url) {
     console.error('Backend leads save skipped: empty BACKEND_LEADS_URL');
-    return false;
+    return { ok: false };
   }
   const headers = { 'Content-Type': 'application/json' };
   const secret = env.LEADS_INGEST_SECRET != null ? String(env.LEADS_INGEST_SECRET).trim() : '';
@@ -449,16 +457,68 @@ async function saveLeadToBackend(env, payload) {
         secretLen: secret.length,
         body: bodyText.slice(0, 400),
       });
-      return false;
+      return { ok: false };
+    }
+    let id = null;
+    try {
+      const parsed = JSON.parse(bodyText);
+      if (parsed && typeof parsed.id === 'number') id = parsed.id;
+    } catch {
+      // ignore
     }
     console.log('Backend leads save ok', {
       status: res.status,
+      id,
       body: bodyText.slice(0, 200),
     });
-    return true;
+    return { ok: true, id };
   } catch (e) {
     console.error('Backend leads save error', e && e.message ? e.message : 'unknown');
-    return false;
+    return { ok: false };
+  }
+}
+
+/** CRM has the lead but Telegram failed — AlertLog on VPS (+ retry TG via relay). */
+async function postTelegramFailureAlert(env, details) {
+  const leadsUrl = String(env.BACKEND_LEADS_URL || 'https://anna-backend.ru/public/leads').trim();
+  const url = leadsUrl.replace(/\/public\/leads\/?$/i, '/public/monitor-alerts');
+  const secret = env.LEADS_INGEST_SECRET != null ? String(env.LEADS_INGEST_SECRET).trim() : '';
+  if (!secret) {
+    console.error('monitor-alerts skipped: LEADS_INGEST_SECRET missing on Worker');
+    return;
+  }
+  const label = details.kind === 'booking' ? 'Запись из виджета' : 'Заявка с формы';
+  const parts = [];
+  if (details.entityId != null) parts.push(`№${details.entityId}`);
+  if (details.name) parts.push(String(details.name).trim());
+  if (details.phone) parts.push(normalizePhone(details.phone) || String(details.phone).trim());
+  const summary = parts.length ? parts.join(', ') : label;
+  const payload = {
+    source: 'telegram',
+    severity: 'critical',
+    title: 'Заявка в CRM, Telegram не доставлен',
+    what: `${label} сохранена (${summary}), но уведомление в Telegram не ушло.`,
+    why: 'Сбой Telegram-реле Worker, неверный секрет, или недоступен api.telegram.org.',
+    howToFix:
+      'Проверить LEADS_INGEST_SECRET VPS↔Worker; wrangler tail; curl /telegram-relay; pm2 logs anna-backend.',
+    actionNeeded:
+      'Откройте /admin/ или /leads/ — клиент может ждать ответа. Свяжитесь вручную.',
+  };
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Leads-Secret': secret,
+      },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const t = await res.text().catch(() => '');
+      console.error('monitor-alerts post failed', res.status, t.slice(0, 300));
+    }
+  } catch (e) {
+    console.error('monitor-alerts post error', e && e.message ? e.message : 'unknown');
   }
 }
 
@@ -652,15 +712,20 @@ export default {
 
       // Forms → Postgres first; calendar bookings already live in Booking table.
       let savedToDb = false;
+      let savedLeadId = null;
       if (body.source !== 'booking') {
         const contactMethods = Array.isArray(body.contactMethods) ? body.contactMethods : [];
-        savedToDb = await saveLeadToBackend(env, {
+        const inboundSource =
+          body.source != null && String(body.source).trim()
+            ? String(body.source).trim().slice(0, 80)
+            : 'form';
+        const saveResult = await saveLeadToBackend(env, {
           name: String(body.name ?? '').trim(),
           phone: normalizePhone(body.phone) || String(body.phone ?? '').trim(),
           email: body.email != null ? String(body.email).trim() : undefined,
           contactMethods,
           comment: body.comment != null ? String(body.comment).trim().slice(0, 2000) : undefined,
-          source: 'form',
+          source: inboundSource,
           site: siteCtx.tag || undefined,
           pageUrl: body.pageUrl != null ? String(body.pageUrl).trim() : undefined,
           utmSource: body.utmSource != null ? String(body.utmSource).trim() : undefined,
@@ -673,9 +738,11 @@ export default {
           raw: {
             origin: corsOrigin,
             referer,
-            source: body.source || 'form',
+            source: inboundSource,
           },
         });
+        savedToDb = saveResult.ok;
+        savedLeadId = saveResult.id;
         if (!savedToDb) {
           console.error('Lead DB save failed; continuing to Telegram', {
             name: String(body.name ?? '').trim().slice(0, 40),
@@ -690,6 +757,12 @@ export default {
       if (!tgOk) {
         // Form already in DB → still OK for the visitor; booking TG failure remains an error.
         if (savedToDb) {
+          await postTelegramFailureAlert(env, {
+            kind: 'lead',
+            entityId: savedLeadId,
+            name: body.name,
+            phone: body.phone,
+          });
           if (idemCacheReq) {
             await idempotencyStore(idemCacheReq);
           }
